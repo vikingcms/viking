@@ -1,0 +1,30 @@
+{
+  "name": "vikingcms",
+  "version": "0.1.0",
+  "description": "The static site CMS built for Github Pages",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vikingcms/vikingcms.git"
+  },
+  "keywords": [
+    "cms",
+    "github",
+    "cms",
+    "static",
+    "site",
+    "generator",
+    "static",
+    "site",
+    "CMS"
+  ],
+  "author": "Tony Lea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vikingcms/vikingcms/issues"
+  },
+  "homepage": "https://github.com/vikingcms/vikingcms#readme"
+}
