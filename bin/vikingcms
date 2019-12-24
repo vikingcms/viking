@@ -1,5 +1,15 @@
-
 #!/usr/bin/env node
 
-require = require('esm')(module /*, options*/);
-require('../src/cli').cli(process.argv);
+var myArgs = process.argv.slice(2);
+var cmd = myArgs[0];
+var folderName = myArgs[1];
+
+if(cmd == 'new'){
+    var newCmd = require('../src/cli/new.js');
+    newCmd.createFolder(folderName);
+}
+
+if(cmd == 'dashboard'){
+    var dashboard = require('../src/cli/dashboard.js');
+    dashboard.launch();
+}
