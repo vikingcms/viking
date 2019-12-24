@@ -25,10 +25,10 @@
             
                 <img src="/assets/img/logo-icon.svg" class="h-5">
 
-                <nav class="text-gray-800 text-sm">
-                    <a href="/" class="block font-bold py-1">Dashboard</a>
-                    <a href="/posts" class="block font-medium hover:text-black py-1">Posts</a>
-                    <a href="/settings" class="block font-medium hover:text-black py-1">Settings</a>
+                <nav class="text-gray-800 text-sm -mt-10">
+                    <a href="/" class="block <% if(request.url == '/'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Dashboard</a>
+                    <a href="/posts" class="block <% if(request.url == '/posts'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Posts</a>
+                    <a href="/settings" class="block <% if(request.url == '/settings'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Settings</a>
                 </nav>
 
                 <div class="text-gray-500">
