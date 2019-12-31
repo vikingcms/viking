@@ -2,13 +2,18 @@
 const http = require('http')
 const getPort = require('get-port')
 const open = require('open')
-let express = require('express')
+const express = require('express')
 let app = express()
 let pathToPackage = require("global-modules-path").getPath("vikingcms");
 const curDir = process.cwd();
 const fs = require('fs');
 const postsFolder = curDir + '/content/posts/json/';
 const debug = true;
+
+// get right now date;
+Date.prototype.rightNow = function () { 
+    return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear() + ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+}
 
 async function getRandomPort (preferredPort = 8000) {
     const port = await getPort({ port: preferredPort });
@@ -22,7 +27,8 @@ let dashboard = module.exports = {
 
             app.set('view engine', 'ejs');
             app.use('/assets', express.static(pathToPackage + '/src/dashboard/assets'));
-            
+            app.use(express.json());
+
             dashboard.generateRoutes();
 
             app.listen(port, () => console.log(`VikingCMS dashboard running on port ${port}!`))
@@ -43,9 +49,62 @@ let dashboard = module.exports = {
             });
         });
 
+        app.get('/posts/create', function(req, res){
+            dashboard.getPosts(function(posts){
+                res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug });
+            });
+        });
+
+        app.post('/save', function(req, res){
+            
+            let postJson = {
+                title: req.body.title,
+                slug: req.body.slug,
+                image: req.body.image,
+                status: "published",
+                body: req.body.body,
+                meta: {},
+                created_at: "",
+                modified_at: ""
+            }
+
+            let newFile = postsFolder + postJson.slug + '.json';
+
+            fs.access(newFile, fs.F_OK, (err) => {
+                if (err) {
+                  console.error(err)
+                  return
+                }
+              
+                //file exists
+              })
+
+            fs.writeFile(newFile, JSON.stringify(postJson), 'utf8', function(){
+
+            });
+            
+            res.json({ status: 'success' });
+        });
+
         app.get('/post/:post', function(req, res){
-            //res.send('rad ' + req.params.post, { request: req });
-            res.send('rad ' + req.params.post);
+            dashboard.getPost(req.params.post, function(post){
+                //console.log(post);
+                res.render(pathToPackage + '/src/dashboard/single', { request: req, post: post, debug: debug });
+            });
+        });
+
+        app.get('/fetchURL', function(req, res){
+            const urlToFetch = req.query.url;
+            var res = `{"success" : 1,
+                "meta": {
+                    "title" : "CodeX Team",
+                    "description" : "Club of web-development, design and marketing. We build team learning how to build full-valued projects on the world market.",
+                    "image" : {
+                        "url" : "https://codex.so/public/app/img/meta_img.png"
+                    }
+                } 
+            }`;
+            return res;
         });
 
     }, 
@@ -60,5 +119,11 @@ let dashboard = module.exports = {
             });
             _callback(posts);
         });
+    }, 
+
+    getPost: function(slug, _callback){
+        console.log('heyo ' + postsFolder + slug + '.json');
+        let post = JSON.parse( fs.readFileSync( postsFolder + slug + '.json' ) );
+        _callback(post);
     }
 }

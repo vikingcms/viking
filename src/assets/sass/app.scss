@@ -1,0 +1,47 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+.ce-block__content, .ce-toolbar__content{
+    max-width:100% !important;
+    margin-left:0px;
+}
+
+.ce-toolbar__plus{
+    background:#ffffff;
+}
+
+[contenteditable]:focus {
+    outline: 0px solid transparent;
+}
+
+.transition{
+    transition: all 0.3s ease-in-out;
+}
+
+#settings{
+    display:none;
+    &.open{
+        display:block;
+    }
+}
+
+#settings-sidebar{
+    right: -28rem;
+    &.open{
+        right:0px;
+    }
+}
+
+.viking-input{
+    @apply bg-white border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal;
+    &:focus{
+        @apply outline-none shadow-outline;
+    }
+}
+
+.viking-label{
+    @apply text-gray-600 text-sm font-medium mb-3 inline-block;
+}
