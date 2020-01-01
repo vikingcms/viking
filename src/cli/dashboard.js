@@ -50,12 +50,23 @@ let dashboard = module.exports = {
         });
 
         app.get('/posts/create', function(req, res){
-            dashboard.getPosts(function(posts){
-                res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug });
-            });
+            res.render(pathToPackage + '/src/dashboard/single', { request: req, post: {}, debug: debug });
         });
 
-        app.post('/save', function(req, res){
+        app.post('/posts/delete', function(req, res){
+            const slug = req.body.slug;
+            let filename = dashboard.getFilenameFromSlug(req.body.slug);
+
+            try {
+                fs.unlinkSync(filename);
+                res.json({ status: 'success' });
+            //file removed
+            } catch(err) {
+                res.json({ status: 'fail', message: err });
+            }
+        });
+
+        app.post('/posts/create', function(req, res){
             
             let postJson = {
                 title: req.body.title,
@@ -68,22 +79,22 @@ let dashboard = module.exports = {
                 modified_at: ""
             }
 
-            let newFile = postsFolder + postJson.slug + '.json';
+            let filename = dashboard.getFilenameFromSlug(postJson.slug);
 
-            fs.access(newFile, fs.F_OK, (err) => {
+            fs.access(filename, fs.F_OK, (err) => {
+                // if we cannot access the file we can write it
                 if (err) {
-                  console.error(err)
-                  return
+                    fs.writeFile(filename, JSON.stringify(postJson), 'utf8', function(){
+
+                    });
+                    res.json({ status: 'success', slug: postJson.slug });
+                } else {
+                    res.json({ status: 'File Already Exists', slug: postJson.slug });
                 }
-              
-                //file exists
-              })
 
-            fs.writeFile(newFile, JSON.stringify(postJson), 'utf8', function(){
-
-            });
+              });
             
-            res.json({ status: 'success' });
+            
         });
 
         app.get('/post/:post', function(req, res){
@@ -125,5 +136,9 @@ let dashboard = module.exports = {
         console.log('heyo ' + postsFolder + slug + '.json');
         let post = JSON.parse( fs.readFileSync( postsFolder + slug + '.json' ) );
         _callback(post);
+    },
+
+    getFilenameFromSlug(slug){
+        return postsFolder + slug + '.json';
     }
 }

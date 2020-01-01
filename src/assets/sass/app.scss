@@ -45,3 +45,50 @@
 .viking-label{
     @apply text-gray-600 text-sm font-medium mb-3 inline-block;
 }
+
+#notification{
+    width: 320px;
+    left: 50%;
+    margin-left: -160px;
+    height: 100px;
+    bottom:-200px;
+    &.open{
+        bottom:0px;
+    }
+    .bubble{
+        width: 75px;
+        height: 75px;
+        margin-top: 13px;
+        margin-left: 13px;
+    }
+    img{
+        margin-top: -25px;
+        margin-left: 4px;
+        width: 94px;
+        height: auto;
+    }
+    &.danger{
+        img{
+            margin-top: -8px;
+            margin-left: 2px;
+            width: 90px;
+            height: auto;
+        }
+    }
+    &.info{
+        img{
+            margin-top: -15px;
+            margin-left: 19px;
+            width: 76px;
+            height: auto;
+        }
+    }
+    &.warning{
+        img{
+            margin-top: 5px;
+            margin-left: 4px;
+            width: 90px;
+            height: auto;
+        }
+    }
+}

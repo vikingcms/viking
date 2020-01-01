@@ -11465,6 +11465,53 @@ video {
   display: inline-block;
 }
 
+#notification {
+  width: 320px;
+  left: 50%;
+  margin-left: -160px;
+  height: 100px;
+  bottom: -200px;
+}
+
+#notification.open {
+  bottom: 0px;
+}
+
+#notification .bubble {
+  width: 75px;
+  height: 75px;
+  margin-top: 13px;
+  margin-left: 13px;
+}
+
+#notification img {
+  margin-top: -25px;
+  margin-left: 4px;
+  width: 94px;
+  height: auto;
+}
+
+#notification.danger img {
+  margin-top: -8px;
+  margin-left: 2px;
+  width: 90px;
+  height: auto;
+}
+
+#notification.info img {
+  margin-top: -15px;
+  margin-left: 19px;
+  width: 76px;
+  height: auto;
+}
+
+#notification.warning img {
+  margin-top: 5px;
+  margin-left: 4px;
+  width: 90px;
+  height: auto;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;
