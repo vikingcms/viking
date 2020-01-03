@@ -21,7 +21,13 @@ let builder = module.exports = {
 
                     if(file == 'home.axe'){
                         let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-                        console.log(contents);
+                        fs.writeFile(sitePath + '/index.html', contents, (err) => {
+                            // throws an error, you could also catch it here
+                            if (err) throw err;
+                        
+                            // success case, the file was saved
+                            console.log('Built Homepage');
+                        });
                     }
                 }
                 //if( == 'axe'){
@@ -48,7 +54,7 @@ let builder = module.exports = {
             if(typeof(includeTemplate[1]) !== "undefined"){
                 includeTemplate = includeTemplate[1].replace('.', '/');
                 // fetch file contents and replace the template
-                contents = contents.replace( includeText, builder.getHTML( themePath + includeTemplate + '.axe' ) )
+                contents = contents.replace( includeText, builder.getHTML( themePath + includeTemplate + '.axe' ) );
             }
             include = contents.indexOf('@include', include+1);
         }
