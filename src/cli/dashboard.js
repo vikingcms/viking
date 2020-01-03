@@ -3,12 +3,26 @@ const http = require('http')
 const getPort = require('get-port')
 const open = require('open')
 const express = require('express')
+let session = require('express-session');
+const url = require('url');
+
+
+const multer  = require('multer')
+
+let bodyParser = require('body-parser')
+//const fileUpload = require('express-fileupload');
+
 let app = express()
 let pathToPackage = require("global-modules-path").getPath("vikingcms");
 const curDir = process.cwd();
 const fs = require('fs');
 const postsFolder = curDir + '/content/posts/json/';
-const debug = true;
+const imagesLocation = '/content/images/';
+const imagesFolder = curDir + imagesLocation;
+
+let upload = multer({ dest : imagesFolder + 'tmp/' })
+const debug = false;
+let notificationShown = 0;
 
 // get right now date;
 Date.prototype.rightNow = function () { 
@@ -27,7 +41,25 @@ let dashboard = module.exports = {
 
             app.set('view engine', 'ejs');
             app.use('/assets', express.static(pathToPackage + '/src/dashboard/assets'));
-            app.use(express.json());
+            app.use(imagesLocation, express.static(imagesFolder));
+            //app.use(express.json());
+            app.use(express.json({limit: '10mb'}));
+            app.use(express.urlencoded({ extended: true }));
+            app.use(bodyParser.urlencoded({ extended: true }));
+            app.use(session({secret:'QLZNQn1I1P'}));
+
+            // notification functionality middleware
+            app.use(function (req, res, next) {
+                if(req.session.notification && req.session.notification_type){
+                    if(notificationShown){
+                        req.session.notification = '';
+                        req.session.notification_type = '';
+                        notificationShown = 0;
+                    }
+                    notificationShown = 1;
+                }
+                next()
+              });
 
             dashboard.generateRoutes();
 
@@ -41,30 +73,79 @@ let dashboard = module.exports = {
 
     generateRoutes: function(){
         
-        app.get('/', (req, res) => res.render(pathToPackage + '/src/dashboard/index', { request: req }) );
+        app.get('/', (req, res) => 
+            res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
+        );
         
         app.get('/posts', function(req, res){
             dashboard.getPosts(function(posts){
-                res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug });
+                res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session });
             });
         });
 
         app.get('/posts/create', function(req, res){
-            res.render(pathToPackage + '/src/dashboard/single', { request: req, post: {}, debug: debug });
+            res.render(pathToPackage + '/src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
         });
 
         app.post('/posts/delete', function(req, res){
-            const slug = req.body.slug;
+            let slug = req.body.slug;
             let filename = dashboard.getFilenameFromSlug(req.body.slug);
 
             try {
                 fs.unlinkSync(filename);
+                req.session.notification = 'Your post has been successfully deleted.';
+                req.session.notification_type = 'success';
                 res.json({ status: 'success' });
             //file removed
             } catch(err) {
                 res.json({ status: 'fail', message: err });
             }
         });
+
+        app.post('/uploadFile', upload.single('image'), function(req, res){
+            console.log('req image');
+            console.log(req.file);
+            let file = req.file;
+            fs.renameSync(file.path, imagesFolder + file.originalname);
+
+            res.json({
+                success : 1,
+                file : {
+                    "url" : imagesLocation + file.originalname
+                }
+            });
+            
+            // req.file.mv(imagesFolder + 'awesome.jpg', function(err) {
+            //     if (err)
+            //         return res.status(500).send(err);
+            
+            //         res.json({
+            //             success : 1,
+            //             file : {
+            //                 "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
+            //             }
+            //         });
+            // });
+            //   let base64String = req.body.file; // Not a real image
+            //   console.log('here is the string ' + base64String);
+            // // Remove header
+            // let base64Image = base64String.split(';base64,').pop();
+            
+            //   fs.writeFileSync(imagesFolder + "rad.jpg", base64Image, 'base64');
+
+            //     res.json({
+            //         success : 1,
+            //         file : {
+            //             "url" : imagesFolder + "rad.jpg",
+            //         }
+            //     });
+              
+
+              
+
+        });
+
+    
 
         app.post('/posts/create', function(req, res){
             
@@ -100,7 +181,8 @@ let dashboard = module.exports = {
         app.get('/post/:post', function(req, res){
             dashboard.getPost(req.params.post, function(post){
                 //console.log(post);
-                res.render(pathToPackage + '/src/dashboard/single', { request: req, post: post, debug: debug });
+                //res.json({ status: 'hmmm', post: post });
+                res.render(pathToPackage + '/src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
             });
         });
 

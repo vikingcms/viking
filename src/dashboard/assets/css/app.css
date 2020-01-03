@@ -11471,6 +11471,7 @@ video {
   margin-left: -160px;
   height: 100px;
   bottom: -200px;
+  z-index: 999;
 }
 
 #notification.open {

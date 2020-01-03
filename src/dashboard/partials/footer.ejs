@@ -5,5 +5,12 @@
     <%- include('notifications/success'); -%>
 
     <script src="/assets/js/app.js"></script>
+    <% if( session.notification ) { %>
+        <script>
+            showNotification('<%= session.notification_type %>', '<%= session.notification %>');
+            session.notification = '';
+            session.notification_type = ''; 
+        </script>
+    <% } %>
 </body>
 </html>
