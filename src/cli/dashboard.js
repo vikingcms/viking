@@ -24,6 +24,8 @@ let upload = multer({ dest : imagesFolder + 'tmp/' })
 const debug = false;
 let notificationShown = 0;
 
+let builder = require(pathToPackage + '/src/lib/builder.js');
+
 // get right now date;
 Date.prototype.rightNow = function () { 
     return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear() + ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
@@ -77,6 +79,10 @@ let dashboard = module.exports = {
             res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
         );
         
+        app.get('/t', function(req, res){
+            res.send(builder.hello());
+        });
+
         app.get('/posts', function(req, res){
             dashboard.getPosts(function(posts){
                 res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session });

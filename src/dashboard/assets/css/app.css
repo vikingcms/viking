@@ -11513,6 +11513,23 @@ video {
   height: auto;
 }
 
+#post .ce-block--stretched {
+  margin-left: -3rem;
+  margin-right: -2.5rem;
+}
+
+#post .ce-block--stretched .image-tool__image {
+  border-radius: 0px;
+}
+
+#post .cdx-block.image-tool {
+  padding-top: 0px;
+}
+
+#post .image-tool__image {
+  border-radius: 5px;
+}
+
 @media (min-width: 640px) {
   .sm\:sr-only {
     position: absolute;

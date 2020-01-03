@@ -1,7 +1,7 @@
 <%- include('partials/header'); -%>
         
     <div class="relative flex justify-center">
-        <div class="max-w-4xl min-h-screen bg-white flex-1 px-10 pl-12 py-8">
+        <div class="max-w-4xl min-h-screen bg-white flex-1 px-10 pl-12 py-8" id="post">
             <input name="title" placeholder="Post Title" class="text-4xl font-bold text-gray-800 mb-4 outline-none focus:outline-none w-full" id="title" value="<% if (post.title) { %><%= post.title %><% } %>">
             <div id="editor" data-blocks="<% if (post.body) { %><%= JSON.stringify(post.body) %><% } %>"></div>
         </div>

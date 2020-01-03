@@ -93,3 +93,22 @@
         }
     }
 }
+
+#post{
+    .ce-block--stretched{
+        @apply -ml-12 -mr-10;
+        .image-tool__image{
+            border-radius:0px;
+        }
+    }
+
+    .cdx-block{
+        &.image-tool{
+            padding-top:0px;
+        }
+    }
+
+    .image-tool__image{
+        border-radius:5px;
+    }
+}

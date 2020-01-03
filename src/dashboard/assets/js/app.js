@@ -3337,10 +3337,9 @@ function setCreatePostFalse() {
 }
 
 if (document.getElementById('title')) {
-  document.getElementById('title').addEventListener('keydown', function (evt) {
-    if (evt.keyCode) {
-      document.getElementById('editor').click();
-    }
+  document.getElementById('title').addEventListener('keydown', function (evt) {// if(evt.keyCode){
+    //     document.getElementById('editor').click();
+    // }
   });
 }
 
