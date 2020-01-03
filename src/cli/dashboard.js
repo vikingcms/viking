@@ -79,8 +79,8 @@ let dashboard = module.exports = {
             res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
         );
         
-        app.get('/t', function(req, res){
-            res.send(builder.hello());
+        app.get('/build', function(req, res){
+            res.json( builder.build(curDir, '2020') );
         });
 
         app.get('/posts', function(req, res){
