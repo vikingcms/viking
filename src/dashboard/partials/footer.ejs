@@ -2,9 +2,7 @@
         </div>
     </div>
 
-    <%- include('notifications/success'); -%>
-
-    <script src="/assets/js/app.js"></script>
+    <script src="/dashboard/assets/js/app.js"></script>
     <% if( session.notification ) { %>
         <script>
             showNotification('<%= session.notification_type %>', '<%= session.notification %>');

@@ -39,7 +39,7 @@ const editor = new EditorJS({
         class: ImageTool,
         config: {
             endpoints: {
-                byFile: '/uploadFile', // Your backend file uploader endpoint
+                byFile: '/dashboard/uploadFile', // Your backend file uploader endpoint
                 byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
             }
             // uploader: {
@@ -173,12 +173,6 @@ function renderBlocks(){
     //}
 }
 
-window.callme = function(){
-    axios.post('/tstp', {
-        cool: 'rad'
-    });
-}
-
 if( document.getElementById('settings') ){
 
     document.getElementById('settings-open').addEventListener('click', function(){
@@ -208,13 +202,13 @@ if( document.getElementById('save-post') ){
 if( document.getElementById('delete-post') ){
     document.getElementById('delete-post').addEventListener('click', function(){
         getPostData(function(data){
-            axios.post('/posts/delete', {
+            axios.post('/dashboard/posts/delete', {
                 slug: data.slug
             })
             .then(function (response) {
                 let data = response.data;
                 if(data.status == "success"){
-                    window.location = '/posts';
+                    window.location = '/dashboard/posts';
                 }
 
                 if(data.status == "fail"){
@@ -238,11 +232,11 @@ function closeSettingsBar(){
 function savePost(){
    
     getPostData(function(data){
-        axios.post('/posts/create', data)
+        axios.post('/dashboard/posts/create', data)
             .then(function (response) {
                 let data = response.data;
                 if(data.status == "success"){
-                    window.history.pushState({}, title, '/post/' + data.slug);
+                    window.history.pushState({}, title, '/dashboard/post/' + data.slug);
                     document.getElementById('slug').value = data.slug;
                     setCreatePostFalse();
                     showNotification('success', 'Your new post has been successfull created.');
@@ -318,7 +312,7 @@ let notificationTemplate = function(type, message, title, color){
     return `<div class="fixed bottom-0 shadow-2xl group rounded-t-lg bg-white border border-gray-100 cursor-pointer transition ` + type + `" id="notification">
         <div class="float-left w-24">
             <div class="rounded-full absolute left-0 bg-black bg-gray-100 border-` + color + `-400 border-l-4 border-b-4 bubble"></div>
-            <img src="/assets/img/notifications/` + type + `.png" class="h-48 -ml-8 -mt-8 relative">
+            <img src="/dashboard/assets/img/notifications/` + type + `.png" class="h-48 -ml-8 -mt-8 relative">
         </div>
         <div class="flex flex-col justify-center h-full pl-4 pr-5">
             <h4 class="text-` + color + `-400 font-bold -mt-1 mb-1">` + title + `</h4>

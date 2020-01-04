@@ -3119,7 +3119,7 @@ var editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default.a({
       "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_2___default.a,
       config: {
         endpoints: {
-          byFile: '/uploadFile',
+          byFile: '/dashboard/uploadFile',
           // Your backend file uploader endpoint
           byUrl: 'http://localhost:8008/fetchUrl' // Your endpoint that provides uploading by Url
 
@@ -3237,12 +3237,6 @@ function renderBlocks() {
 
 }
 
-window.callme = function () {
-  axios.post('/tstp', {
-    cool: 'rad'
-  });
-};
-
 if (document.getElementById('settings')) {
   document.getElementById('settings-open').addEventListener('click', function () {
     document.getElementById('settings').classList.add('open');
@@ -3267,13 +3261,13 @@ if (document.getElementById('save-post')) {
 if (document.getElementById('delete-post')) {
   document.getElementById('delete-post').addEventListener('click', function () {
     getPostData(function (data) {
-      axios.post('/posts/delete', {
+      axios.post('/dashboard/posts/delete', {
         slug: data.slug
       }).then(function (response) {
         var data = response.data;
 
         if (data.status == "success") {
-          window.location = '/posts';
+          window.location = '/dashboard/posts';
         }
 
         if (data.status == "fail") {
@@ -3295,11 +3289,11 @@ function closeSettingsBar() {
 
 function savePost() {
   getPostData(function (data) {
-    axios.post('/posts/create', data).then(function (response) {
+    axios.post('/dashboard/posts/create', data).then(function (response) {
       var data = response.data;
 
       if (data.status == "success") {
-        window.history.pushState({}, title, '/post/' + data.slug);
+        window.history.pushState({}, title, '/dashboard/post/' + data.slug);
         document.getElementById('slug').value = data.slug;
         setCreatePostFalse();
         showNotification('success', 'Your new post has been successfull created.');
@@ -3369,7 +3363,7 @@ window.showNotification = function (type, message) {
 };
 
 var notificationTemplate = function notificationTemplate(type, message, title, color) {
-  return "<div class=\"fixed bottom-0 shadow-2xl group rounded-t-lg bg-white border border-gray-100 cursor-pointer transition " + type + "\" id=\"notification\">\n        <div class=\"float-left w-24\">\n            <div class=\"rounded-full absolute left-0 bg-black bg-gray-100 border-" + color + "-400 border-l-4 border-b-4 bubble\"></div>\n            <img src=\"/assets/img/notifications/" + type + ".png\" class=\"h-48 -ml-8 -mt-8 relative\">\n        </div>\n        <div class=\"flex flex-col justify-center h-full pl-4 pr-5\">\n            <h4 class=\"text-" + color + "-400 font-bold -mt-1 mb-1\">" + title + "</h4>\n            <p class=\"text-xs text-gray-500 overflow-scroll\">" + message + "</p>\n        </div>\n        <div class=\"absolute right-0 top-0 bg-gray-100 group-hover:bg-gray-200 text-gray-400 rounded-full h-5 w-5 flex justify-center items-center text-xs leading-none font-bold mt-2 mr-2 cursor-pointer\">&times;</div>\n    </div>";
+  return "<div class=\"fixed bottom-0 shadow-2xl group rounded-t-lg bg-white border border-gray-100 cursor-pointer transition " + type + "\" id=\"notification\">\n        <div class=\"float-left w-24\">\n            <div class=\"rounded-full absolute left-0 bg-black bg-gray-100 border-" + color + "-400 border-l-4 border-b-4 bubble\"></div>\n            <img src=\"/dashboard/assets/img/notifications/" + type + ".png\" class=\"h-48 -ml-8 -mt-8 relative\">\n        </div>\n        <div class=\"flex flex-col justify-center h-full pl-4 pr-5\">\n            <h4 class=\"text-" + color + "-400 font-bold -mt-1 mb-1\">" + title + "</h4>\n            <p class=\"text-xs text-gray-500 overflow-scroll\">" + message + "</p>\n        </div>\n        <div class=\"absolute right-0 top-0 bg-gray-100 group-hover:bg-gray-200 text-gray-400 rounded-full h-5 w-5 flex justify-center items-center text-xs leading-none font-bold mt-2 mr-2 cursor-pointer\">&times;</div>\n    </div>";
 };
 
 var createNotification = function createNotification(type, message) {

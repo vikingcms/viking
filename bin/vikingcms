@@ -9,7 +9,7 @@ if(cmd == 'new'){
     newCmd.createFolder(folderName);
 }
 
-if(cmd == 'dashboard'){
-    var dashboard = require('../src/cli/dashboard.js');
-    dashboard.launch();
+if(cmd == 'serve'){
+    var serve = require('../src/cli/serve.js');
+    serve.launch();
 }

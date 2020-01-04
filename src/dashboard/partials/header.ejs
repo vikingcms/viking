@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Welcome to VikingCMS</title>
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <link rel="stylesheet" href="/dashboard/assets/css/app.css">
     <style>
         .dashboard-bg{
-            background-image:url('/assets/img/dashboard-bg.jpg');
+            background-image:url('/dashboard/assets/img/dashboard-bg.jpg');
             background-size:cover;
             background-position:top center;
         }
@@ -23,12 +23,12 @@
         <!-- Sidebar -->
         <div class="w-64 bg-white flex flex-col justify-between items-start p-5 max-h-screen fixed left-0 h-full">
             
-                <img src="/assets/img/logo-icon.svg" class="h-5">
+                <img src="/dashboard/assets/img/logo-icon.svg" class="h-5">
 
                 <nav class="text-gray-800 text-sm -mt-10">
-                    <a href="/" class="block <% if(request.url == '/'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Dashboard</a>
-                    <a href="/posts" class="block <% if(request.url == '/posts'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Posts</a>
-                    <a href="/settings" class="block <% if(request.url == '/settings'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Settings</a>
+                    <a href="/dashboard" class="block <% if(request.url == '/dashboard'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Dashboard</a>
+                    <a href="/dashboard/posts" class="block <% if(request.url == '/dashboard/posts'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Posts</a>
+                    <a href="/dashboard/settings" class="block <% if(request.url == '/dashboard/settings'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Settings</a>
                 </nav>
 
                 <div class="text-gray-500">

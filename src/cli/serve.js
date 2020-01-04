@@ -36,14 +36,15 @@ async function getRandomPort (preferredPort = 8000) {
     return port;
 }
 
-let dashboard = module.exports = {
+let serve = module.exports = {
     launch: function(){
 
         getRandomPort(8080).then( function(port){
 
             app.set('view engine', 'ejs');
-            app.use('/assets', express.static(pathToPackage + '/src/dashboard/assets'));
+            app.use('/dashboard/assets', express.static(pathToPackage + '/src/dashboard/assets'));
             app.use(imagesLocation, express.static(imagesFolder));
+            app.use('/', express.static(curDir));
             //app.use(express.json());
             app.use(express.json({limit: '10mb'}));
             app.use(express.urlencoded({ extended: true }));
@@ -63,7 +64,7 @@ let dashboard = module.exports = {
                 next()
               });
 
-            dashboard.generateRoutes();
+            serve.generateRoutes();
 
             app.listen(port, () => console.log(`VikingCMS dashboard running on port ${port}!`))
             
@@ -78,24 +79,28 @@ let dashboard = module.exports = {
         app.get('/', (req, res) => 
             res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
         );
+
+        app.get('/dashboard', (req, res) => 
+            res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
+        );
         
-        app.get('/build', function(req, res){
+        app.get('/dashboard/build', function(req, res){
             res.json( builder.build(curDir, '2020') );
         });
 
-        app.get('/posts', function(req, res){
-            dashboard.getPosts(function(posts){
+        app.get('/dashboard/posts', function(req, res){
+            serve.getPosts(function(posts){
                 res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session });
             });
         });
 
-        app.get('/posts/create', function(req, res){
+        app.get('/dashboard/posts/create', function(req, res){
             res.render(pathToPackage + '/src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
         });
 
-        app.post('/posts/delete', function(req, res){
+        app.post('/dashboard/posts/delete', function(req, res){
             let slug = req.body.slug;
-            let filename = dashboard.getFilenameFromSlug(req.body.slug);
+            let filename = serve.getFilenameFromSlug(req.body.slug);
 
             try {
                 fs.unlinkSync(filename);
@@ -108,7 +113,7 @@ let dashboard = module.exports = {
             }
         });
 
-        app.post('/uploadFile', upload.single('image'), function(req, res){
+        app.post('/dashboard/uploadFile', upload.single('image'), function(req, res){
             console.log('req image');
             console.log(req.file);
             let file = req.file;
@@ -153,7 +158,7 @@ let dashboard = module.exports = {
 
     
 
-        app.post('/posts/create', function(req, res){
+        app.post('/dashboard/posts/create', function(req, res){
             
             let postJson = {
                 title: req.body.title,
@@ -166,7 +171,7 @@ let dashboard = module.exports = {
                 modified_at: ""
             }
 
-            let filename = dashboard.getFilenameFromSlug(postJson.slug);
+            let filename = serve.getFilenameFromSlug(postJson.slug);
 
             fs.access(filename, fs.F_OK, (err) => {
                 // if we cannot access the file we can write it
@@ -184,15 +189,15 @@ let dashboard = module.exports = {
             
         });
 
-        app.get('/post/:post', function(req, res){
-            dashboard.getPost(req.params.post, function(post){
+        app.get('/dashboard/post/:post', function(req, res){
+            serve.getPost(req.params.post, function(post){
                 //console.log(post);
                 //res.json({ status: 'hmmm', post: post });
                 res.render(pathToPackage + '/src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
             });
         });
 
-        app.get('/fetchURL', function(req, res){
+        app.get('/dashboard/fetchURL', function(req, res){
             const urlToFetch = req.query.url;
             var res = `{"success" : 1,
                 "meta": {
@@ -211,11 +216,13 @@ let dashboard = module.exports = {
     getPosts: function(_callback){
         let posts = [];
         fs.readdir(postsFolder, (err, files) => {
-            files.forEach(file => {
-                //console.log(file);
-                let filename = file.replace('.json', '');
-                posts.push( JSON.parse( fs.readFileSync( postsFolder + file ) ) );
-            });
+            if(files.length){
+                files.forEach(file => {
+                    //console.log(file);
+                    let filename = file.replace('.json', '');
+                    posts.push( JSON.parse( fs.readFileSync( postsFolder + file ) ) );
+                });
+            }
             _callback(posts);
         });
     }, 
