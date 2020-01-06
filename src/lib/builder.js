@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+const fse = require('fs-extra');
 // In newer Node.js versions where process is already global this isn't necessary.
 var process = require("process");
 let themeFolder = '/content/themes/'
@@ -18,17 +19,52 @@ let builder = module.exports = {
                 if(typeof(extension) != 'undefined' && extension == '.axe'){
                     console.log(file);
 
+                    // turn into func used again below
+                    let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
+                    contents = builder.replaceSettings( contents, sitePath, themePath);
 
                     if(file == 'home.axe'){
-                        let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
+
                         fs.writeFile(sitePath + '/index.html', contents, (err) => {
                             // throws an error, you could also catch it here
                             if (err) throw err;
                         
                             // success case, the file was saved
-                            console.log('Built Homepage');
+                            console.log('Built: ' + file);
                         });
                     }
+
+                    if(file == 'single.axe'){
+
+                        fs.readdir(sitePath + '/content/posts/json/', function (err, postFiles) {
+                            if (err) {
+                              console.error("Could not list the post directory.", err);
+                              process.exit(1);
+                            }
+                            postFiles.forEach(function (postFile, index) {
+                                let jsonPath = sitePath + '/content/posts/json/' + postFile;
+                                let post = JSON.parse(builder.getPost(jsonPath));
+
+                                let fileLocation = sitePath + '/' + postFile.replace('.json', '') + '/index.html';
+                                
+                                let postContents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
+                                postContents = builder.replaceSettings( contents, sitePath, themePath);
+                                postContents = builder.replacePostData( contents, post );
+
+                                fse.outputFile(fileLocation, postContents, err => {
+                                    if(err) {
+                                      console.log(err);
+                                    } else {
+                                        console.log('Built: ' + postFile);
+                                    }
+                                });
+                            });
+
+                        });
+
+                    }
+
+                    
                 }
                 //if( == 'axe'){
                     //console.log('processed: ' + file); 
@@ -41,6 +77,10 @@ let builder = module.exports = {
     },
 
     getHTML: function(file){
+        return fs.readFileSync(file, 'utf8');
+    },
+
+    getPost: function(file){
         return fs.readFileSync(file, 'utf8');
     },
 
@@ -61,6 +101,16 @@ let builder = module.exports = {
 
         return contents;
     },
+    replaceSettings: function(contents, sitePath, themePath){
+        //let loadSettings = builder.loadSettingsFile();
+        let settings = {
+                "title": "GetFullReport"
+            };
+
+        contents = contents.replace('{{ title }}', settings.title);
+
+        return contents;
+    },
     endOfIncludeLocation: function(start, str){
         let endIncludeLocation = str.length;
         let nextSpaceIndex = str.indexOf(" ", 10);
@@ -72,5 +122,36 @@ let builder = module.exports = {
             endIncludeLocation = nextNewLineIndex;
         }
         return endIncludeLocation;
+    },
+    replacePostData: function( contents, post ){
+        for (var key in post) {
+            if (post.hasOwnProperty(key)) {
+                
+                let replaceThis = '{{ post.' + key + ' }}';
+                let withThis = post[key];
+                if(key == 'body'){
+                    withThis = builder.renderHTML(post[key]);
+                }
+                contents = contents.replace(replaceThis, withThis);
+            }
+        }
+        return contents;
+    },
+    renderHTML: function(data) {
+        let result = ``;
+        for (let block of data.blocks) {
+          switch (block.type) {
+            case 'paragraph':
+              result += `<p class="text-gray-700 mb-2">${block.data.text}</p>`;
+              break;
+            case 'header':
+              result += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
+              break;
+            case 'list':
+              result += ``;
+              break;
+          }
+        }
+        return result;
     }
 };

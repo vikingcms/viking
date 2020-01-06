@@ -18,7 +18,7 @@
                 </thead>
                 <tbody>
                     <% posts.forEach(function(post){ %>
-                        <tr class="cursor-pointer bg-white hover:bg-yellow-100" onclick="window.location = '/post/<%= post.slug %>'">
+                        <tr class="cursor-pointer bg-white hover:bg-yellow-100" onclick="window.location = '/dashboard/post/<%= post.slug %>'">
                             <td class="px-5 py-5 text-sm">
                                 <div class="flex">
                                     <p class="text-gray-900 whitespace-no-wrap"><%= post.title %></p>
