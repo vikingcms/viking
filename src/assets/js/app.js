@@ -357,6 +357,14 @@ let createNotification = function(type, message){
     }, 3999000);
 }
 
+
+// Add event listener click for the build button
+if( document.getElementById('build-btn') ){
+    document.getElementById('build-btn').addEventListener('click', function(){
+
+    });
+}
+
 //showNotification('success', 'Your new post has been successfull created.');
 //showNotification('danger', 'Something has went wrong trying to save your post.');
 //showNotification('info', 'Did you know that you can upload an image for your post.');
