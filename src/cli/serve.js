@@ -94,6 +94,10 @@ let serve = module.exports = {
             });
         });
 
+        app.get('/dashboard/settings', (req, res) => 
+            res.render(pathToPackage + '/src/dashboard/settings', { request: req, debug: debug, session: req.session }) 
+        );
+
         app.get('/dashboard/posts/create', function(req, res){
             res.render(pathToPackage + '/src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
         });
