@@ -1,3 +1,7 @@
+---
+permalink: /index.html
+---
+
 # VikingCMS
 
 Currently in Development.
