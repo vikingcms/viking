@@ -37,14 +37,18 @@
         var inputContainer = document.getElementById('input-container');
 
         for (var key in settings) {
+            var inputPairContainer = document.createElement("div");
+                inputPairContainer.classList.add(`${key}`);
             var newInputKey = document.createElement("input");
             var newInputValue = document.createElement("input");
 
-            newInputKey.value = key;
-            newInputValue.value = settings[key];
+            newInputKey.setAttribute('value', key);
+            newInputValue.setAttribute('value', settings[key]);
+
+            inputPairContainer.appendChild(newInputKey);
+            inputPairContainer.appendChild(newInputValue);
+            inputContainer.appendChild(inputPairContainer);
             
-            inputContainer.appendChild(newInputKey);
-            inputContainer.appendChild(newInputValue);
         }
     </script>
 
