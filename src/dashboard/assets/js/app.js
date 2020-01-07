@@ -3100,126 +3100,57 @@ function _getb() {
   return _getb.apply(this, arguments);
 }
 
-var editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default.a({
-  /**
-   * Id of Element that should contain Editor instance
-   */
-  holderId: 'editor',
-  tools: {
-    header: Header,
-    linkTool: {
-      "class": LinkTool,
-      config: {
-        endpoint: 'http://localhost:8008/fetchUrl' // Your backend endpoint for url data fetching
+if (document.getElementById('editor')) {
+  var _editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default.a({
+    /**
+     * Id of Element that should contain Editor instance
+     */
+    holderId: 'editor',
+    tools: {
+      header: Header,
+      linkTool: {
+        "class": LinkTool,
+        config: {
+          endpoint: 'http://localhost:8008/fetchUrl' // Your backend endpoint for url data fetching
 
-      }
-    },
-    raw: RawTool,
-    image: {
-      "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_2___default.a,
-      config: {
-        endpoints: {
-          byFile: '/dashboard/uploadFile',
-          // Your backend file uploader endpoint
-          byUrl: 'http://localhost:8008/fetchUrl' // Your endpoint that provides uploading by Url
+        }
+      },
+      raw: RawTool,
+      image: {
+        "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_2___default.a,
+        config: {
+          endpoints: {
+            byFile: '/dashboard/uploadFile',
+            // Your backend file uploader endpoint
+            byUrl: 'http://localhost:8008/fetchUrl' // Your endpoint that provides uploading by Url
 
-        } // uploader: {
-        //     uploadByFile(file) {
-        //         let base64Image = getb6(file);
-        //         return fetch('/uploadFile', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Accept': 'application/json',
-        //                 'Content-Type': 'application/json'
-        //             },
-        //             body: JSON.stringify({
-        //                 file: base64Image,
-        //                 filename: file.name
-        //             })
-        //         }).then(function(response) {
-        //                     //return response.data;
-        //                     return {
-        //                         "success" : 1,
-        //                         "file": {
-        //                             "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg",
-        //                             // ... and any additional fields you want to store, such as width, height, color, extension, etc
-        //                         }
-        //                     };
-        //                 });
-        //         //return fileToBase64(file).then(function(result){
-        //             // fetch('/uploadFile', {
-        //             //     method: 'POST',
-        //             //     headers: {
-        //             //         'Accept': 'application/json',
-        //             //         'Content-Type': 'application/json'
-        //             //     },
-        //             //     body: JSON.stringify({
-        //             //         file: base64Image,
-        //             //         filename: file.name
-        //             //     })
-        //             // });
-        //        // });
-        //     //     let reader = new FileReaderSync();
-        //     //     let base64Image = reader.onload = function (e) {
-        //     //         return e.target.result;
-        //     //         // axios.post('/uploadFile', {
-        //     //         //         file: e.target.result,
-        //     //         //         filename: file.name
-        //     //         // }).then(function(response) {
-        //     //         //     return response.data;
-        //     //         // })
-        //     //    };
-        //     //     // Read the file
-        //     //     reader.readAsDataURL(file);
-        //     //     return fetch('/uploadFile', {
-        //     //         method: 'POST',
-        //     //         headers: {
-        //     //             'Accept': 'application/json',
-        //     //             'Content-Type': 'application/json'
-        //     //         },
-        //     //         body: JSON.stringify({
-        //     //             file: base64Image,
-        //     //             filename: file.name
-        //     //         })
-        //     //     }).then(function(response) {
-        //     //         //return response.data;
-        //     //         return {
-        //     //             "success" : 1,
-        //     //             "file": {
-        //     //                 "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg",
-        //     //                 // ... and any additional fields you want to store, such as width, height, color, extension, etc
-        //     //             }
-        //     //         };
-        //     //     });
-        //     }
-        // }
-
-      }
+          }
+        }
+      },
+      paragraph: {
+        config: {
+          placeholder: 'Tell your story...'
+        }
+      },
+      list: {
+        "class": List,
+        inlineToolbar: true
+      },
+      delimiter: Delimiter,
+      inlineCode: {
+        "class": InlineCode,
+        shortcut: 'CMD+SHIFT+M'
+      },
+      warning: Warning,
+      quote: Quote
     },
-    paragraph: {
-      config: {
-        placeholder: 'Tell your story...'
-      }
-    },
-    list: {
-      "class": List,
-      inlineToolbar: true
-    },
-    delimiter: Delimiter,
-    inlineCode: {
-      "class": InlineCode,
-      shortcut: 'CMD+SHIFT+M'
-    },
-    warning: Warning,
-    quote: Quote
-  },
-  autofocus: !createPost,
-  onReady: function onReady() {
-    console.log('rdy');
-    renderBlocks();
-  }
-});
-window.ceditor = editor;
+    autofocus: !createPost,
+    onReady: function onReady() {
+      console.log('rdy');
+      renderBlocks();
+    }
+  });
+}
 
 function renderBlocks() {
   //if( document.getElementById('editor').dataset.blocks ){
@@ -3403,7 +3334,12 @@ var createNotification = function createNotification(type, message) {
       }, 300);
     }
   }, 3999000);
-}; //showNotification('success', 'Your new post has been successfull created.');
+}; // Add event listener click for the build button
+
+
+if (document.getElementById('build-btn')) {
+  document.getElementById('build-btn').addEventListener('click', function () {});
+} //showNotification('success', 'Your new post has been successfull created.');
 //showNotification('danger', 'Something has went wrong trying to save your post.');
 //showNotification('info', 'Did you know that you can upload an image for your post.');
 //showNotification('warning', 'Make sure to enter a good title in your post.');

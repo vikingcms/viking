@@ -5,10 +5,7 @@ const open = require('open')
 const express = require('express')
 let session = require('express-session');
 const url = require('url');
-
-
 const multer  = require('multer')
-
 let bodyParser = require('body-parser')
 //const fileUpload = require('express-fileupload');
 
@@ -129,34 +126,6 @@ let serve = module.exports = {
                     "url" : imagesLocation + file.originalname
                 }
             });
-            
-            // req.file.mv(imagesFolder + 'awesome.jpg', function(err) {
-            //     if (err)
-            //         return res.status(500).send(err);
-            
-            //         res.json({
-            //             success : 1,
-            //             file : {
-            //                 "url" : "https://www.tesla.com/tesla_theme/assets/img/_vehicle_redesign/roadster_and_semi/roadster/hero.jpg"
-            //             }
-            //         });
-            // });
-            //   let base64String = req.body.file; // Not a real image
-            //   console.log('here is the string ' + base64String);
-            // // Remove header
-            // let base64Image = base64String.split(';base64,').pop();
-            
-            //   fs.writeFileSync(imagesFolder + "rad.jpg", base64Image, 'base64');
-
-            //     res.json({
-            //         success : 1,
-            //         file : {
-            //             "url" : imagesFolder + "rad.jpg",
-            //         }
-            //     });
-              
-
-              
 
         });
 
@@ -185,12 +154,13 @@ let serve = module.exports = {
                     });
                     res.json({ status: 'success', slug: postJson.slug });
                 } else {
-                    res.json({ status: 'File Already Exists', slug: postJson.slug });
+                    fs.writeFile(filename, JSON.stringify(postJson), 'utf8', function(){
+
+                    });
+                    res.json({ status: 'success', slug: postJson.slug });
                 }
 
               });
-            
-            
         });
 
         app.get('/dashboard/post/:post', function(req, res){

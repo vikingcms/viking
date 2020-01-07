@@ -21,54 +21,54 @@ async function getb6(file){
     return await (new Response(file)).text();
 }
 
-const editor = new EditorJS({
-  /**
-   * Id of Element that should contain Editor instance
-   */
-  holderId: 'editor',
-  tools: {
-    header: Header,
-    linkTool: {
-        class: LinkTool,
-        config: {
-            endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
-        }
-    },
-    raw: RawTool,
-    image: {
-        class: ImageTool,
-        config: {
-            endpoints: {
-                byFile: '/dashboard/uploadFile', // Your backend file uploader endpoint
-                byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
+if( document.getElementById('editor') ){
+    const editor = new EditorJS({
+    /**
+     * Id of Element that should contain Editor instance
+     */
+    holderId: 'editor',
+    tools: {
+        header: Header,
+        linkTool: {
+            class: LinkTool,
+            config: {
+                endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching
             }
-        }
+        },
+        raw: RawTool,
+        image: {
+            class: ImageTool,
+            config: {
+                endpoints: {
+                    byFile: '/dashboard/uploadFile', // Your backend file uploader endpoint
+                    byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
+                }
+            }
+        },
+        paragraph: {
+            config: {
+                placeholder: 'Tell your story...'
+            }
+        },
+        list: {
+            class: List,
+            inlineToolbar: true,
+        },
+        delimiter: Delimiter,
+        inlineCode: {
+            class: InlineCode,
+            shortcut: 'CMD+SHIFT+M',
+        },
+        warning: Warning,
+        quote: Quote
     },
-    paragraph: {
-        config: {
-            placeholder: 'Tell your story...'
-        }
-    },
-    list: {
-        class: List,
-        inlineToolbar: true,
-      },
-      delimiter: Delimiter,
-      inlineCode: {
-        class: InlineCode,
-        shortcut: 'CMD+SHIFT+M',
-      },
-      warning: Warning,
-      quote: Quote
-  },
-  autofocus: !createPost,
-  onReady: () => {
-      console.log('rdy');
-    renderBlocks();
-  }
-});
-
-window.ceditor = editor;
+    autofocus: !createPost,
+    onReady: () => {
+        console.log('rdy');
+        renderBlocks();
+    }
+    });
+}
 
 function renderBlocks(){
     //if( document.getElementById('editor').dataset.blocks ){
@@ -78,9 +78,9 @@ function renderBlocks(){
         }
         console.log(blocks + ' -');
         if(blocks){
-        editor.blocks.render(
-            blocks
-        );
+            editor.blocks.render(
+                blocks
+            );
         }
     //}
 }

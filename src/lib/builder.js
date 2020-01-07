@@ -148,8 +148,23 @@ let builder = module.exports = {
               result += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
               break;
             case 'list':
-              result += ``;
+                if(block.data.style == 'ordered'){
+                    result += `<ol>`;
+                } else {
+                    result += `<ul>`;
+                }
+                for(var i=0; i<block.data.items.length; i++){
+                    result += `<li>` + block.data.items[i] + `</li>`;
+                }
+                if(block.data.style == 'ordered'){
+                    result += `</ol>`;
+                } else {
+                    result += `</ul>`;
+                }
               break;
+            case 'image':
+                result += `<img src="${block.data.file.url}" class="w-full">`;
+                break;
           }
         }
         return result;
