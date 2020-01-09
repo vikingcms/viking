@@ -6,7 +6,7 @@ var process = require("process");
 let themeFolder = '/content/themes/'
 
 let builder = module.exports = {
-    build: function(sitePath, theme){
+    build: function(sitePath, theme, debug){
         let themePath = sitePath + themeFolder + theme + '/';
         fs.readdir(themePath, function (err, files) {
             if (err) {
@@ -22,6 +22,9 @@ let builder = module.exports = {
                     // turn into func used again below
                     let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
                     contents = builder.replaceSettings( contents, sitePath, themePath);
+                    if(debug){
+                        contents = builder.addAdminBar(contents);
+                    }
 
                     if(file == 'home.axe'){
 
@@ -48,8 +51,13 @@ let builder = module.exports = {
                                 let fileLocation = sitePath + '/' + postFile.replace('.json', '') + '/index.html';
                                 
                                 let postContents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-                                postContents = builder.replaceSettings( contents, sitePath, themePath);
-                                postContents = builder.replacePostData( contents, post );
+                                postContents = builder.replaceSettings( postContents, sitePath, themePath);
+                                postContents = builder.replacePostData( postContents, post );
+
+                                // If Admin Debug is on
+                                if(debug){
+                                    postContents = builder.addAdminBar(postContents);
+                                }
 
                                 fse.outputFile(fileLocation, postContents, err => {
                                     if(err) {
@@ -73,7 +81,7 @@ let builder = module.exports = {
             });
         });
 
-        return {'success' : 1};
+        return {'status' : 'success'};
     },
 
     getHTML: function(file){
@@ -142,7 +150,7 @@ let builder = module.exports = {
         for (let block of data.blocks) {
           switch (block.type) {
             case 'paragraph':
-              result += `<p class="text-gray-700 mb-2">${block.data.text}</p>`;
+              result += `<p>${block.data.text}</p>`;
               break;
             case 'header':
               result += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
@@ -168,5 +176,17 @@ let builder = module.exports = {
           }
         }
         return result;
+    },
+    addAdminBar: function(contents) {
+        return contents.replace('</body>', builder.adminBarHTML() + '</body>');
+    },
+    adminBarHTML: function() {
+        return `<div class="fixed bottom-0 left-0 bg-black w-full h-10 flex justify-between items-center z-50">
+                    <img src="/dashboard/assets/img/logo-inverse.svg" class="h-4 pl-2 w-auto">
+                    <div class="flex h-10">
+                        <a href="/dashboard" class="text-white font-medium inline-block h-full px-3 flex items-center text-xs uppercase border-r border-l border-gray-800">Dashboard</a>
+                        <a href="/dashboard/build" class="text-white font-medium inline-block h-full px-3 flex items-center text-xs uppercase border-r border-l border-gray-800">Build</a>
+                    </div>
+                </div>`;
     }
 };

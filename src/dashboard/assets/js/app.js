@@ -3100,8 +3100,10 @@ function _getb() {
   return _getb.apply(this, arguments);
 }
 
+var editor = '';
+
 if (document.getElementById('editor')) {
-  var _editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default.a({
+  editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default.a({
     /**
      * Id of Element that should contain Editor instance
      */
@@ -3162,7 +3164,7 @@ function renderBlocks() {
 
   console.log(blocks + ' -');
 
-  if (blocks) {
+  if (blocks && editor) {
     editor.blocks.render(blocks);
   } //}
 
@@ -3338,7 +3340,17 @@ var createNotification = function createNotification(type, message) {
 
 
 if (document.getElementById('build-btn')) {
-  document.getElementById('build-btn').addEventListener('click', function () {});
+  document.getElementById('build-btn').addEventListener('click', function () {
+    axios.post('/dashboard/build').then(function (response) {
+      var data = response.data;
+
+      if (data.status == "success") {
+        showNotification('success', 'Successfully built your site.');
+      }
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  });
 } //showNotification('success', 'Your new post has been successfull created.');
 //showNotification('danger', 'Something has went wrong trying to save your post.');
 //showNotification('info', 'Did you know that you can upload an image for your post.');

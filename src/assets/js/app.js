@@ -21,8 +21,9 @@ async function getb6(file){
     return await (new Response(file)).text();
 }
 
+let editor = '';
 if( document.getElementById('editor') ){
-    const editor = new EditorJS({
+    editor = new EditorJS({
     /**
      * Id of Element that should contain Editor instance
      */
@@ -77,7 +78,7 @@ function renderBlocks(){
             blocks = JSON.parse(document.getElementById('editor').dataset.blocks);
         }
         console.log(blocks + ' -');
-        if(blocks){
+        if(blocks && editor){
             editor.blocks.render(
                 blocks
             );
@@ -273,7 +274,16 @@ let createNotification = function(type, message){
 // Add event listener click for the build button
 if( document.getElementById('build-btn') ){
     document.getElementById('build-btn').addEventListener('click', function(){
-
+        axios.post('/dashboard/build')
+            .then(function (response) {
+                let data = response.data;
+                if(data.status == "success"){
+                    showNotification('success', 'Successfully built your site.');
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     });
 }
 

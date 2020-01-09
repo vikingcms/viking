@@ -81,8 +81,8 @@ let serve = module.exports = {
             res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
         );
         
-        app.get('/dashboard/build', function(req, res){
-            res.json( builder.build(curDir, '2020') );
+        app.post('/dashboard/build', function(req, res){
+            res.json( builder.build(curDir, '2020', debug) );
         });
 
         app.get('/dashboard/posts', function(req, res){
