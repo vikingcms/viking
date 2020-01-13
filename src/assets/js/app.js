@@ -106,6 +106,28 @@ if( document.getElementById('settings') ){
 
 }
 
+var openToggles = document.getElementsByClassName('open-toggle');
+for(var i = 0; i < openToggles.length; i++){
+    openToggles[i].addEventListener('click', function(){
+        let toggleId = this.dataset.toggle;
+        let toggleElement = document.getElementById( toggleId );
+        if(toggleElement.classList.contains('open')){
+            toggleElement.classList.remove('open');
+        } else {
+            toggleElement.classList.add('open');
+        }
+    });
+}
+
+window.removeOpenClasses =  function(){
+    var openClasses = document.getElementsByClassName('open');
+    for(var i = 0; i < openClasses.length; i++){
+        if(openClasses[i].id != 'settings'){
+            openClasses[i].classList.remove('open');
+        }
+    }
+}
+
 if( document.getElementById('save-post') ){
     document.getElementById('save-post').addEventListener('click', function(){
         savePost();
@@ -137,6 +159,7 @@ if( document.getElementById('delete-post') ){
 
 function closeSettingsBar(){
     document.getElementById('settings-sidebar').classList.remove('open');
+    removeOpenClasses();
     setTimeout(function(){
         document.getElementById('settings').classList.remove('open');
     }, 300);
@@ -200,7 +223,10 @@ function getPostData(_callback){
         _callback({
             title: document.getElementById('title').value,
             body: body,
-            slug: getSlugValue()
+            slug: getSlugValue(),
+            excerpt: document.getElementById('excerpt').value,
+            meta_title: document.getElementById('meta_title').value,
+            meta_description: document.getElementById('meta_description').value
         });
 
     }).catch((error) => {

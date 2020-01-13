@@ -136,11 +136,15 @@ let serve = module.exports = {
             
             let postJson = {
                 title: req.body.title,
+                excerpt: req.body.excerpt,
                 slug: req.body.slug,
                 image: req.body.image,
                 status: "published",
                 body: req.body.body,
-                meta: {},
+                meta: {
+                    title: req.body.meta_title,
+                    description: req.body.meta_description,
+                },
                 created_at: "",
                 modified_at: ""
             }
