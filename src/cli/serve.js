@@ -18,14 +18,27 @@ const imagesLocation = '/content/images/';
 const imagesFolder = curDir + imagesLocation;
 
 let upload = multer({ dest : imagesFolder + 'tmp/' })
-const debug = false;
+let debug = false;
 let notificationShown = 0;
 
 let builder = require(pathToPackage + '/src/lib/builder.js');
+let dateFormat = require('dateformat');
 
 // get right now date;
 Date.prototype.rightNow = function () { 
     return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear() + ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+}
+
+function getDateString(d){
+	var year = d.getFullYear();
+	var month = String(d.getMonth()+1).padStart(2, 0);
+	var day = String(d.getDate()).padStart(2, 0);
+
+	var hour = String(d.getHours()).padStart(2, 0);
+	var minute = String(d.getMinutes()).padStart(2, 0);
+	var second = String(d.getSeconds()).padStart(2, 0);
+
+	return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }
 
 async function getRandomPort (preferredPort = 8000) {
@@ -87,7 +100,7 @@ let serve = module.exports = {
 
         app.get('/dashboard/posts', function(req, res){
             serve.getPosts(function(posts){
-                res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session });
+                res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session, dateFormat: dateFormat });
             });
         });
 
@@ -130,42 +143,56 @@ let serve = module.exports = {
 
         });
 
-    
-
         app.post('/dashboard/posts/create', function(req, res){
             
-            let postJson = {
-                title: req.body.title,
-                excerpt: req.body.excerpt,
-                slug: req.body.slug,
-                image: req.body.image,
-                status: "published",
-                body: req.body.body,
-                meta: {
-                    title: req.body.meta_title,
-                    description: req.body.meta_description,
-                },
-                created_at: "",
-                modified_at: ""
-            }
-
-            let filename = serve.getFilenameFromSlug(postJson.slug);
-
-            fs.access(filename, fs.F_OK, (err) => {
-                // if we cannot access the file we can write it
-                if (err) {
-                    fs.writeFile(filename, JSON.stringify(postJson), 'utf8', function(){
-
-                    });
-                    res.json({ status: 'success', slug: postJson.slug });
-                } else {
-                    fs.writeFile(filename, JSON.stringify(postJson), 'utf8', function(){
-
-                    });
-                    res.json({ status: 'success', slug: postJson.slug });
+            try {
+                let imageFile = req.body.image;
+                if(req.body.image_filename != ""){
+                    let base64Image = req.body.image.split(';base64,').pop();
+                    imageFile = imagesLocation + req.body.image_filename;
+                    fs.writeFileSync(imagesFolder + req.body.image_filename, base64Image, {encoding: 'base64'});
                 }
 
-              });
+                let postJson = {
+                    title: req.body.title,
+                    excerpt: req.body.excerpt,
+                    slug: req.body.slug,
+                    image: imageFile,
+                    status: "published",
+                    body: req.body.body,
+                    meta: {
+                        title: req.body.meta_title,
+                        description: req.body.meta_description,
+                    },
+                    created_at: getDateString(new Date()),
+                    updated_at: getDateString(new Date()),
+                }
+    
+                let filename = serve.getFilenameFromSlug(postJson.slug);
+    
+                fs.access(filename, fs.F_OK, (err) => {
+                    // if we cannot access the file we can write it
+                    if (err) {
+                        fs.writeFile(filename, JSON.stringify(postJson), 'utf8', function(){
+    
+                        });
+                        res.json({ status: 'success', slug: postJson.slug });
+                    } else {
+                        fs.writeFile(filename, JSON.stringify(postJson), 'utf8', function(){
+    
+                        });
+                        res.json({ status: 'success', slug: postJson.slug });
+                    }
+    
+                  });
+
+            } catch(err) {
+                // An error occurred
+                console.error(err);
+                res.json({ status: 'danger', message: err });
+            }
+
+            
         });
 
         app.get('/dashboard/post/:post', function(req, res){

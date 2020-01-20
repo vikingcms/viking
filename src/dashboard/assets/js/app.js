@@ -3301,6 +3301,8 @@ function getPostData(_callback) {
     _callback({
       title: document.getElementById('title').value,
       body: body,
+      image: document.getElementById('image').src,
+      image_filename: document.getElementById('image').dataset.name,
       slug: getSlugValue(),
       excerpt: document.getElementById('excerpt').value,
       meta_title: document.getElementById('meta_title').value,
@@ -3321,7 +3323,7 @@ window.showNotification = function (type, message) {
     if (notification) {
       notification.classList.add('open');
     }
-  }, 0);
+  }, 10);
 };
 
 var notificationTemplate = function notificationTemplate(type, message, title, color) {
@@ -3364,7 +3366,7 @@ var createNotification = function createNotification(type, message) {
         }
       }, 300);
     }
-  }, 3999000);
+  }, 3000);
 }; // Add event listener click for the build button
 
 
@@ -3384,6 +3386,43 @@ if (document.getElementById('build-btn')) {
 //showNotification('danger', 'Something has went wrong trying to save your post.');
 //showNotification('info', 'Did you know that you can upload an image for your post.');
 //showNotification('warning', 'Make sure to enter a good title in your post.');
+
+
+window.encodeImageFileAsURL = function (element) {
+  var file = element.files[0];
+  var reader = new FileReader();
+
+  reader.onload = function (event) {
+    document.getElementById('image').src = event.target.result;
+    document.getElementById('image').dataset.name = file.name;
+    console.log('hit abcdefg');
+  };
+
+  reader.readAsDataURL(file);
+};
+
+if (document.getElementById('image_upload')) {
+  document.getElementById('image_upload').addEventListener('change', function (event) {
+    console.log('changed y');
+    encodeImageFileAsURL(this);
+    showImagePreview();
+  });
+}
+
+window.hideImagePreview = function () {
+  document.getElementById('image_preview_upload').classList.remove('hidden');
+  document.getElementById('image_upload').classList.remove('hidden');
+  document.getElementById('image_preview').classList.add('hidden');
+  document.getElementById('image').src = document.getElementById('image').dataset.pixel;
+  document.getElementById('image_upload').value = "";
+  document.getElementById('image').dataset.name = "";
+};
+
+window.showImagePreview = function () {
+  document.getElementById('image_preview_upload').classList.add('hidden');
+  document.getElementById('image_upload').classList.add('hidden');
+  document.getElementById('image_preview').classList.remove('hidden');
+};
 
 /***/ }),
 

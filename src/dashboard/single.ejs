@@ -6,7 +6,7 @@
             <div id="editor" data-blocks="<% if (post.body) { %><%= JSON.stringify(post.body) %><% } %>"></div>
         </div>
 
-        <div class="fixed right-0 top-0 flex bg-white shadow-xl pb-2 pl-5 rounded-bl-lg">
+        <div class="fixed right-0 top-0 flex bg-white border-l border-b border-gray-300 pb-2 pl-5 rounded-bl-lg">
             <div class="inline-block text-gray-500 underline cursor-pointer mr-3 uppercase text-sm flex items-center mt-1" id="save-post">Save</div>
             <div class="group cursor-pointer rounded-full p-2 bg-gray-200 hover:bg-gray-300 mr-3 mt-2" id="settings-open">
                 <svg width="20" height="20" class="fill-current text-gray-500 group-hover:text-gray-600" xmlns="http://www.w3.org/2000/svg"><path d="M19.535 8.427l-2.006-.55c-.296-.696-.422-.992-.697-1.71l1.035-1.816a.607.607 0 00-.106-.76L16.41 2.238a.615.615 0 00-.76-.106l-1.817 1.035c-.697-.296-.992-.422-1.71-.697l-.55-2.006A.653.653 0 0010.961 0H9.039c-.296 0-.549.19-.612.465l-.55 2.006c-.696.296-.992.422-1.71.697L4.35 2.133a.607.607 0 00-.76.106L2.238 3.59a.615.615 0 00-.106.76l1.035 1.817c-.296.697-.422.992-.697 1.71l-2.006.55A.653.653 0 000 9.039v1.922c0 .296.19.549.465.612l2.006.55c.296.696.422.992.697 1.71L2.133 15.65a.607.607 0 00.106.76l1.351 1.352a.615.615 0 00.76.106l1.817-1.035c.697.296.992.422 1.71.697l.55 2.006a.653.653 0 00.612.465h1.922c.296 0 .549-.19.612-.465l.55-2.006c.696-.296.992-.422 1.71-.697l1.816 1.035c.254.148.57.106.76-.106l1.352-1.351a.615.615 0 00.106-.76l-1.035-1.817c.296-.697.422-.992.697-1.71l2.006-.55a.653.653 0 00.465-.612V9.039a.653.653 0 00-.465-.612zM10 14a4 4 0 11-.001-7.999A4 4 0 0110 14z" /></svg>
@@ -22,11 +22,15 @@
 
                     <div class="p-6">
 
-                        <div class="relative cursor-pointer mb-8">
-                            <label class="top-0 left-0 w-full h-48 rounded-lg bg-white border border-gray-200 rounded-lg cursor-pointer block flex flex-col justify-center items-center">
+                        <div class="relative cursor-pointer mb-8 h-56 rounded-lg overflow-hidden">
+                            <label id="image_preview_upload" class="top-0 left-0 w-full h-56 rounded-lg bg-white border border-gray-200 rounded-lg cursor-pointer block flex flex-col justify-center items-center <% if (post.image) { %>hidden<% } %>">
                                 <span class="px-3 py-2 rounded border border-gray-300 bg-white text-xs font-bold text-gray-600">Upload Post Image</span>
                             </label>
-                            <input type="file" class="w-full h-full absolute left-0 top-0 opacity-0 cursor-pointer">
+                            <div id="image_preview" class="<% if (!post.image) { %>hidden<% } %> w-full h-full">
+                                <div id="removeImage" class="w-20 h-6 bg-red-500 text-white absolute right-0 top-0 mr-3 mt-3 rounded-full flex justify-center items-center text-xs leading-none font-bold" onclick="hideImagePreview()">&times; remove</div>
+                                <img src="<% if (post.image) { %><%= post.image %><% } else { %>data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==<% } %>" data-pixel="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-name="" class="w-full h-full" id="image">
+                            </div>
+                            <input type="file" id="image_upload" class="w-full h-full absolute left-0 top-0 opacity-0 cursor-pointer <% if (post.image) { %>hidden<% } %>">
                         </div>
 
                         <label class="viking-label" for="slug">URL</label>

@@ -109,6 +109,12 @@
         }
     }
 
+    .cdx-settings-button:not(:nth-child(3n+3)), .ce-settings__button:not(:nth-child(3n+3)){
+        margin-right: 0px;
+    }
+
+    
+
     .ce-block{
         @apply p-4 border border-transparent rounded-lg;
     }
@@ -167,3 +173,35 @@
 .linear-gradient-blue{
     background: linear-gradient(45deg, #0074ff, #00c6ff);
 }
+
+/********* TOGGLE Button CSS *********/
+
+
+.toggle__dot {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  input:checked ~ .toggle__dot {
+    transform: translateX(24px);
+    background-color: #55e6a5;
+  }
+  
+  input:checked ~ .toggle__line{
+    background:#46d695;
+  }
+  
+  input:checked ~ .toggle__line .no{
+    display:none;
+  }
+  
+  input:checked ~ .toggle__line .yes{
+    display:block;
+  }
+  
+  .yes{
+    font-size: 9px;
+    top: 3px;
+    left: -1px;
+  }
+
+/********* END TOGGLE Button CSS *********/
