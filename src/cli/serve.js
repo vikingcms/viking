@@ -7,27 +7,17 @@ let session = require('express-session');
 const url = require('url');
 const multer  = require('multer')
 let bodyParser = require('body-parser')
-//const fileUpload = require('express-fileupload');
-
+let dateFormat = require('dateformat')
 let app = express()
-let pathToPackage = require("global-modules-path").getPath("vikingcms");
-const curDir = process.cwd();
 const fs = require('fs');
-const postsFolder = curDir + '/content/posts/json/';
-const imagesLocation = '/content/images/';
-const imagesFolder = curDir + imagesLocation;
 
-let upload = multer({ dest : imagesFolder + 'tmp/' })
+let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
+let builder = require(folder.vikingPath() + '/src/lib/builder.js');
+const config = require(folder.vikingPath() + '/src/lib/config.js');
+
+let upload = multer({ dest : folder.imagePath() + 'tmp/' })
 let debug = false;
 let notificationShown = 0;
-
-let builder = require(pathToPackage + '/src/lib/builder.js');
-let dateFormat = require('dateformat');
-
-// get right now date;
-Date.prototype.rightNow = function () { 
-    return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear() + ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
-}
 
 function getDateString(d){
 	var year = d.getFullYear();
@@ -52,9 +42,10 @@ let serve = module.exports = {
         getRandomPort(8080).then( function(port){
 
             app.set('view engine', 'ejs');
-            app.use('/dashboard/assets', express.static(pathToPackage + '/src/dashboard/assets'));
-            app.use(imagesLocation, express.static(imagesFolder));
-            app.use('/', express.static(curDir));
+            app.use('/dashboard/assets', express.static(folder.vikingPath() + '/src/dashboard/assets'));
+            
+            app.use('/', express.static( folder.sitePath() ));
+            app.use('/images/', express.static(folder.imagePath()));
             //app.use(express.json());
             app.use(express.json({limit: '10mb'}));
             app.use(express.urlencoded({ extended: true }));
@@ -87,30 +78,37 @@ let serve = module.exports = {
     generateRoutes: function(){
         
         app.get('/', (req, res) => 
-            res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
+            res.render(folder.vikingPath() + '/src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
         );
 
         app.get('/dashboard', (req, res) => 
-            res.render(pathToPackage + '/src/dashboard/index', { request: req, debug: debug, session: req.session }) 
+            res.render(folder.vikingPath() + '/src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
         );
         
         app.post('/dashboard/build', function(req, res){
-            res.json( builder.build(curDir, '2020', debug) );
+            res.json( builder.build('2020', debug) );
         });
 
         app.get('/dashboard/posts', function(req, res){
             serve.getPosts(function(posts){
-                res.render(pathToPackage + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session, dateFormat: dateFormat });
+                res.render(folder.vikingPath() + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session, dateFormat: dateFormat });
             });
         });
 
         app.get('/dashboard/settings', function (req, res) {
-            let settingsFile = JSON.parse(fs.readFileSync(curDir + '/content/settings.json'));
-            res.render(pathToPackage + '/src/dashboard/settings', { request: req, debug: debug, session: req.session, settingsFile: settingsFile }) 
+            let settingsFile = JSON.parse(fs.readFileSync(folder.rootPath() + '/content/settings.json'));
+            res.render(folder.vikingPath() + '/src/dashboard/settings', { request: req, debug: debug, session: req.session, settingsFile: settingsFile }) 
         });
 
         app.get('/dashboard/posts/create', function(req, res){
-            res.render(pathToPackage + '/src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
+            res.render(folder.vikingPath() + '/src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
+        });
+
+        app.post('/dashboard/update/config/:file', function(req, res){
+            config.updateOption(req.params.file, req.body.key, req.body.value);
+            res.json({
+                "success": true
+            });
         });
 
         app.post('/dashboard/posts/delete', function(req, res){
@@ -132,12 +130,12 @@ let serve = module.exports = {
             console.log('req image');
             console.log(req.file);
             let file = req.file;
-            fs.renameSync(file.path, imagesFolder + file.originalname);
+            fs.renameSync(file.path, folder.imagePath() + file.originalname);
 
             res.json({
                 success : 1,
                 file : {
-                    "url" : imagesLocation + file.originalname
+                    "url" : '/images/' + file.originalname
                 }
             });
 
@@ -149,8 +147,8 @@ let serve = module.exports = {
                 let imageFile = req.body.image;
                 if(req.body.image_filename != ""){
                     let base64Image = req.body.image.split(';base64,').pop();
-                    imageFile = imagesLocation + req.body.image_filename;
-                    fs.writeFileSync(imagesFolder + req.body.image_filename, base64Image, {encoding: 'base64'});
+                    imageFile = '/images/' + req.body.image_filename;
+                    fs.writeFileSync(folder.imagePath() + req.body.image_filename, base64Image, {encoding: 'base64'});
                 }
 
                 let postJson = {
@@ -199,7 +197,7 @@ let serve = module.exports = {
             serve.getPost(req.params.post, function(post){
                 //console.log(post);
                 //res.json({ status: 'hmmm', post: post });
-                res.render(pathToPackage + '/src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
+                res.render(folder.vikingPath() + '/src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
             });
         });
 
@@ -221,12 +219,12 @@ let serve = module.exports = {
 
     getPosts: function(_callback){
         let posts = [];
-        fs.readdir(postsFolder, (err, files) => {
+        fs.readdir(folder.post(), (err, files) => {
             if(files.length){
                 files.forEach(file => {
                     //console.log(file);
                     let filename = file.replace('.json', '');
-                    posts.push( JSON.parse( fs.readFileSync( postsFolder + file ) ) );
+                    posts.push( JSON.parse( fs.readFileSync( folder.post() + file ) ) );
                 });
             }
             _callback(posts);
@@ -234,12 +232,12 @@ let serve = module.exports = {
     }, 
 
     getPost: function(slug, _callback){
-        console.log('heyo ' + postsFolder + slug + '.json');
-        let post = JSON.parse( fs.readFileSync( postsFolder + slug + '.json' ) );
+        console.log('heyo ' + folder.post() + slug + '.json');
+        let post = JSON.parse( fs.readFileSync( folder.post() + slug + '.json' ) );
         _callback(post);
     },
 
     getFilenameFromSlug(slug){
-        return postsFolder + slug + '.json';
+        return folder.post() + slug + '.json';
     }
 }

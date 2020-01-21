@@ -3,11 +3,22 @@ var path = require('path');
 const fse = require('fs-extra');
 // In newer Node.js versions where process is already global this isn't necessary.
 var process = require("process");
-let themeFolder = '/content/themes/'
+let themeFolder = '/content/themes/';
+var ncp = require('ncp').ncp;
+
+let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
+const config = require(folder.vikingPath() + '/src/lib/config.js');
+
 
 let builder = module.exports = {
-    build: function(sitePath, theme, debug){
-        let themePath = sitePath + themeFolder + theme + '/';
+    build: function(theme, debug){
+        
+        let buildConfig = config.loadConfigs().build;
+
+        // empty the site folder
+        fse.emptyDirSync( folder.sitePath() );
+
+        let themePath = folder.themePath() + theme + '/';
         fs.readdir(themePath, function (err, files) {
             if (err) {
               console.error("Could not list the directory.", err);
@@ -21,14 +32,14 @@ let builder = module.exports = {
 
                     // turn into func used again below
                     let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-                    contents = builder.replaceSettings( contents, sitePath, themePath);
-                    if(debug){
+                    contents = builder.replaceSettings( contents, folder.rootPath(), themePath);
+                    if(buildConfig.debug){
                         contents = builder.addAdminBar(contents);
                     }
 
                     if(file == 'home.axe'){
 
-                        fs.writeFile(sitePath + '/index.html', contents, (err) => {
+                        fs.writeFile(folder.sitePath() + 'index.html', contents, (err) => {
                             // throws an error, you could also catch it here
                             if (err) throw err;
                         
@@ -39,23 +50,23 @@ let builder = module.exports = {
 
                     if(file == 'single.axe'){
 
-                        fs.readdir(sitePath + '/content/posts/json/', function (err, postFiles) {
+                        fs.readdir( folder.postPath() , function (err, postFiles) {
                             if (err) {
                               console.error("Could not list the post directory.", err);
                               process.exit(1);
                             }
                             postFiles.forEach(function (postFile, index) {
-                                let jsonPath = sitePath + '/content/posts/json/' + postFile;
+                                let jsonPath = folder.postPath() + postFile;
                                 let post = JSON.parse(builder.getPost(jsonPath));
 
-                                let fileLocation = sitePath + '/' + postFile.replace('.json', '') + '/index.html';
+                                let fileLocation = folder.sitePath() + postFile.replace('.json', '') + '/index.html';
                                 
                                 let postContents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-                                postContents = builder.replaceSettings( postContents, sitePath, themePath);
+                                postContents = builder.replaceSettings( postContents, folder.rootPath(), themePath);
                                 postContents = builder.replacePostData( postContents, post );
 
                                 // If Admin Debug is on
-                                if(debug){
+                                if(buildConfig.debug){
                                     postContents = builder.addAdminBar(postContents);
                                 }
 
@@ -72,11 +83,13 @@ let builder = module.exports = {
 
                     }
 
+                    // copy over all the assets
+                    fse.copySync(themePath + '/site/', folder.sitePath());
+                    // copy over all the images
+                    fse.copySync(folder.imagePath(), folder.sitePath() + 'images/');
+
                     
                 }
-                //if( == 'axe'){
-                    //console.log('processed: ' + file); 
-                //}
                 
             });
         });
@@ -185,7 +198,6 @@ let builder = module.exports = {
                     <img src="/dashboard/assets/img/logo-inverse.svg" class="h-4 pl-2 w-auto">
                     <div class="flex h-10">
                         <a href="/dashboard" class="text-white font-medium inline-block h-full px-3 flex items-center text-xs uppercase border-r border-l border-gray-800">Dashboard</a>
-                        <a href="/dashboard/build" class="text-white font-medium inline-block h-full px-3 flex items-center text-xs uppercase border-r border-l border-gray-800">Build</a>
                     </div>
                 </div>`;
     }

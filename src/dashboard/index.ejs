@@ -15,23 +15,24 @@
                                     <h2 class="font-bold text-lg">Welcome To Viking</h2>
                                     <p>An Awesome Static Site CMS</p>
                                 </div>
-                                <div>
+                                <div class="flex">
                                     <!-- Begin of Toggle Switch -->
-                                    <div class="relative md:absolute right-0 mt-6 md:mt-4 mr-0 md:mr-10 flex justify-center md:justify-end w-full">
+                                    <div class="flex justify-center">
                                         <!-- text to the right of toggle -->
 
-                                        <label for="typeToggle" class="flex items-center cursor-pointer select-none">
-
+                                        
+                                        <label for="toggleDebug" class="flex items-center cursor-pointer select-none mr-2">
+                                            <span class="mr-2 text-gray-500 font-medium text-xs">Debug</span>
                                             <span class="relative block">
-                                                <input id="typeToggle" type="checkbox" class="hidden" />
-                                                <span class="toggle__line w-12 px-2 h-6 bg-gray-200 rounded-full shadow-inner block">
-                                                    <span class="yes absolute right-0 text-white font-medium text-xs ml-2 mt-1 leading-tight hidden">YES</span>
-                                                    <span class="no absolute right-0 text-gray-500 font-medium text-xs mr-2 mt-1 leading-tight">no</span>
+                                                <input id="toggleDebug" type="checkbox" class="hidden" data-key="debug" data-config="build" <% if (config.build.debug) { %>checked="checked"<% } %>  />
+                                                <span class="toggle__line w-12 px-2 h-6 bg-gray-700 rounded-full shadow-inner block">
+                                                    <span class="yes absolute right-0 text-white font-medium text-xs ml-2 mt-1 leading-tight hidden">ON</span>
+                                                    <span class="no absolute right-0 text-gray-500 font-medium text-xs mr-2 mt-1 leading-tight">off</span>
                                                 </span>
                                                 <!-- dot -->
                                                 <span class="toggle__dot absolute w-4 h-4 mt-1 bg-white rounded-full shadow inset-0 left-0 ml-1 block"></span>
                                             </span>
-                                            <span class="ml-2 text-white font-medium text-sm">This is Me</span>
+                                            
 
 
                                         </label>

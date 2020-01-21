@@ -3326,6 +3326,22 @@ window.showNotification = function (type, message) {
   }, 10);
 };
 
+if (document.getElementById('toggleDebug')) {
+  document.getElementById('toggleDebug').addEventListener('change', function () {
+    console.log('heyo');
+    var value = this.checked ? true : false;
+    var key = this.dataset.key;
+    axios.post('/dashboard/update/config/' + this.dataset.config, {
+      key: key,
+      value: value
+    }).then(function (response) {
+      console.log(response);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  });
+}
+
 var notificationTemplate = function notificationTemplate(type, message, title, color) {
   return "<div class=\"fixed bottom-0 shadow-2xl group rounded-t-lg bg-white border border-gray-100 cursor-pointer transition " + type + "\" id=\"notification\">\n        <div class=\"float-left w-24\">\n            <div class=\"rounded-full absolute left-0 bg-black bg-gray-100 border-" + color + "-400 border-l-4 border-b-4 bubble\"></div>\n            <img src=\"/dashboard/assets/img/notifications/" + type + ".png\" class=\"h-48 -ml-8 -mt-8 relative\">\n        </div>\n        <div class=\"flex flex-col justify-center h-full pl-4 pr-5\">\n            <h4 class=\"text-" + color + "-400 font-bold -mt-1 mb-1\">" + title + "</h4>\n            <p class=\"text-xs text-gray-500 overflow-scroll\">" + message + "</p>\n        </div>\n        <div class=\"absolute right-0 top-0 bg-gray-100 group-hover:bg-gray-200 text-gray-400 rounded-full h-5 w-5 flex justify-center items-center text-xs leading-none font-bold mt-2 mr-2 cursor-pointer\">&times;</div>\n    </div>";
 };

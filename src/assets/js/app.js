@@ -250,6 +250,21 @@ window.showNotification = function(type, message){
     }, 10);
 }
 
+if( document.getElementById('toggleDebug') ){
+    document.getElementById('toggleDebug').addEventListener('change', function(){
+        console.log('heyo');
+        let value = (this.checked) ? true : false;
+        let key = this.dataset.key;
+            axios.post('/dashboard/update/config/' + this.dataset.config, { key: key, value: value })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+    });
+}
+
 let notificationTemplate = function(type, message, title, color){
     return `<div class="fixed bottom-0 shadow-2xl group rounded-t-lg bg-white border border-gray-100 cursor-pointer transition ` + type + `" id="notification">
         <div class="float-left w-24">
