@@ -3328,17 +3328,18 @@ window.showNotification = function (type, message) {
 
 if (document.getElementById('toggleDebug')) {
   document.getElementById('toggleDebug').addEventListener('change', function () {
-    console.log('heyo');
-    var value = this.checked ? true : false;
-    var key = this.dataset.key;
-    axios.post('/dashboard/update/config/' + this.dataset.config, {
-      key: key,
-      value: value
-    }).then(function (response) {
-      console.log(response);
-    })["catch"](function (error) {
-      console.log(error);
-    });
+    updateConfig(this.dataset.config, this.dataset.key, this.checked ? true : false);
+  });
+}
+
+function updateConfig(file, key, value) {
+  axios.post('/dashboard/update/config/' + file, {
+    key: key,
+    value: value
+  }).then(function (response) {
+    console.log(response);
+  })["catch"](function (error) {
+    console.log(error);
   });
 }
 

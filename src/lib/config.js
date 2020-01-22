@@ -6,7 +6,8 @@ let self = module.exports = {
     loadConfigs: function(){
 
         return {
-            build: self.loadConfig('build')
+            build: self.loadConfig('build'),
+            site: self.loadConfig('site')
         }
     },
 
@@ -15,20 +16,27 @@ let self = module.exports = {
         try{
             return fs.readJsonSync( folder.config() + name + '.json');
         } catch (err){
-            return {
-                "debug" : false
-            }
+            let defaultConfig = fs.readJsonSync( folder.defaultConfigs() + name + '.json');
+            fs.outputJsonSync(folder.config() + name + '.json', defaultConfig);
+            return fs.readJsonSync( folder.config() + name + '.json');
         }
     },
 
     updateOption(name, key, value){
-        var data = {};
+        
+
+        try{
+            data = fs.readJsonSync( folder.config() + name + '.json');
+        } catch (err){
+            var data = fs.readJsonSync( folder.defaultConfigs() + name + '.json');
+        }
+
         data[key] = value;
+
         self.update(name, data);
     },
 
     update: function(name, data) {
-        console.log('and data: ' + data);
         fs.outputJsonSync(folder.config() + name + '.json', data);
     }
 }

@@ -12,8 +12,11 @@ let app = express()
 const fs = require('fs');
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
-let builder = require(folder.vikingPath() + '/src/lib/builder.js');
-const config = require(folder.vikingPath() + '/src/lib/config.js');
+let builder = require(folder.vikingPath() + 'src/lib/builder.js');
+const config = require(folder.vikingPath() + 'src/lib/config.js');
+const Post = require(folder.vikingPath() + 'src/lib/post.js');
+
+let post = new Post();
 
 let upload = multer({ dest : folder.imagePath() + 'tmp/' })
 let debug = false;
@@ -42,7 +45,7 @@ let serve = module.exports = {
         getRandomPort(8080).then( function(port){
 
             app.set('view engine', 'ejs');
-            app.use('/dashboard/assets', express.static(folder.vikingPath() + '/src/dashboard/assets'));
+            app.use('/dashboard/assets', express.static(folder.vikingPath() + 'src/dashboard/assets'));
             
             app.use('/', express.static( folder.sitePath() ));
             app.use('/images/', express.static(folder.imagePath()));
@@ -78,30 +81,29 @@ let serve = module.exports = {
     generateRoutes: function(){
         
         app.get('/', (req, res) => 
-            res.render(folder.vikingPath() + '/src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
+            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
         );
 
         app.get('/dashboard', (req, res) => 
-            res.render(folder.vikingPath() + '/src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
+            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
         );
         
         app.post('/dashboard/build', function(req, res){
-            res.json( builder.build('2020', debug) );
+            res.json( builder.build() );
         });
 
         app.get('/dashboard/posts', function(req, res){
-            serve.getPosts(function(posts){
-                res.render(folder.vikingPath() + '/src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session, dateFormat: dateFormat });
-            });
+            let posts = post.orderBy('created_at', 'DESC').getPosts();
+            res.render(folder.vikingPath() + 'src/dashboard/posts', { request: req, posts: posts, debug: debug, session: req.session, dateFormat: dateFormat });
         });
 
         app.get('/dashboard/settings', function (req, res) {
             let settingsFile = JSON.parse(fs.readFileSync(folder.rootPath() + '/content/settings.json'));
-            res.render(folder.vikingPath() + '/src/dashboard/settings', { request: req, debug: debug, session: req.session, settingsFile: settingsFile }) 
+            res.render(folder.vikingPath() + 'src/dashboard/settings', { request: req, debug: debug, session: req.session, settingsFile: settingsFile }) 
         });
 
         app.get('/dashboard/posts/create', function(req, res){
-            res.render(folder.vikingPath() + '/src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
+            res.render(folder.vikingPath() + 'src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
         });
 
         app.post('/dashboard/update/config/:file', function(req, res){
@@ -197,7 +199,7 @@ let serve = module.exports = {
             serve.getPost(req.params.post, function(post){
                 //console.log(post);
                 //res.json({ status: 'hmmm', post: post });
-                res.render(folder.vikingPath() + '/src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
+                res.render(folder.vikingPath() + 'src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
             });
         });
 
@@ -215,20 +217,6 @@ let serve = module.exports = {
             return res;
         });
 
-    }, 
-
-    getPosts: function(_callback){
-        let posts = [];
-        fs.readdir(folder.post(), (err, files) => {
-            if(files.length){
-                files.forEach(file => {
-                    //console.log(file);
-                    let filename = file.replace('.json', '');
-                    posts.push( JSON.parse( fs.readFileSync( folder.post() + file ) ) );
-                });
-            }
-            _callback(posts);
-        });
     }, 
 
     getPost: function(slug, _callback){

@@ -1,24 +1,27 @@
-var fs = require('fs');
 var path = require('path');
-const fse = require('fs-extra');
+const fs = require('fs-extra');
 // In newer Node.js versions where process is already global this isn't necessary.
 var process = require("process");
 let themeFolder = '/content/themes/';
-var ncp = require('ncp').ncp;
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
 const config = require(folder.vikingPath() + '/src/lib/config.js');
+const Post = require(folder.vikingPath() + 'src/lib/post.js');
 
+let post = new Post();
+let themePath = folder.themePath() + '2020/';
 
 let builder = module.exports = {
-    build: function(theme, debug){
+    build: function(){
         
         let buildConfig = config.loadConfigs().build;
+        let siteConfig = config.loadConfigs().site;
+        let posts = post.orderBy('created_at', 'DESC').getPosts();
 
         // empty the site folder
-        fse.emptyDirSync( folder.sitePath() );
+        fs.emptyDirSync( folder.sitePath() );
 
-        let themePath = folder.themePath() + theme + '/';
+        
         fs.readdir(themePath, function (err, files) {
             if (err) {
               console.error("Could not list the directory.", err);
@@ -28,73 +31,62 @@ let builder = module.exports = {
             files.forEach(function (file, index) {
                 let extension = path.extname(file);
                 if(typeof(extension) != 'undefined' && extension == '.axe'){
-                    console.log(file);
 
-                    // turn into func used again below
-                    let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-                    contents = builder.replaceSettings( contents, folder.rootPath(), themePath);
+                    // if debug mode is on we will write all posts to a json file
                     if(buildConfig.debug){
-                        contents = builder.addAdminBar(contents);
+                        fs.writeJsonSync( folder.sitePath() + '/posts.json', posts, { spaces: '\t' });
                     }
 
                     if(file == 'home.axe'){
-
-                        fs.writeFile(folder.sitePath() + 'index.html', contents, (err) => {
-                            // throws an error, you could also catch it here
-                            if (err) throw err;
-                        
-                            // success case, the file was saved
-                            console.log('Built: ' + file);
-                        });
+                        builder.writeFile(file, '', false, '');
                     }
-
+                    
                     if(file == 'single.axe'){
 
-                        fs.readdir( folder.postPath() , function (err, postFiles) {
-                            if (err) {
-                              console.error("Could not list the post directory.", err);
-                              process.exit(1);
-                            }
-                            postFiles.forEach(function (postFile, index) {
-                                let jsonPath = folder.postPath() + postFile;
-                                let post = JSON.parse(builder.getPost(jsonPath));
-
-                                let fileLocation = folder.sitePath() + postFile.replace('.json', '') + '/index.html';
-                                
-                                let postContents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-                                postContents = builder.replaceSettings( postContents, folder.rootPath(), themePath);
-                                postContents = builder.replacePostData( postContents, post );
-
-                                // If Admin Debug is on
-                                if(buildConfig.debug){
-                                    postContents = builder.addAdminBar(postContents);
-                                }
-
-                                fse.outputFile(fileLocation, postContents, err => {
-                                    if(err) {
-                                      console.log(err);
-                                    } else {
-                                        console.log('Built: ' + postFile);
-                                    }
-                                });
-                            });
-
+                        posts.forEach(function (post, index) {
+                            builder.writeFile(file, post.slug + '/', true, post);
                         });
+
+                    }
+
+                    if(file == 'loop.axe'){
 
                     }
 
                     // copy over all the assets
-                    fse.copySync(themePath + '/site/', folder.sitePath());
+                    fs.copySync(themePath + '/site/', folder.sitePath());
                     // copy over all the images
-                    fse.copySync(folder.imagePath(), folder.sitePath() + 'images/');
+                    fs.copySync(folder.imagePath(), folder.sitePath() + 'images/');
 
-                    
                 }
                 
             });
         });
 
         return {'status' : 'success'};
+    },
+
+    writeFile: function(file, directory, single, post){
+
+        let buildConfig = config.loadConfigs().build;
+
+        // turn into func used again below
+        let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
+        contents = builder.replaceSettings( contents, folder.rootPath(), themePath);
+        if(single){
+            contents = builder.replacePostData( contents, post );
+        }
+        if(buildConfig.debug){
+            contents = builder.addAdminBar(contents);
+        }
+
+        fs.outputFile(folder.sitePath() + directory + 'index.html', contents, (err) => {
+            // throws an error, you could also catch it here
+            if (err) throw err;
+        
+            // success case, the file was saved
+            console.log('Built: ' + file);
+        });
     },
 
     getHTML: function(file){
