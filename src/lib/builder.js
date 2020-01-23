@@ -2,6 +2,7 @@ var path = require('path');
 const fs = require('fs-extra');
 // In newer Node.js versions where process is already global this isn't necessary.
 var process = require("process");
+var slugify = require('slugify');
 let themeFolder = '/content/themes/';
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
@@ -38,19 +39,19 @@ let builder = module.exports = {
                     }
 
                     if(file == 'home.axe'){
-                        builder.writeFile(file, '', false, '');
+                        builder.writeFile(file, '', {});
                     }
                     
                     if(file == 'single.axe'){
 
                         posts.forEach(function (post, index) {
-                            builder.writeFile(file, post.slug + '/', true, post);
+                            builder.writeFile(file, post.slug + '/', { post: post });
                         });
 
                     }
 
                     if(file == 'loop.axe'){
-
+                        builder.writeFile(file, siteConfig.loopRoute + '/', {});
                     }
 
                     // copy over all the assets
@@ -66,15 +67,18 @@ let builder = module.exports = {
         return {'status' : 'success'};
     },
 
-    writeFile: function(file, directory, single, post){
+    writeFile: function(file, directory, data){
 
         let buildConfig = config.loadConfigs().build;
 
         // turn into func used again below
         let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
         contents = builder.replaceSettings( contents, folder.rootPath(), themePath);
-        if(single){
-            contents = builder.replacePostData( contents, post );
+        if(file == 'single.axe'){
+            contents = builder.replacePostData( contents, data.post );
+        }
+        if(file == 'loop.axe'){
+            contents = builder.replacePostDataLoop( contents );
         }
         if(buildConfig.debug){
             contents = builder.addAdminBar(contents);
@@ -145,10 +149,40 @@ let builder = module.exports = {
                 if(key == 'body'){
                     withThis = builder.renderHTML(post[key]);
                 }
-                contents = contents.replace(replaceThis, withThis);
+                let regexReplaceThis = new RegExp(replaceThis, 'g');
+                contents = contents.replace(regexReplaceThis, withThis);
             }
         }
         return contents;
+    },
+    replacePostDataLoop: function(contents){
+        let posts = post.orderBy('created_at', 'DESC').getPosts();
+        
+        let loopStartString = '@loop';
+        let loopEndString = '@endloop';
+
+        let loopStart = contents.indexOf( loopStartString );
+        let loopEnd = contents.indexOf( loopEndString );
+
+        let topHTML = contents.slice(0, loopStart);
+        let loopHTML = contents.slice( loopStart + loopStartString.length, loopEnd );
+        let bottomHTML = contents.slice(loopEnd + loopEndString.length, contents.length);
+
+        let loopContent = '';
+
+        posts.forEach(function (post, index){
+            loopContent += builder.replacePostData( loopHTML, post );
+        });
+
+        // insert loop content between top and bottom half of file
+        contents = topHTML + loopContent.trim() + bottomHTML;
+
+        // return updated contents
+        return contents;
+
+        // posts.forEach(function (post, index) {
+
+        // });
     },
     renderHTML: function(data) {
         let result = ``;
@@ -159,6 +193,9 @@ let builder = module.exports = {
               break;
             case 'header':
               result += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
+              if(block.data.level == 2){
+                  result = result.replace('<h2>', '<h2 id="' + slugify(block.data.text, { remove: /[^\w\s]/gi, lower:true}) + '">');
+              }
               break;
             case 'list':
                 if(block.data.style == 'ordered'){
