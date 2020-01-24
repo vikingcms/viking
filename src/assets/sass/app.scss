@@ -205,3 +205,18 @@
   }
 
 /********* END TOGGLE Button CSS *********/
+.codeeditor-wrapper{
+    position: relative;
+    height: 100%;
+    min-height: 45vh;
+    .codeeditor, .ace_editor{
+        font-family: "Roboto Mono", monospace;
+        font-size: 14px;
+        position: absolute;
+        min-height: 300px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+}

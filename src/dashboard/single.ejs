@@ -72,6 +72,11 @@
 
                     <label class="viking-label mt-8" for="meta_description">Meta Description</label>
                     <textarea class="viking-input h-24" name="meta_description" id="meta_description"><% if(post.meta && post.meta.description) { %><%= post.meta.description %><% } %></textarea>
+                
+                    <label class="viking-label mt-8" for="meta_schema">Meta Schema</label>
+                    <div class="codeeditor-wrapper rounded-lg border border-gray-300 overflow-hidden">
+                        <textarea class="viking-input h-64 codeeditor" name="meta_schema" id="meta_schema" cols="30" rows="10"><% if(post.meta.schema && post.meta.schema) { %><%= post.meta.schema %><% } %></textarea>
+                    </div>
                 </div>
 
             </div>

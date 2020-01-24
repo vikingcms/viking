@@ -3,6 +3,7 @@ const fs = require('fs-extra');
 // In newer Node.js versions where process is already global this isn't necessary.
 var process = require("process");
 var slugify = require('slugify');
+let dateFormat = require('dateformat');
 let themeFolder = '/content/themes/';
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
@@ -73,8 +74,10 @@ let builder = module.exports = {
 
         // turn into func used again below
         let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-        contents = builder.replaceSettings( contents, folder.rootPath(), themePath);
+        //contents = builder.replaceSettings( contents );
+        contents = builder.replaceTitle( contents, file, data );
         if(file == 'single.axe'){
+            
             contents = builder.replacePostData( contents, data.post );
         }
         if(file == 'loop.axe'){
@@ -118,13 +121,34 @@ let builder = module.exports = {
 
         return contents;
     },
-    replaceSettings: function(contents, sitePath, themePath){
+    replaceSettings: function(contents){
         //let loadSettings = builder.loadSettingsFile();
         let settings = {
                 "title": "GetFullReport"
             };
 
         contents = contents.replace('{{ title }}', settings.title);
+
+        return contents;
+    },
+    replaceTitle: function(contents, file, data){
+        //let loadSettings = builder.loadSettingsFile();
+        let settings = {
+            "title": "Get Full Report",
+            "description": "Background Checks, Phone Lookups, and People Search"
+        };
+
+        if(file == 'home.axe'){
+            contents = contents.replace('{{ title }}', settings.title + ' - ' + settings.description);
+        }
+
+        if(file == 'loop.axe'){
+            contents = contents.replace('{{ title }}', 'Background Check Guides - ' + settings.title);
+        }
+
+        if(file == 'single.axe'){
+            contents = contents.replace('{{ title }}', data.post.title + ' - ' + settings.title);
+        }
 
         return contents;
     },
@@ -148,6 +172,9 @@ let builder = module.exports = {
                 let withThis = post[key];
                 if(key == 'body'){
                     withThis = builder.renderHTML(post[key]);
+                }
+                if(key == 'created_at'){
+                    withThis = dateFormat( post[key], "mmmm d, yyyy");
                 }
                 let regexReplaceThis = new RegExp(replaceThis, 'g');
                 contents = contents.replace(regexReplaceThis, withThis);

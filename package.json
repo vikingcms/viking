@@ -41,6 +41,7 @@
   },
   "homepage": "https://github.com/vikingcms/vikingcms#readme",
   "dependencies": {
+    "ace-builds": "^1.4.8",
     "date-format": "^3.0.0",
     "dateformat": "^3.0.3",
     "esm": "^3.2.25",
@@ -74,6 +75,7 @@
     "body-parser": "^1.19.0",
     "cross-env": "^5.1",
     "ejs": "^3.0.1",
+    "file-loader": "^5.0.2",
     "laravel-mix": "^4.0.14",
     "laravel-mix-purgecss": "^4.1.0",
     "laravel-mix-tailwind": "^0.1.0",

@@ -163,6 +163,7 @@ let serve = module.exports = {
                     meta: {
                         title: req.body.meta_title,
                         description: req.body.meta_description,
+                        schema: req.body.meta_schema
                     },
                     created_at: getDateString(new Date()),
                     updated_at: getDateString(new Date()),

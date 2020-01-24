@@ -9,6 +9,9 @@ const Quote = require('@editorjs/quote');
 const Warning = require('@editorjs/warning');
 const InlineCode = require('@editorjs/inline-code');
 const axios = require('axios');
+import ace from 'ace-builds';
+import modeJson from 'ace-builds/src-min-noconflict/mode-json.js';
+import themeChrome from 'ace-builds/src-min-noconflict/theme-chrome.js';
 var slugify = require('slugify');
 let createPost = null;
 setCreatePostFalse();
@@ -19,6 +22,21 @@ if(document.getElementById('createPost') && parseInt(document.getElementById('cr
 
 async function getb6(file){
     return await (new Response(file)).text();
+}
+
+let meta_schema = '';
+if( document.getElementById('meta_schema') ){
+    //ace.config.setModuleUrl('ace/mode/json_worker', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/worker-javascript.js');
+    //ace.config.set("workerPath", 'ace-builds/src-min-noconflict/worker-json.js');
+    //ace.config.setModuleUrl('ace/mode/json_worker', require('file-loader!../../../node_modules/ace-builds/src-min-noconflict/worker-json.js'));
+    meta_schema = ace.edit('meta_schema', {
+        mode: 'ace/mode/json',
+        selectionStyle: 'text',
+        showPrintMargin: false,
+        theme: 'ace/theme/chrome'
+    });
+    meta_schema.getSession().setUseWorker(false);
+    
 }
 
 let editor = '';
@@ -229,7 +247,8 @@ function getPostData(_callback){
             slug: getSlugValue(),
             excerpt: document.getElementById('excerpt').value,
             meta_title: document.getElementById('meta_title').value,
-            meta_description: document.getElementById('meta_description').value
+            meta_description: document.getElementById('meta_description').value,
+            meta_schema: meta_schema.getValue()
         });
 
     }).catch((error) => {
