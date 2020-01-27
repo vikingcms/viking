@@ -83,8 +83,9 @@ if( document.getElementById('editor') ){
     },
     autofocus: !createPost,
     onReady: () => {
-        console.log('rdy');
-        renderBlocks();
+        if(document.getElementById('editor').dataset.blocks){
+            renderBlocks();
+        }
     }
     });
 }
@@ -388,5 +389,48 @@ window.showImagePreview = function(){
     document.getElementById('image_preview_upload').classList.add('hidden');
     document.getElementById('image_upload').classList.add('hidden');
     document.getElementById('image_preview').classList.remove('hidden');
+}
+
+const nth = function(d) {
+    if (d > 3 && d < 21) return 'th';
+    switch (d % 10) {
+      case 1:  return "st";
+      case 2:  return "nd";
+      case 3:  return "rd";
+      default: return "th";
+    }
+}
+
+let secondTick = false;
+
+function DisplayCurrentTime() {
+    var date = new Date();
+    var hours = date.getHours() > 12 ? date.getHours() - 12 : date.getHours();
+    var am_pm = date.getHours() >= 12 ? "PM" : "AM";
+    var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+    var secondDelimiter = (secondTick) ? '<span class="text-gray-700">:</span>' : ':';
+    secondTick = !secondTick;
+    document.getElementById('time').innerHTML = hours + secondDelimiter + minutes + " " + am_pm;
+    var time = setTimeout(DisplayCurrentTime, 500);
+};
+
+function DisplayCurrentDate(){
+    var now = new Date();
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var dayOfWeek = days[ now.getDay() ];
+    var month = months[ now.getMonth() ];
+    var day = now.getDate();
+    var year = now.getFullYear();
+    document.getElementById('date').innerHTML = dayOfWeek + ", " + month + " " + day + nth(day) + " " + year;
+    var time = setTimeout(DisplayCurrentDate, 500);
+}
+
+if( document.getElementById('time') ) {
+    DisplayCurrentTime();
+}
+
+if( document.getElementById('date') ) {
+    DisplayCurrentDate();
 }
 

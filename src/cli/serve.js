@@ -47,8 +47,9 @@ let serve = module.exports = {
             app.set('view engine', 'ejs');
             app.use('/dashboard/assets', express.static(folder.vikingPath() + 'src/dashboard/assets'));
             
-            app.use('/', express.static( folder.sitePath() ));
+            
             app.use('/images/', express.static(folder.imagePath()));
+            app.use('/', express.static( folder.sitePath() ));
             //app.use(express.json());
             app.use(express.json({limit: '10mb'}));
             app.use(express.urlencoded({ extended: true }));
@@ -80,13 +81,15 @@ let serve = module.exports = {
 
     generateRoutes: function(){
         
-        app.get('/', (req, res) => 
-            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
-        );
+        app.get('/', function(req, res){
+            let posts = post.orderBy('created_at', 'DESC').getPosts();   
+            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs(), posts: posts }) 
+        });
 
-        app.get('/dashboard', (req, res) => 
-            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs() }) 
-        );
+        app.get('/dashboard', function(req, res) {
+            let posts = post.orderBy('created_at', 'DESC').getPosts();
+            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs(), posts: posts }) 
+        });
         
         app.post('/dashboard/build', function(req, res){
             res.json( builder.build() );

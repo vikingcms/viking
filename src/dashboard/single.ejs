@@ -2,7 +2,7 @@
         
     <div class="relative flex justify-start">
         <div class="max-w-4xl min-h-screen bg-white flex-1 px-10 pl-12 py-8 border-r border-l border-gray-200" id="post">
-            <input name="title" placeholder="Post Title" class="viking-input text-4xl font-bold text-gray-800 mb-4 w-full px-4 border-none overflow-visible" id="title" value="<% if (post.title) { %><%= post.title %><% } %>">
+            <input name="title" placeholder="Post Title" class="viking-input text-4xl font-bold text-black mb-4 w-full px-4 border-none overflow-visible" id="title" value="<% if (post.title) { %><%= post.title %><% } %>">
             <div id="editor" data-blocks="<% if (post.body) { %><%= JSON.stringify(post.body) %><% } %>"></div>
         </div>
 
@@ -75,7 +75,7 @@
                 
                     <label class="viking-label mt-8" for="meta_schema">Meta Schema</label>
                     <div class="codeeditor-wrapper rounded-lg border border-gray-300 overflow-hidden">
-                        <textarea class="viking-input h-64 codeeditor" name="meta_schema" id="meta_schema" cols="30" rows="10"><% if(post.meta.schema && post.meta.schema) { %><%= post.meta.schema %><% } %></textarea>
+                        <textarea class="viking-input h-64 codeeditor" name="meta_schema" id="meta_schema" cols="30" rows="10"><% if(post.meta && post.meta.schema && post.meta.schema) { %><%= post.meta.schema %><% } %></textarea>
                     </div>
                 </div>
 

@@ -12,6 +12,7 @@ const Post = require(folder.vikingPath() + 'src/lib/post.js');
 
 let post = new Post();
 let themePath = folder.themePath() + '2020/';
+let siteMapContents = '';
 
 let builder = module.exports = {
     build: function(){
@@ -31,6 +32,11 @@ let builder = module.exports = {
             }
           
             files.forEach(function (file, index) {
+
+                if(index == 0){
+                    builder.beginSitemap();
+                }
+
                 let extension = path.extname(file);
                 if(typeof(extension) != 'undefined' && extension == '.axe'){
 
@@ -60,10 +66,16 @@ let builder = module.exports = {
                     // copy over all the images
                     fs.copySync(folder.imagePath(), folder.sitePath() + 'images/');
 
+                    console.log('op ind: ' + index);
+                    
+
                 }
                 
             });
+            builder.endSitemap();
         });
+
+        
 
         return {'status' : 'success'};
     },
@@ -71,13 +83,14 @@ let builder = module.exports = {
     writeFile: function(file, directory, data){
 
         let buildConfig = config.loadConfigs().build;
+        let siteConfig = config.loadConfigs().site;
+        builder.addToSitemap(file, directory, data, siteConfig);
 
         // turn into func used again below
         let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
         //contents = builder.replaceSettings( contents );
         contents = builder.replaceTitle( contents, file, data );
         if(file == 'single.axe'){
-            
             contents = builder.replacePostData( contents, data.post );
         }
         if(file == 'loop.axe'){
@@ -87,13 +100,48 @@ let builder = module.exports = {
             contents = builder.addAdminBar(contents);
         }
 
-        fs.outputFile(folder.sitePath() + directory + 'index.html', contents, (err) => {
-            // throws an error, you could also catch it here
-            if (err) throw err;
         
-            // success case, the file was saved
-            console.log('Built: ' + file);
-        });
+
+        fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
+        console.log('Built: ' + file);
+    },
+
+    beginSitemap: function(){
+        console.log('begin writing');
+        siteMapContents = `<?xml version="1.0" encoding="UTF-8" ?>\n\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+    },
+
+    endSitemap: function(){
+        console.log('value of smc ' + siteMapContents);
+        siteMapContents += `\n\n</urlset>`;
+        fs.writeFileSync(folder.sitePath() + 'sitemap.xml', siteMapContents);
+    },
+
+    addToSitemap: function(file, directory, data, siteConfig){
+
+        let urlStructure = `\n\t<url>\n\t\t<loc>{{ loc }}</loc>\n\t\t<lastmod>{{ lastmod }}</lastmod>\n\t\t<priority>{{ priority }}</priority>\n\t</url>`;
+
+        //Check which file this is for
+        if(file == 'home.axe'){
+            urlStructure = urlStructure.replace('{{ loc }}', siteConfig.url);
+            urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(), "isoDateTime"));
+            urlStructure = urlStructure.replace('{{ priority }}', '1.0');
+        }
+
+        if(file == 'loop.axe'){
+            urlStructure = urlStructure.replace('{{ loc }}', siteConfig.url + '/' + directory);
+            urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(), "isoDateTime"));
+            urlStructure = urlStructure.replace('{{ priority }}', '0.9');
+        }
+
+        if(file == 'single.axe'){
+            urlStructure = urlStructure.replace('{{ loc }}', siteConfig.url + '/' + directory);
+            urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(data.post.updated_at), "isoDateTime"));
+            urlStructure = urlStructure.replace('{{ priority }}', '0.9');
+        }
+
+        siteMapContents += urlStructure;
+        
     },
 
     getHTML: function(file){
