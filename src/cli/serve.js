@@ -13,7 +13,7 @@ const fs = require('fs');
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
 let builder = require(folder.vikingPath() + 'src/lib/builder.js');
-const config = require(folder.vikingPath() + 'src/lib/config.js');
+const settings = require(folder.vikingPath() + 'src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
 
 let post = new Post();
@@ -83,12 +83,12 @@ let serve = module.exports = {
         
         app.get('/', function(req, res){
             let posts = post.orderBy('created_at', 'DESC').getPosts();   
-            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs(), posts: posts }) 
+            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, settings: settings.load(), posts: posts }) 
         });
 
         app.get('/dashboard', function(req, res) {
             let posts = post.orderBy('created_at', 'DESC').getPosts();
-            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, config: config.loadConfigs(), posts: posts }) 
+            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, settings: settings.load(), posts: posts }) 
         });
         
         app.post('/dashboard/build', function(req, res){
@@ -109,8 +109,8 @@ let serve = module.exports = {
             res.render(folder.vikingPath() + 'src/dashboard/single', { request: req, post: {}, debug: debug, session: req.session });
         });
 
-        app.post('/dashboard/update/config/:file', function(req, res){
-            config.updateOption(req.params.file, req.body.key, req.body.value);
+        app.post('/dashboard/update/settings/:file', function(req, res){
+            settings.updateOption(req.params.file, req.body.key, req.body.value);
             res.json({
                 "success": true
             });

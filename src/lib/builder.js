@@ -7,18 +7,20 @@ let dateFormat = require('dateformat');
 let themeFolder = '/content/themes/';
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
-const config = require(folder.vikingPath() + '/src/lib/config.js');
+const settings = require(folder.vikingPath() + '/src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
 
 let post = new Post();
 let themePath = folder.themePath() + '2020/';
 let siteMapContents = '';
 
+let onlyOnce = false;
+
 let builder = module.exports = {
     build: function(){
         
-        let buildConfig = config.loadConfigs().build;
-        let siteConfig = config.loadConfigs().site;
+        let buildSettings = settings.load().build;
+        let siteSettings = settings.load().site;
         let posts = post.orderBy('created_at', 'DESC').getPosts();
 
         // empty the site folder
@@ -41,7 +43,7 @@ let builder = module.exports = {
                 if(typeof(extension) != 'undefined' && extension == '.axe'){
 
                     // if debug mode is on we will write all posts to a json file
-                    if(buildConfig.debug){
+                    if(buildSettings.debug){
                         fs.writeJsonSync( folder.sitePath() + '/posts.json', posts, { spaces: '\t' });
                     }
 
@@ -57,8 +59,16 @@ let builder = module.exports = {
 
                     }
 
+                    if(file == 'amp.axe'){
+
+                        // posts.forEach(function (post, index) {
+                        //     builder.writeFile(file, '/amp/' + post.slug + '/', { post: post });
+                        // });
+
+                    }
+
                     if(file == 'loop.axe'){
-                        builder.writeFile(file, siteConfig.loopRoute + '/', {});
+                        builder.writeFile(file, siteSettings.loopRoute + '/', {});
                     }
 
                     // copy over all the assets
@@ -82,60 +92,64 @@ let builder = module.exports = {
 
     writeFile: function(file, directory, data){
 
-        let buildConfig = config.loadConfigs().build;
-        let siteConfig = config.loadConfigs().site;
-        builder.addToSitemap(file, directory, data, siteConfig);
+        let buildSettings = settings.load().build;
+        let siteSettings = settings.load().site;
+        builder.addToSitemap(file, directory, data, siteSettings);
 
+        let contents = '';
         // turn into func used again below
-        let contents = builder.replaceIncludes( builder.getHTML(themePath + file), themePath );
-        //contents = builder.replaceSettings( contents );
-        contents = builder.replaceTitle( contents, file, data );
-        if(file == 'single.axe'){
-            contents = builder.replacePostData( contents, data.post );
-        }
-        if(file == 'loop.axe'){
-            contents = builder.replacePostDataLoop( contents );
-        }
-        if(buildConfig.debug){
-            contents = builder.addAdminBar(contents);
-        }
+        builder.replaceIncludes(file, function(contents){
+            
+            builder.replaceConditionals(contents, data, function(contents){
+                contents = builder.replaceTitle( contents, file, data );
+                if(file == 'single.axe' || file == 'amp.axe'){
+                    contents = builder.replacePostData( contents, data.post );
+                }
+                if(file == 'loop.axe'){
+                    contents = builder.replacePostDataLoop( contents );
+                }
+                if(buildSettings.debug){
+                    contents = builder.addAdminBar(contents);
+                }
+
+                fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
+                console.log('Built: ' + file);
+            });
+        });
 
         
 
-        fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
-        console.log('Built: ' + file);
+        
     },
 
     beginSitemap: function(){
-        console.log('begin writing');
         siteMapContents = `<?xml version="1.0" encoding="UTF-8" ?>\n\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     },
 
     endSitemap: function(){
-        console.log('value of smc ' + siteMapContents);
         siteMapContents += `\n\n</urlset>`;
         fs.writeFileSync(folder.sitePath() + 'sitemap.xml', siteMapContents);
     },
 
-    addToSitemap: function(file, directory, data, siteConfig){
+    addToSitemap: function(file, directory, data, siteSettings){
 
         let urlStructure = `\n\t<url>\n\t\t<loc>{{ loc }}</loc>\n\t\t<lastmod>{{ lastmod }}</lastmod>\n\t\t<priority>{{ priority }}</priority>\n\t</url>`;
 
         //Check which file this is for
         if(file == 'home.axe'){
-            urlStructure = urlStructure.replace('{{ loc }}', siteConfig.url);
+            urlStructure = urlStructure.replace('{{ loc }}', siteSettings.url);
             urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(), "isoDateTime"));
             urlStructure = urlStructure.replace('{{ priority }}', '1.0');
         }
 
         if(file == 'loop.axe'){
-            urlStructure = urlStructure.replace('{{ loc }}', siteConfig.url + '/' + directory);
+            urlStructure = urlStructure.replace('{{ loc }}', siteSettings.url + '/' + directory);
             urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(), "isoDateTime"));
             urlStructure = urlStructure.replace('{{ priority }}', '0.9');
         }
 
         if(file == 'single.axe'){
-            urlStructure = urlStructure.replace('{{ loc }}', siteConfig.url + '/' + directory);
+            urlStructure = urlStructure.replace('{{ loc }}', siteSettings.url + '/' + directory);
             urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(data.post.updated_at), "isoDateTime"));
             urlStructure = urlStructure.replace('{{ priority }}', '0.9');
         }
@@ -144,15 +158,54 @@ let builder = module.exports = {
         
     },
 
-    getHTML: function(file){
-        return fs.readFileSync(file, 'utf8');
-    },
-
     getPost: function(file){
         return fs.readFileSync(file, 'utf8');
     },
 
-    replaceIncludes: function(contents, themePath){
+    replaceConditionals(contents, data, _callback){
+        let conditionalTxt = '@if(';
+        let endContiditionalTxt = '@endif';
+
+        let startIndex = contents.indexOf(conditionalTxt);
+        if(startIndex > 0){
+
+            let post = data.post;
+            
+
+            let endConditional = contents.indexOf(')', startIndex);
+            let conditional = contents.substring(startIndex + conditionalTxt.length, endConditional);
+            
+            let BeginningOfEnd = contents.indexOf(endContiditionalTxt);
+
+
+           let conditionalResult = false;
+           eval('if( ' + conditional + '){ conditionalResult = true; }');
+
+           let firstHalfOfContent = contents.slice(0, startIndex);
+            try{
+                // if it's try we only want to remove the conditional @if and leave the content inside
+                if(conditionalResult){
+                    // remove the @if() section
+                    firstHalfOfContent = contents.slice(0, startIndex) + contents.slice(endConditional+1, BeginningOfEnd);
+                }
+            } catch (err){
+                    firstHalfOfContent = contents.slice(0, startIndex);
+            }
+            let secondHalf = contents.slice(BeginningOfEnd + endContiditionalTxt.length, contents.length);
+            contents = firstHalfOfContent + secondHalf;
+
+            if(!onlyOnce){
+                onlyOnce = true;
+                console.log('end is: ' + BeginningOfEnd + ' and statement is ' + conditional);
+            }
+        }
+
+
+        _callback(contents);
+    },
+
+    replaceIncludes: function(file, _callback){
+        let contents = fs.readFileSync(themePath + file, 'utf8');
         let include = contents.indexOf('@include', 0);
 
         while(include != -1){
@@ -162,12 +215,12 @@ let builder = module.exports = {
             if(typeof(includeTemplate[1]) !== "undefined"){
                 includeTemplate = includeTemplate[1].replace('.', '/');
                 // fetch file contents and replace the template
-                contents = contents.replace( includeText, builder.getHTML( themePath + includeTemplate + '.axe' ) );
+                contents = contents.replace( includeText, fs.readFileSync( themePath + includeTemplate + '.axe', 'utf8' ) );
             }
             include = contents.indexOf('@include', include+1);
         }
 
-        return contents;
+        _callback( contents );
     },
     replaceSettings: function(contents){
         //let loadSettings = builder.loadSettingsFile();
@@ -216,16 +269,28 @@ let builder = module.exports = {
         for (var key in post) {
             if (post.hasOwnProperty(key)) {
                 
-                let replaceThis = '{{ post.' + key + ' }}';
-                let withThis = post[key];
-                if(key == 'body'){
-                    withThis = builder.renderHTML(post[key]);
+                if(key == 'meta'){
+                    for(meta_key in post.meta){
+                        if (post.meta.hasOwnProperty(meta_key)) {
+                            let replaceThis = '{{ post.meta.' + meta_key + ' }}';
+                            let withThis = post.meta[meta_key];
+                            
+                            let regexReplaceThis = new RegExp(replaceThis, 'g');
+                            contents = contents.replace(regexReplaceThis, withThis);
+                        }
+                    }
+                } else {
+                    let replaceThis = '{{ post.' + key + ' }}';
+                    let withThis = post[key];
+                    if(key == 'body'){
+                        withThis = builder.renderHTML(post[key]);
+                    }
+                    if(key == 'created_at'){
+                        withThis = dateFormat( post[key], "mmmm d, yyyy");
+                    }
+                    let regexReplaceThis = new RegExp(replaceThis, 'g');
+                    contents = contents.replace(regexReplaceThis, withThis);
                 }
-                if(key == 'created_at'){
-                    withThis = dateFormat( post[key], "mmmm d, yyyy");
-                }
-                let regexReplaceThis = new RegExp(replaceThis, 'g');
-                contents = contents.replace(regexReplaceThis, withThis);
             }
         }
         return contents;

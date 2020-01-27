@@ -272,12 +272,12 @@ window.showNotification = function(type, message){
 
 if( document.getElementById('toggleDebug') ){
     document.getElementById('toggleDebug').addEventListener('change', function(){
-        updateConfig(this.dataset.config, this.dataset.key, ( (this.checked) ? true: false ) );
+        updateSettings(this.dataset.settings, this.dataset.key, ( (this.checked) ? true: false ) );
     });
 }
 
-function updateConfig(file, key, value){
-    axios.post('/dashboard/update/config/' + file, { key: key, value: value })
+function updateSettings(file, key, value){
+    axios.post('/dashboard/update/settings/' + file, { key: key, value: value })
     .then(function (response) {
         console.log(response);
     })
