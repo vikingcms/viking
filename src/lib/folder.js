@@ -75,6 +75,6 @@ let folder = module.exports = {
         return require("global-modules-path").getPath("vikingcms") + '/';
     },
     defaultSettings: function(){
-        return folder.vikingPath() + 'src/settings/';
+        return folder.vikingPath() + 'src/site/settings/';
     }
 }

@@ -5,6 +5,7 @@ var process = require("process");
 var slugify = require('slugify');
 let dateFormat = require('dateformat');
 let themeFolder = '/content/themes/';
+let sizeOf = require('image-size');
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
 const settings = require(folder.vikingPath() + '/src/lib/settings.js');
@@ -61,9 +62,9 @@ let builder = module.exports = {
 
                     if(file == 'amp.axe'){
 
-                        // posts.forEach(function (post, index) {
-                        //     builder.writeFile(file, '/amp/' + post.slug + '/', { post: post });
-                        // });
+                        posts.forEach(function (post, index) {
+                            builder.writeFile(file, '/amp/' + post.slug + '/', { post: post });
+                        });
 
                     }
 
@@ -103,7 +104,8 @@ let builder = module.exports = {
             builder.replaceConditionals(contents, data, function(contents){
                 contents = builder.replaceTitle( contents, file, data );
                 if(file == 'single.axe' || file == 'amp.axe'){
-                    contents = builder.replacePostData( contents, data.post );
+                    let amp = (file == 'amp.axe') ? true : false;
+                    contents = builder.replacePostData( contents, data.post, amp);
                 }
                 if(file == 'loop.axe'){
                     contents = builder.replacePostDataLoop( contents );
@@ -200,8 +202,12 @@ let builder = module.exports = {
             }
         }
 
-
-        _callback(contents);
+        let nextConditional = contents.indexOf(conditionalTxt);
+        if(nextConditional > 0){
+            builder.replaceConditionals(contents, data, _callback);
+        } else {
+            _callback(contents);
+        }
     },
 
     replaceIncludes: function(file, _callback){
@@ -213,9 +219,25 @@ let builder = module.exports = {
             let includeText = contents.substring(include, include+endInclude);
             let includeTemplate = includeText.split(" ");
             if(typeof(includeTemplate[1]) !== "undefined"){
-                includeTemplate = includeTemplate[1].replace('.', '/');
+                let allowedFileIncludes = ['.css', '.js', '.axe'];
+                let partial = includeTemplate[1];
+                let fileExt = path.extname(partial);
+                if(fileExt == '.css'){
+                    console.log('heyo partial: ' + partial);
+                    console.log('----');
+                    if(allowedFileIncludes.includes( fileExt )){
+                        console.log('and it be true The Pen is Blue');
+                    }
+                }
+                if(allowedFileIncludes.includes( fileExt )){
+                    // remove the extension
+                    partial = partial.split('.').slice(0, -1).join('.');
+                } else {
+                    fileExt = '.axe';
+                }
+                includeTemplate = partial.replace(/\./g, '/') + fileExt;
                 // fetch file contents and replace the template
-                contents = contents.replace( includeText, fs.readFileSync( themePath + includeTemplate + '.axe', 'utf8' ) );
+                contents = contents.replace( includeText, fs.readFileSync( themePath + includeTemplate, 'utf8' ) );
             }
             include = contents.indexOf('@include', include+1);
         }
@@ -265,7 +287,10 @@ let builder = module.exports = {
         }
         return endIncludeLocation;
     },
-    replacePostData: function( contents, post ){
+    replacePostData: function( contents, post, amp ){
+        if(typeof amp == 'undefined'){
+            amp = false;
+        }
         for (var key in post) {
             if (post.hasOwnProperty(key)) {
                 
@@ -283,7 +308,7 @@ let builder = module.exports = {
                     let replaceThis = '{{ post.' + key + ' }}';
                     let withThis = post[key];
                     if(key == 'body'){
-                        withThis = builder.renderHTML(post[key]);
+                        withThis = (amp) ? builder.renderAmp(post[key]) : builder.renderHTML(post[key]);
                     }
                     if(key == 'created_at'){
                         withThis = dateFormat( post[key], "mmmm d, yyyy");
@@ -359,14 +384,54 @@ let builder = module.exports = {
         }
         return result;
     },
+    renderAmp: function(data) {
+        let result = ``;
+        for (let block of data.blocks) {
+          switch (block.type) {
+            case 'paragraph':
+              result += `<p>${block.data.text}</p>`;
+              break;
+            case 'header':
+              result += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`;
+              if(block.data.level == 2){
+                  result = result.replace('<h2>', '<h2 id="' + slugify(block.data.text, { remove: /[^\w\s]/gi, lower:true}) + '">');
+              }
+              break;
+            case 'list':
+                if(block.data.style == 'ordered'){
+                    result += `<ol>`;
+                } else {
+                    result += `<ul>`;
+                }
+                for(var i=0; i<block.data.items.length; i++){
+                    result += `<li>` + block.data.items[i] + `</li>`;
+                }
+                if(block.data.style == 'ordered'){
+                    result += `</ol>`;
+                } else {
+                    result += `</ul>`;
+                }
+              break;
+            case 'image':
+                    let imagePath = folder.contentPath() + block.data.file.url;
+                    if (fs.existsSync(imagePath)) {
+                        var size = sizeOf(folder.contentPath() + block.data.file.url);
+                        result += `<amp-img layout="responsive" src="${block.data.file.url}" width="${size.width}" height="${size.height}"></amp-img>`;
+                    }
+                
+                break;
+          }
+        }
+        return result;
+    },
     addAdminBar: function(contents) {
         return contents.replace('</body>', builder.adminBarHTML() + '</body>');
     },
     adminBarHTML: function() {
-        return `<div class="fixed bottom-0 left-0 bg-black w-full h-10 flex justify-between items-center z-50">
-                    <img src="/dashboard/assets/img/logo-inverse.svg" class="h-4 pl-2 w-auto">
-                    <div class="flex h-10">
-                        <a href="/dashboard" class="text-white font-medium inline-block h-full px-3 flex items-center text-xs uppercase border-r border-l border-gray-800">Dashboard</a>
+        return `<div style="background-color: #000; z-index: 50; width: 100%; left: 0; bottom:0; position: fixed; height: 2.5rem; -webkit-box-pack: justify; justify-content: space-between; -webkit-box-align: center; align-items: center; display: -webkit-box; display: flex; box-sizing: border-box; border-width:0px;">
+                    <img src="/dashboard/assets/img/logo-inverse.svg" style="width: auto; padding-left: 0.5rem; height: 1rem;">
+                    <div style="display: -webkit-box; display: flex; height: 2.5rem;">
+                        <a href="/dashboard" style="text-transform: uppercase; font-size: 0.75rem; color: #fff; padding-left: 0.75rem; padding-right: 0.75rem; height: 100%; font-weight: 500; -webkit-box-align: center; align-items: center; display: -webkit-box; display: flex; border-left-width: 1px; border-right-width: 1px; border-color: #2d3748;">Dashboard</a>
                     </div>
                 </div>`;
     }

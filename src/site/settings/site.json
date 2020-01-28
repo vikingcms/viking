@@ -1,4 +1,4 @@
 {
     "postRoute" : "/post/{post}",
-    "loopRoute" : "/posts"
+    "loopRoute" : "posts"
 }

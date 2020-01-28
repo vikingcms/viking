@@ -10,6 +10,7 @@ let bodyParser = require('body-parser')
 let dateFormat = require('dateformat')
 let app = express()
 const fs = require('fs');
+var ghpages = require('gh-pages');
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
 let builder = require(folder.vikingPath() + 'src/lib/builder.js');
@@ -198,6 +199,8 @@ let serve = module.exports = {
 
             
         });
+
+        
 
         app.get('/dashboard/post/:post', function(req, res){
             serve.getPost(req.params.post, function(post){

@@ -6,7 +6,7 @@ var folderName = myArgs[1];
 
 if(cmd == 'new'){
     var newCmd = require('../src/cli/new.js');
-    newCmd.createFolder(folderName);
+    newCmd.newProject(folderName);
 }
 
 if(cmd == 'serve'){

@@ -1,4 +1,5 @@
-const fs = require('fs')
+const fs = require('fs-extra');
+const serve = require('../src/cli/serve.js');
 
 module.exports = {
     welcome: function(){
@@ -9,7 +10,14 @@ module.exports = {
         fs.mkdir('./' + folderName , { recursive: true }, (err) => {
             if (err) throw err;
           });
-
-        
+    },
+    newProject: function(folderName){
+        console.log('Welcome Viking!');
+        console.log('Generating your new site inside: ' + folderName);
+        fs.mkdir('./' + folderName , { recursive: true }, (err) => {
+            if (err) throw err;
+          });
+        console.log('Prepare your Hammer and Axe!')
+        console.log('Because it\'s time to start building...');
     }
 }
