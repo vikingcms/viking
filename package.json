@@ -1,6 +1,6 @@
 {
   "name": "viking",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "The static site CMS built for Github Pages",
   "main": "index.js",
   "scripts": {
