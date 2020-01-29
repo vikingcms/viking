@@ -134,8 +134,6 @@ let serve = module.exports = {
         });
 
         app.post('/dashboard/uploadFile', upload.single('image'), function(req, res){
-            console.log('req image');
-            console.log(req.file);
             let file = req.file;
             fs.renameSync(file.path, folder.imagePath() + file.originalname);
 
@@ -204,8 +202,17 @@ let serve = module.exports = {
         app.get('/dashboard/deploy', function(req, res){
             let envSettings = settings.load().environment;
 
+            if(typeof envSettings.gh_token == 'undefined' || envSettings.gh_token == ''){
+                console.log('No GH TOKEN available');
+                req.session.notification = 'Could not deploy, no gh_token key in your environment.json';
+                req.session.notification_type = 'danger';
+                res.redirect('/dashboard');
+            }
+
             let ghConfig = parse.sync();
             let githubURL = ghConfig['remote "origin"'].url.replace('https://', '').replace('http://', '');
+
+            console.log('deploying to repo https://' + envSettings.gh_token + '@' + githubURL);
             
             ghpages.publish(folder.sitePath(), {
                 branch: 'gh-pages',
@@ -242,7 +249,6 @@ let serve = module.exports = {
     }, 
 
     getPost: function(slug, _callback){
-        console.log('heyo ' + folder.post() + slug + '.json');
         let post = JSON.parse( fs.readFileSync( folder.post() + slug + '.json' ) );
         _callback(post);
     },

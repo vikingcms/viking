@@ -6,6 +6,7 @@ var slugify = require('slugify');
 let dateFormat = require('dateformat');
 let themeFolder = '/content/themes/';
 let sizeOf = require('image-size');
+var minify = require('html-minifier').minify;
 
 let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 const settings = require(folder.vikingPath() + '/src/lib/settings.js');
@@ -76,8 +77,6 @@ let builder = module.exports = {
                     fs.copySync(themePath + '/site/', folder.sitePath());
                     // copy over all the images
                     fs.copySync(folder.imagePath(), folder.sitePath() + 'images/');
-
-                    console.log('op ind: ' + index);
                     
 
                 }
@@ -199,7 +198,6 @@ let builder = module.exports = {
 
             if(!onlyOnce){
                 onlyOnce = true;
-                console.log('end is: ' + BeginningOfEnd + ' and statement is ' + conditional);
             }
         }
 
@@ -223,13 +221,6 @@ let builder = module.exports = {
                 let allowedFileIncludes = ['.css', '.js', '.axe'];
                 let partial = includeTemplate[1];
                 let fileExt = path.extname(partial);
-                if(fileExt == '.css'){
-                    console.log('heyo partial: ' + partial);
-                    console.log('----');
-                    if(allowedFileIncludes.includes( fileExt )){
-                        console.log('and it be true The Pen is Blue');
-                    }
-                }
                 if(allowedFileIncludes.includes( fileExt )){
                     // remove the extension
                     partial = partial.split('.').slice(0, -1).join('.');
