@@ -3,7 +3,7 @@ const serve = require('../src/cli/serve.js');
 
 module.exports = {
     welcome: function(){
-        console.log('Welcome to VikingCMS');
+        console.log('Welcome to Viking');
     },
     createFolder: function(folderName){
         console.log('creating new folder ' + folderName);

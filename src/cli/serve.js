@@ -13,7 +13,7 @@ const fs = require('fs');
 var ghpages = require('gh-pages');
 const parse = require('parse-git-config');
 
-let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
+let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 let builder = require(folder.vikingPath() + 'src/lib/builder.js');
 const settings = require(folder.vikingPath() + 'src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
@@ -73,7 +73,7 @@ let serve = module.exports = {
 
             serve.generateRoutes();
 
-            app.listen(port, () => console.log(`VikingCMS dashboard running on port ${port}!`))
+            app.listen(port, () => console.log(`Viking dashboard running on port ${port}!`))
             
             open('http://localhost:' + port);
 

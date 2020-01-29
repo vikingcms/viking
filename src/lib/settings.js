@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
+let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 
 let self = module.exports = {
     

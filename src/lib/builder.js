@@ -7,7 +7,7 @@ let dateFormat = require('dateformat');
 let themeFolder = '/content/themes/';
 let sizeOf = require('image-size');
 
-let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
+let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 const settings = require(folder.vikingPath() + '/src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
 

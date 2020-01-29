@@ -16,8 +16,8 @@
  * folder.themePath()   Theme path
  * folder.site()        Site directory
  * folder.sitePath()    Site path
- * folder.vikingPath()  VikingCMS path
- * folder.defaultSettings() VikingCMS default settings location
+ * folder.vikingPath()  Viking path
+ * folder.defaultSettings() Viking default settings location
  */
 
 let contentFolder = 'content/';
@@ -72,7 +72,7 @@ let folder = module.exports = {
         return folder.rootPath() + settingsFolder;
     },
     vikingPath: function(){
-        return require("global-modules-path").getPath("vikingcms") + '/';
+        return require("global-modules-path").getPath("viking") + '/';
     },
     defaultSettings: function(){
         return folder.vikingPath() + 'src/site/settings/';

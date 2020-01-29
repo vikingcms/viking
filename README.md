@@ -1,4 +1,4 @@
-# VikingCMS
+# Viking
 
 Currently in Development.
 
