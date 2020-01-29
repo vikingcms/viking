@@ -5,5 +5,5 @@ Currently in Development.
 # Installation
 
 ```
-npm install -g vikingcms
+npm install -g viking
 ```
