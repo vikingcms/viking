@@ -84,6 +84,7 @@ let builder = module.exports = {
                 
             });
             builder.endSitemap();
+            builder.createCNAME();
         });
 
         
@@ -247,7 +248,7 @@ let builder = module.exports = {
     replaceSettings: function(contents){
         //let loadSettings = builder.loadSettingsFile();
         let settings = {
-                "title": "GetFullReport"
+                "title": ""
             };
 
         contents = contents.replace('{{ title }}', settings.title);
@@ -423,6 +424,11 @@ let builder = module.exports = {
           }
         }
         return result;
+    },
+    createCNAME: function(){
+        let siteSettings = settings.load().site;
+        let domain = siteSettings.url.replace('https://', '').replace('http://', '');
+        fs.outputFileSync(folder.sitePath() + 'CNAME', domain);
     },
     addAdminBar: function(contents) {
         return contents.replace('</body>', builder.adminBarHTML() + '</body>');

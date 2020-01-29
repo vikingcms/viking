@@ -11,6 +11,7 @@ let dateFormat = require('dateformat')
 let app = express()
 const fs = require('fs');
 var ghpages = require('gh-pages');
+const parse = require('parse-git-config');
 
 let folder = require(require("global-modules-path").getPath("vikingcms") + '/src/lib/folder.js');
 let builder = require(folder.vikingPath() + 'src/lib/builder.js');
@@ -200,12 +201,26 @@ let serve = module.exports = {
             
         });
 
-        
+        app.get('/dashboard/deploy', function(req, res){
+            let envSettings = settings.load().environment;
+
+            let ghConfig = parse.sync();
+            let githubURL = ghConfig['remote "origin"'].url.replace('https://', '').replace('http://', '');
+            
+            ghpages.publish(folder.sitePath(), {
+                branch: 'gh-pages',
+                repo: 'https://' + envSettings.gh_token + '@' + githubURL,
+                silent: true
+              }, function(){
+                req.session.notification = 'Your site has been successfully deployed. Give it a few minutes to update.';
+                req.session.notification_type = 'success';
+                res.redirect('/dashboard');
+                //res.json({ status: 'success', message: 'deployed to gh-pages branch of ' +  envSettings.gh_token + '@' + githubURL });
+              });
+        });
 
         app.get('/dashboard/post/:post', function(req, res){
             serve.getPost(req.params.post, function(post){
-                //console.log(post);
-                //res.json({ status: 'hmmm', post: post });
                 res.render(folder.vikingPath() + 'src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
             });
         });

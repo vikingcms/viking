@@ -13500,6 +13500,15 @@ video {
   display: block;
 }
 
+#deploy-modal {
+  display: none;
+}
+
+#deploy-modal.open {
+  display: -webkit-box;
+  display: flex;
+}
+
 #settings-sidebar {
   right: -28rem;
 }

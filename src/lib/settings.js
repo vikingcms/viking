@@ -7,7 +7,8 @@ let self = module.exports = {
 
         return {
             build: self.loadSetting('build'),
-            site: self.loadSetting('site')
+            site: self.loadSetting('site'),
+            environment: self.loadSetting('environment')
         }
     },
 

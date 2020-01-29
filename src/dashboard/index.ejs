@@ -3,6 +3,17 @@
     <div class="dashboard-bg h-64 fixed w-full">
         <div class="absolute w-full h-full top-0 left-0 gradient-bg"></div>
     </div>
+    <div id="deploy-modal" class="fixed w-full h-full flex justify-center items-center z-30 left-0 top-0">
+        <div class="bg-black opacity-25 absolute w-full h-full open-toggle" data-toggle="deploy-modal"></div>
+        <div class="bg-white container max-w-3xl h-auto p-10 rounded-lg shadow-xl relative z-40 flex flex-col justify-center items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-20 h-auto fill-current" viewBox="0 0 64 80"><path d="M52 44a8 8 0 00-6.634 3.526l-.525.779-.81-.476a5.982 5.982 0 00-8.676 3.154l-.4 1.11-1.03-.572a3.949 3.949 0 00-4.723.624L28.131 53.2l-.554-1.4a5.977 5.977 0 00-7.533-3.465l-.768.265-.416-.7A8 8 0 1012 60h40a8 8 0 000-16z"/><path d="M32 37a2 2 0 012 2 8.591 8.591 0 01-2 5.535A8.591 8.591 0 0130 39a2 2 0 012-2zM36 27h2V13.616A10.537 10.537 0 0032 4.1a10.537 10.537 0 00-6 9.518V27h10zm-4-17a4 4 0 11-4 4 4 4 0 014-4z"/><circle cx="32" cy="14" r="2"/><path d="M44 26.324a7.766 7.766 0 00-4-6.8V27h4zM30 29h4v2h-4zM41 29h2v2h-2zM21 29h2v2h-2zM24 19.526a7.766 7.766 0 00-4 6.8V27h4zM22 37a1 1 0 011 1 3.855 3.855 0 01-1 2.58A3.855 3.855 0 0121 38a1 1 0 011-1zM42 37a1 1 0 011 1 3.855 3.855 0 01-1 2.58A3.855 3.855 0 0141 38a1 1 0 011-1z"/></svg>
+            <h2 class="text-gray-700 font-sans text-2xl pb-8 py-0">Are you sure you want to deploy your site?</h2>
+            <div class="flex">
+                <div class="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-3 cursor-pointer open-toggle" data-toggle="deploy-modal">Cancel</div>
+                <a href="/dashboard/deploy" class="bg-black text-white px-4 py-2 rounded">Yep, Let's Do It</a>
+            </div>
+        </div>
+    </div>
     <div class="px-8 relative w-full">
             
             <div class="flex flex-col justify-between min-h-screen py-5">
@@ -62,13 +73,23 @@
 
                         
 
-                        <div class="mt-6 rounded-lg bg-white w-1/3 px-6 py-4 h-56 flex justify-center items-center shadow-sm">
+                        <div class="mt-6 rounded-lg bg-white w-1/3 px-6 py-4 h-56 flex justify-center items-center shadow-sm mr-2">
                             <div>
                                 <h2 class="w-full text-center text-3xl font-bold text-gray-900"><%= posts.length %></h2>
                                 <p class="text-sm text-gray-500 w-full text-center">Posts</p>
                                 <a href="/dashboard/posts/create" class="text-gray-700 border border-gray-300 px-4 py-2 mt-5 inline-block rounded text-sm font-medium">Add New</a>
                             </div>
                         </div>
+
+                        <!-- Deploy Card -->
+                        <div class="w-1/4 pl-2">
+                            <div class="rounded-lg mt-6 h-56 shadow-sm bg-white px-6 py-4 flex flex-col justify-center items-center">
+                                
+                                <div class="bg-gray-900 text-white px-5 py-2 text-2xl tracking-wider font-black rounded cursor-pointer inline-block uppercase open-toggle" data-toggle="deploy-modal">Deploy Site</div>
+                            
+                            </div>
+                        </div>
+                        <!-- End Build Card -->
 
                     </div><!-- .w-full -->
                     

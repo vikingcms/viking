@@ -28,6 +28,13 @@
     }
 }
 
+#deploy-modal{
+    display:none;
+    &.open{
+        display:flex;
+    }
+}
+
 #settings-sidebar{
     right: -28rem;
     &.open{
