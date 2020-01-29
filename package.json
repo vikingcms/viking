@@ -1,6 +1,6 @@
 {
-  "name": "vikingcms",
-  "version": "0.3.0",
+  "name": "viking",
+  "version": "0.4.0",
   "description": "The static site CMS built for Github Pages",
   "main": "index.js",
   "scripts": {
@@ -14,11 +14,11 @@
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
   },
   "bin": {
-    "vikingcms": "bin/vikingcms"
+    "viking": "bin/viking"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vikingcms/vikingcms.git"
+    "url": "git+https://github.com/vikingcms/viking.git"
   },
   "publishConfig": {
     "access": "public"
@@ -37,9 +37,9 @@
   "author": "Tony Lea",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vikingcms/vikingcms/issues"
+    "url": "https://github.com/vikingcms/viking/issues"
   },
-  "homepage": "https://github.com/vikingcms/vikingcms#readme",
+  "homepage": "https://github.com/vikingcms/viking#readme",
   "dependencies": {
     "ace-builds": "^1.4.8",
     "date-format": "^3.0.0",
