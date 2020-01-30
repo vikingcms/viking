@@ -1,37 +1,34 @@
-// content of index.js
-const http = require('http')
-const getPort = require('get-port')
-const open = require('open')
-const express = require('express')
-let session = require('express-session');
-const url = require('url');
-const multer  = require('multer')
-let bodyParser = require('body-parser')
-let dateFormat = require('dateformat')
-let app = express()
+const getPort = require('get-port');
+const open = require('open');
+const express = require('express');
+const session = require('express-session');
+const multer  = require('multer');
+const bodyParser = require('body-parser');
+const dateFormat = require('dateformat');
+const app = express();
 const fs = require('fs');
-var ghpages = require('gh-pages');
+const ghpages = require('gh-pages');
 const parse = require('parse-git-config');
 
-let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
-let builder = require(folder.vikingPath() + 'src/lib/builder.js');
+const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
+const builder = require(folder.vikingPath() + 'src/lib/builder.js');
 const settings = require(folder.vikingPath() + 'src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
 
-let post = new Post();
+const post = new Post();
 
-let upload = multer({ dest : folder.imagePath() + 'tmp/' })
+const upload = multer({ dest : folder.imagePath() + 'tmp/' });
 let debug = false;
 let notificationShown = 0;
 
 function getDateString(d){
-	var year = d.getFullYear();
-	var month = String(d.getMonth()+1).padStart(2, 0);
-	var day = String(d.getDate()).padStart(2, 0);
+	const year = d.getFullYear();
+	const month = String(d.getMonth()+1).padStart(2, 0);
+	const day = String(d.getDate()).padStart(2, 0);
 
-	var hour = String(d.getHours()).padStart(2, 0);
-	var minute = String(d.getMinutes()).padStart(2, 0);
-	var second = String(d.getSeconds()).padStart(2, 0);
+	const hour = String(d.getHours()).padStart(2, 0);
+	const minute = String(d.getMinutes()).padStart(2, 0);
+	const second = String(d.getSeconds()).padStart(2, 0);
 
 	return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
 }
@@ -119,7 +116,6 @@ let serve = module.exports = {
         });
 
         app.post('/dashboard/posts/delete', function(req, res){
-            let slug = req.body.slug;
             let filename = serve.getFilenameFromSlug(req.body.slug);
 
             try {

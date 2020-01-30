@@ -1,5 +1,4 @@
 const fs = require('fs-extra');
-const serve = require('../src/cli/serve.js');
 
 module.exports = {
     welcome: function(){

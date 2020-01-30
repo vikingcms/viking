@@ -1,24 +1,22 @@
-var path = require('path');
+const path = require('path');
 const fs = require('fs-extra');
 // In newer Node.js versions where process is already global this isn't necessary.
-var process = require("process");
-var slugify = require('slugify');
-let dateFormat = require('dateformat');
-let themeFolder = '/content/themes/';
-let sizeOf = require('image-size');
-var minify = require('html-minifier').minify;
+const process = require("process");
+const slugify = require('slugify');
+const dateFormat = require('dateformat');
+const sizeOf = require('image-size');
 
-let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
+const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 const settings = require(folder.vikingPath() + '/src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
 
-let post = new Post();
-let themePath = folder.themePath() + '2020/';
-let siteMapContents = '';
+const post = new Post();
+const themePath = folder.themePath() + '2020/';
 
+let siteMapContents = '';
 let onlyOnce = false;
 
-let builder = module.exports = {
+const builder = module.exports = {
     build: function(){
         
         let buildSettings = settings.load().build;
@@ -86,8 +84,6 @@ let builder = module.exports = {
             builder.createCNAME();
         });
 
-        
-
         return {'status' : 'success'};
     },
 
@@ -118,9 +114,6 @@ let builder = module.exports = {
                 console.log('Built: ' + file);
             });
         });
-
-        
-
         
     },
 
@@ -165,14 +158,13 @@ let builder = module.exports = {
     },
 
     replaceConditionals(contents, data, _callback){
-        let conditionalTxt = '@if(';
-        let endContiditionalTxt = '@endif';
+        const conditionalTxt = '@if(';
+        const endContiditionalTxt = '@endif';
 
         let startIndex = contents.indexOf(conditionalTxt);
         if(startIndex > 0){
 
             let post = data.post;
-            
 
             let endConditional = contents.indexOf(')', startIndex);
             let conditional = contents.substring(startIndex + conditionalTxt.length, endConditional);
@@ -315,8 +307,8 @@ let builder = module.exports = {
     replacePostDataLoop: function(contents){
         let posts = post.orderBy('created_at', 'DESC').getPosts();
         
-        let loopStartString = '@loop';
-        let loopEndString = '@endloop';
+        const loopStartString = '@loop';
+        const loopEndString = '@endloop';
 
         let loopStart = contents.indexOf( loopStartString );
         let loopEnd = contents.indexOf( loopEndString );

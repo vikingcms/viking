@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
-let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
+const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 
-let self = module.exports = {
+const self = module.exports = {
     
     load: function(){
 
@@ -25,7 +25,6 @@ let self = module.exports = {
 
     updateOption(name, key, value){
         
-
         try{
             data = fs.readJsonSync( folder.settings() + name + '.json');
         } catch (err){

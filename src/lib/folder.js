@@ -20,15 +20,15 @@
  * folder.defaultSettings() Viking default settings location
  */
 
-let contentFolder = 'content/';
-let imageFolder = 'images/';
-let postFolder = 'posts/json/';
-let siteFolder = 'site/';
-let themeFolder = 'themes/';
-let settingsFolder = 'settings/';
+const contentFolder = 'content/';
+const imageFolder = 'images/';
+const postFolder = 'posts/json/';
+const siteFolder = 'site/';
+const themeFolder = 'themes/';
+const settingsFolder = 'settings/';
 
 
-let folder = module.exports = {
+const folder = module.exports = {
     root: function(){
         return './';
     },
