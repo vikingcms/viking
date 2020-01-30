@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-let folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
+const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 
 class Post{
 
