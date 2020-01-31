@@ -26,7 +26,6 @@ const builder = module.exports = {
 
         // empty the site folder
         fs.emptyDirSync( folder.sitePath() );
-
         
         fs.readdir(themePath, function (err, files) {
             if (err) {
@@ -236,7 +235,7 @@ const builder = module.exports = {
         }
     },
 
-    replaceIncludes (file, _callback) {
+    replaceIncludes(file, _callback) {
         let contents = fs.readFileSync(themePath + file, 'utf8');
         let include = contents.indexOf('@include', 0);
 
