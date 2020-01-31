@@ -35,15 +35,10 @@ class Post{
     getPosts(){
         this.posts.forEach(function (post, index) {
             if(typeof post !== 'undefined' && typeof post.meta !== 'undefined' && typeof post.meta.data !== 'undefined'){
-                post.meta.data = JSON.parse(post.meta.data);
+                if(post.meta.data){
+                    post.meta.data = JSON.parse(post.meta.data);
+                }
             }
-            // if(typeof post !== 'undefined' && typeof post.meta == 'undefined'){
-            //     post['meta']['title'] = '';
-            //     post['meta']['description'] = '';
-            //     post['meta']['schema'] = '';
-            //     post['meta']['data'] = {};
-            // }
-            
         });
         return this.posts;
     }

@@ -20,7 +20,7 @@ let onlyOnce = false;
 const builder = module.exports = {
     build() {
         
-        let buildSettings = settings.load().build;
+        let env = settings.load().environment;
         let siteSettings = settings.load().site;
         let posts = post.orderBy('created_at', 'DESC').getPosts();
 
@@ -43,7 +43,7 @@ const builder = module.exports = {
                 if(typeof(extension) != 'undefined' && extension == '.axe'){
 
                     // if debug mode is on we will write all posts to a json file
-                    if(buildSettings.debug){
+                    if(env.debug){
                         fs.writeJsonSync( folder.sitePath() + '/posts.json', posts, { spaces: '\t' });
                     }
 
@@ -90,7 +90,7 @@ const builder = module.exports = {
 
     writeFile(file, directory, data) {
 
-        let buildSettings = settings.load().build;
+        let env = settings.load().environment;
         let siteSettings = settings.load().site;
         builder.addToSitemap(file, directory, data, siteSettings);
 
@@ -103,22 +103,25 @@ const builder = module.exports = {
                     builder.replaceConditionals(contents, data, function (contents){
                         let amp = (file == 'amp.axe') ? true : false;
                         contents = builder.replacePostData( contents, data.post, amp);
+                        contents = contents.replace('{{ meta_description }}', data.post.meta.description);
                         builder.minifyAndWrite(directory, contents);
                     });
                 }
                 if(file == 'home.axe'){
                     builder.replaceConditionals(contents, data, function (contents){
+                        contents = contents.replace('{{ meta_description }}', siteSettings.description);
                         builder.minifyAndWrite(directory, contents);
                     });
                 }
                 if(file == 'loop.axe'){
                     builder.replaceConditionals(contents, data, function (contents){
                         builder.replacePostDataLoop(contents, function (contents){
+                            contents = contents.replace('{{ meta_description }}', siteSettings.post.types[0].description);
                             builder.minifyAndWrite(directory, contents);
                         });
                     });
                 }
-                if(buildSettings.debug){
+                if(env.debug){
                     contents = builder.addAdminBar(contents);
                 }
 
@@ -129,6 +132,8 @@ const builder = module.exports = {
     },
 
     minifyAndWrite(directory, contents) {
+        let siteSettings = settings.load().site;
+
         contents = minify(contents, {
             removeComments: true,
             collapseWhitespace: true,
@@ -136,6 +141,9 @@ const builder = module.exports = {
             minifyCSS: true,
             minifyJS: true
         });
+
+        contents = contents.replace('{{ currentURL }}', siteSettings.url + '/' + directory);
+        
 
         fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
     },

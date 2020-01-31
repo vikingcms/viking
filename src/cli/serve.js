@@ -42,7 +42,7 @@ let serve = module.exports = {
     launch() {
 
         getRandomPort(8080).then( function(port){
-
+            
             app.set('view engine', 'ejs');
             app.use('/dashboard/assets', express.static(folder.vikingPath() + 'src/dashboard/assets'));
             
@@ -70,7 +70,7 @@ let serve = module.exports = {
 
             serve.generateRoutes();
 
-            app.listen(port, () => console.log(`Viking dashboard running on port ${port}!`))
+            app.listen(port, () => console.log(`Viking is running on port ${port}!`))
             
             open('http://localhost:' + port);
 

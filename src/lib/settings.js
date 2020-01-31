@@ -6,7 +6,6 @@ const self = module.exports = {
     load() {
 
         return {
-            build: self.loadSetting('build'),
             site: self.loadSetting('site'),
             environment: self.loadSetting('environment')
         }
@@ -16,6 +15,7 @@ const self = module.exports = {
 
         try{
             return fs.readJsonSync( folder.settings() + name + '.json');
+            console.log('reading settings from ' + folder.settings());
         } catch (err){
             let defaultSettings = fs.readJsonSync( folder.defaultSettings() + name + '.json');
             fs.outputJsonSync(folder.settings() + name + '.json', defaultSettings);

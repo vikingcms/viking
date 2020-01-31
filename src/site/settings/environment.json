@@ -1,4 +1,5 @@
 {
-    "debug": "true",
-    "gh_token": ""
+    "debug": "false",
+    "gh_token": "",
+    "name": ""
 }

@@ -1,4 +1,5 @@
 {
-    "postRoute" : "/post/{post}",
-    "loopRoute" : "posts"
+    "url": "http://localhost:8080",
+    "postRoute": "/post/{post}",
+    "loopRoute": "posts"
 }
