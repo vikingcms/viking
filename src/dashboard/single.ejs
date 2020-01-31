@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="absolute right-0 top-0 bg-gray-100 border-l border-gray-200 min-h-screen container max-w-md z-40 shadow-2xl transition" id="meta-sidebar">
+            <div class="absolute right-0 top-0 bg-gray-100 border-l border-gray-200 min-h-screen h-full overflow-scroll container max-w-md z-40 shadow-2xl transition" id="meta-sidebar">
                 
                 <div class="flex">
                     <div class="open-toggle text-xl w-16 h-16 justify-center items-center flex cursor-pointer relative z-10" data-toggle="meta-sidebar">
@@ -76,6 +76,11 @@
                     <label class="viking-label mt-8" for="meta_schema">Meta Schema</label>
                     <div class="codeeditor-wrapper rounded-lg border border-gray-300 overflow-hidden">
                         <textarea class="viking-input h-64 codeeditor" name="meta_schema" id="meta_schema" cols="30" rows="10"><% if(post.meta && post.meta.schema && post.meta.schema) { %><%= post.meta.schema %><% } %></textarea>
+                    </div>
+
+                    <label class="viking-label mt-8" for="meta_data">Extra Meta Data</label>
+                    <div class="codeeditor-wrapper rounded-lg border border-gray-300 overflow-hidden">
+                        <textarea class="viking-input h-64 codeeditor" name="meta_sdata" id="meta_data" cols="30" rows="10"><% if(post.meta && post.meta.data && post.meta.data) { %><%= post.meta.data %><% } %></textarea>
                     </div>
                 </div>
 

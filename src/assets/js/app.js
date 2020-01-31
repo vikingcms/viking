@@ -26,9 +26,6 @@ async function getb6(file){
 
 let meta_schema = '';
 if( document.getElementById('meta_schema') ){
-    //ace.config.setModuleUrl('ace/mode/json_worker', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/worker-javascript.js');
-    //ace.config.set("workerPath", 'ace-builds/src-min-noconflict/worker-json.js');
-    //ace.config.setModuleUrl('ace/mode/json_worker', require('file-loader!../../../node_modules/ace-builds/src-min-noconflict/worker-json.js'));
     meta_schema = ace.edit('meta_schema', {
         mode: 'ace/mode/json',
         selectionStyle: 'text',
@@ -36,6 +33,18 @@ if( document.getElementById('meta_schema') ){
         theme: 'ace/theme/chrome'
     });
     meta_schema.getSession().setUseWorker(false);
+    
+}
+
+let meta_data = '';
+if( document.getElementById('meta_data') ){
+    meta_data = ace.edit('meta_data', {
+        mode: 'ace/mode/json',
+        selectionStyle: 'text',
+        showPrintMargin: false,
+        theme: 'ace/theme/chrome'
+    });
+    meta_data.getSession().setUseWorker(false);
     
 }
 
@@ -249,7 +258,8 @@ function getPostData(_callback){
             excerpt: document.getElementById('excerpt').value,
             meta_title: document.getElementById('meta_title').value,
             meta_description: document.getElementById('meta_description').value,
-            meta_schema: meta_schema.getValue()
+            meta_schema: meta_schema.getValue(),
+            meta_data: meta_data.getValue()
         });
 
     }).catch((error) => {

@@ -5,6 +5,7 @@ const process = require("process");
 const slugify = require('slugify');
 const dateFormat = require('dateformat');
 const sizeOf = require('image-size');
+const minify = require('html-minifier').minify;
 
 const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 const settings = require(folder.vikingPath() + '/src/lib/settings.js');
@@ -82,6 +83,7 @@ const builder = module.exports = {
             });
             builder.endSitemap();
             builder.createCNAME();
+            builder.addGitKeep();
         });
 
         return {'status' : 'success'};
@@ -97,24 +99,47 @@ const builder = module.exports = {
         // turn into func used again below
         builder.replaceIncludes(file, function(contents){
             
-            builder.replaceConditionals(contents, data, function(contents){
+            
                 contents = builder.replaceTitle( contents, file, data );
                 if(file == 'single.axe' || file == 'amp.axe'){
-                    let amp = (file == 'amp.axe') ? true : false;
-                    contents = builder.replacePostData( contents, data.post, amp);
+                    builder.replaceConditionals(contents, data, function(contents){
+                        let amp = (file == 'amp.axe') ? true : false;
+                        contents = builder.replacePostData( contents, data.post, amp);
+                        builder.minifyAndWrite(directory, contents);
+                    });
+                }
+                if(file == 'home.axe'){
+                    builder.replaceConditionals(contents, data, function(contents){
+                        builder.minifyAndWrite(directory, contents);
+                    });
                 }
                 if(file == 'loop.axe'){
-                    contents = builder.replacePostDataLoop( contents );
+                    builder.replaceConditionals(contents, data, function(contents){
+                        builder.replacePostDataLoop( contents, function(contents){
+                            builder.minifyAndWrite(directory, contents);
+                        });
+                    });
                 }
                 if(buildSettings.debug){
                     contents = builder.addAdminBar(contents);
                 }
 
-                fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
                 console.log('Built: ' + file);
-            });
+                
         });
         
+    },
+
+    minifyAndWrite: function(directory, contents){
+        contents = minify(contents, {
+            removeComments: true,
+            collapseWhitespace: true,
+            collapseInlineTagWhitespace: true,
+            minifyCSS: true,
+            minifyJS: true
+        });
+
+        fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
     },
 
     beginSitemap: function(){
@@ -162,20 +187,29 @@ const builder = module.exports = {
         const endContiditionalTxt = '@endif';
 
         let startIndex = contents.indexOf(conditionalTxt);
-        if(startIndex > 0){
+        
+        // check if Index is in loop
+        let loopStartString = '@loop';
+        let loopEndString = '@endloop';
+
+        let loopStart = contents.indexOf( loopStartString );
+        let loopEnd = contents.indexOf( loopEndString );
+
+        if(startIndex > 0 && (startIndex < loopStart || startIndex > loopEnd) ){
 
             let post = data.post;
 
-            let endConditional = contents.indexOf(')', startIndex);
+            let endOfCurLine = contents.indexOf('\n', startIndex);
+            let endConditional = contents.lastIndexOf(')', endOfCurLine);
             let conditional = contents.substring(startIndex + conditionalTxt.length, endConditional);
             
             let BeginningOfEnd = contents.indexOf(endContiditionalTxt);
 
 
-           let conditionalResult = false;
-           eval('if( ' + conditional + '){ conditionalResult = true; }');
+        let conditionalResult = false;
+        eval('if( ' + conditional + '){ conditionalResult = true; }');
 
-           let firstHalfOfContent = contents.slice(0, startIndex);
+        let firstHalfOfContent = contents.slice(0, startIndex);
             try{
                 // if it's try we only want to remove the conditional @if and leave the content inside
                 if(conditionalResult){
@@ -194,7 +228,9 @@ const builder = module.exports = {
         }
 
         let nextConditional = contents.indexOf(conditionalTxt);
-        if(nextConditional > 0){
+
+        
+        if(nextConditional > 0 && (nextConditional < loopStart || nextConditional > loopEnd) ){
             builder.replaceConditionals(contents, data, _callback);
         } else {
             _callback(contents);
@@ -304,7 +340,7 @@ const builder = module.exports = {
         }
         return contents;
     },
-    replacePostDataLoop: function(contents){
+    replacePostDataLoop: function(contents, _callback){
         let posts = post.orderBy('created_at', 'DESC').getPosts();
         
         const loopStartString = '@loop';
@@ -320,18 +356,35 @@ const builder = module.exports = {
         let loopContent = '';
 
         posts.forEach(function (post, index){
-            loopContent += builder.replacePostData( loopHTML, post );
+            builder.replaceConditionals(loopHTML, {post: post}, function(contents){
+                loopContent += builder.replacePostData( contents, post );
+            });
         });
 
         // insert loop content between top and bottom half of file
         contents = topHTML + loopContent.trim() + bottomHTML;
 
         // return updated contents
-        return contents;
+        _callback(contents);
 
         // posts.forEach(function (post, index) {
 
         // });
+    },
+
+    checkIfIndexInLoop: function(contents, index, _callback){
+        const loopStartString = '@loop';
+        const loopEndString = '@endloop';
+
+        let loopStart = contents.indexOf( loopStartString );
+        let loopEnd = contents.indexOf( loopEndString );
+
+        if(index > loopStart && index < loopEnd){
+            _callback( true );
+        } else {
+            _callback( false );
+       }
+        
     },
     renderHTML: function(data) {
         let result = ``;
@@ -362,7 +415,7 @@ const builder = module.exports = {
                 }
               break;
             case 'image':
-                result += `<img src="${block.data.file.url}" class="w-full">`;
+                result += `<img src="${block.data.file.url}" alt="${block.data.file.caption}" class="w-full">`;
                 break;
           }
         }
@@ -412,6 +465,10 @@ const builder = module.exports = {
         let siteSettings = settings.load().site;
         let domain = siteSettings.url.replace('https://', '').replace('http://', '');
         fs.outputFileSync(folder.sitePath() + 'CNAME', domain);
+    },
+    addGitKeep: function(){
+        // adding the .gitkeep to the folder will allow the empty site folder to remain in the repo
+        fs.outputFileSync(folder.sitePath() + '.gitkeep', '');
     },
     addAdminBar: function(contents) {
         return contents.replace('</body>', builder.adminBarHTML() + '</body>');

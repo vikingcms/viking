@@ -162,7 +162,8 @@ let serve = module.exports = {
                     meta: {
                         title: req.body.meta_title,
                         description: req.body.meta_description,
-                        schema: req.body.meta_schema
+                        schema: req.body.meta_schema,
+                        data: req.body.meta_data
                     },
                     created_at: getDateString(new Date()),
                     updated_at: getDateString(new Date()),
@@ -207,6 +208,10 @@ let serve = module.exports = {
 
             let ghConfig = parse.sync();
             let githubURL = ghConfig['remote "origin"'].url.replace('https://', '').replace('http://', '');
+            let checkForAtInURL = githubURL.split('@');
+            if(typeof checkForAtInURL[1] !== 'undefined'){
+                githubURL = checkForAtInURL[1];
+            }
 
             console.log('deploying to repo https://' + envSettings.gh_token + '@' + githubURL);
             
