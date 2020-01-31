@@ -18,7 +18,7 @@ let siteMapContents = '';
 let onlyOnce = false;
 
 const builder = module.exports = {
-    build: function(){
+    build() {
         
         let buildSettings = settings.load().build;
         let siteSettings = settings.load().site;
@@ -89,7 +89,7 @@ const builder = module.exports = {
         return {'status' : 'success'};
     },
 
-    writeFile: function(file, directory, data){
+    writeFile(file, directory, data) {
 
         let buildSettings = settings.load().build;
         let siteSettings = settings.load().site;
@@ -97,25 +97,24 @@ const builder = module.exports = {
 
         let contents = '';
         // turn into func used again below
-        builder.replaceIncludes(file, function(contents){
+        builder.replaceIncludes(file, function (contents){
             
-            
-                contents = builder.replaceTitle( contents, file, data );
+                contents = builder.replaceTitle(contents, file, data );
                 if(file == 'single.axe' || file == 'amp.axe'){
-                    builder.replaceConditionals(contents, data, function(contents){
+                    builder.replaceConditionals(contents, data, function (contents){
                         let amp = (file == 'amp.axe') ? true : false;
                         contents = builder.replacePostData( contents, data.post, amp);
                         builder.minifyAndWrite(directory, contents);
                     });
                 }
                 if(file == 'home.axe'){
-                    builder.replaceConditionals(contents, data, function(contents){
+                    builder.replaceConditionals(contents, data, function (contents){
                         builder.minifyAndWrite(directory, contents);
                     });
                 }
                 if(file == 'loop.axe'){
-                    builder.replaceConditionals(contents, data, function(contents){
-                        builder.replacePostDataLoop( contents, function(contents){
+                    builder.replaceConditionals(contents, data, function (contents){
+                        builder.replacePostDataLoop(contents, function (contents){
                             builder.minifyAndWrite(directory, contents);
                         });
                     });
@@ -130,7 +129,7 @@ const builder = module.exports = {
         
     },
 
-    minifyAndWrite: function(directory, contents){
+    minifyAndWrite(directory, contents) {
         contents = minify(contents, {
             removeComments: true,
             collapseWhitespace: true,
@@ -142,16 +141,16 @@ const builder = module.exports = {
         fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
     },
 
-    beginSitemap: function(){
+    beginSitemap() {
         siteMapContents = `<?xml version="1.0" encoding="UTF-8" ?>\n\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     },
 
-    endSitemap: function(){
+    endSitemap() {
         siteMapContents += `\n\n</urlset>`;
         fs.writeFileSync(folder.sitePath() + 'sitemap.xml', siteMapContents);
     },
 
-    addToSitemap: function(file, directory, data, siteSettings){
+    addToSitemap(file, directory, data, siteSettings) {
 
         let urlStructure = `\n\t<url>\n\t\t<loc>{{ loc }}</loc>\n\t\t<lastmod>{{ lastmod }}</lastmod>\n\t\t<priority>{{ priority }}</priority>\n\t</url>`;
 
@@ -178,19 +177,19 @@ const builder = module.exports = {
         
     },
 
-    getPost: function(file){
+    getPost(file) {
         return fs.readFileSync(file, 'utf8');
     },
 
-    replaceConditionals(contents, data, _callback){
+    replaceConditionals(contents, data, _callback) {
         const conditionalTxt = '@if(';
         const endContiditionalTxt = '@endif';
 
         let startIndex = contents.indexOf(conditionalTxt);
         
         // check if Index is in loop
-        let loopStartString = '@loop';
-        let loopEndString = '@endloop';
+        const loopStartString = '@loop';
+        const loopEndString = '@endloop';
 
         let loopStart = contents.indexOf( loopStartString );
         let loopEnd = contents.indexOf( loopEndString );
@@ -237,7 +236,7 @@ const builder = module.exports = {
         }
     },
 
-    replaceIncludes: function(file, _callback){
+    replaceIncludes (file, _callback) {
         let contents = fs.readFileSync(themePath + file, 'utf8');
         let include = contents.indexOf('@include', 0);
 
@@ -264,17 +263,19 @@ const builder = module.exports = {
 
         _callback( contents );
     },
-    replaceSettings: function(contents){
+
+    replaceSettings(contents) {
         //let loadSettings = builder.loadSettingsFile();
         let settings = {
-                "title": ""
-            };
+            "title": ""
+        };
 
         contents = contents.replace('{{ title }}', settings.title);
 
         return contents;
     },
-    replaceTitle: function(contents, file, data){
+
+    replaceTitle(contents, file, data) {
         //let loadSettings = builder.loadSettingsFile();
         let settings = {
             "title": "Get Full Report",
@@ -295,7 +296,8 @@ const builder = module.exports = {
 
         return contents;
     },
-    endOfIncludeLocation: function(start, str){
+
+    endOfIncludeLocation(start, str) {
         let endIncludeLocation = str.length;
         let nextSpaceIndex = str.indexOf(" ", 10);
         let nextNewLineIndex = str.indexOf("\n", 10);
@@ -307,7 +309,8 @@ const builder = module.exports = {
         }
         return endIncludeLocation;
     },
-    replacePostData: function( contents, post, amp ){
+
+    replacePostData(contents, post, amp) {
         if(typeof amp == 'undefined'){
             amp = false;
         }
@@ -340,7 +343,8 @@ const builder = module.exports = {
         }
         return contents;
     },
-    replacePostDataLoop: function(contents, _callback){
+
+    replacePostDataLoop(contents, _callback) {
         let posts = post.orderBy('created_at', 'DESC').getPosts();
         
         const loopStartString = '@loop';
@@ -356,7 +360,7 @@ const builder = module.exports = {
         let loopContent = '';
 
         posts.forEach(function (post, index){
-            builder.replaceConditionals(loopHTML, {post: post}, function(contents){
+            builder.replaceConditionals(loopHTML, {post: post}, function (contents){
                 loopContent += builder.replacePostData( contents, post );
             });
         });
@@ -366,13 +370,9 @@ const builder = module.exports = {
 
         // return updated contents
         _callback(contents);
-
-        // posts.forEach(function (post, index) {
-
-        // });
     },
 
-    checkIfIndexInLoop: function(contents, index, _callback){
+    checkIfIndexInLoop(contents, index, _callback) {
         const loopStartString = '@loop';
         const loopEndString = '@endloop';
 
@@ -386,7 +386,8 @@ const builder = module.exports = {
        }
         
     },
-    renderHTML: function(data) {
+
+    renderHTML(data) {
         let result = ``;
         for (let block of data.blocks) {
           switch (block.type) {
@@ -421,7 +422,8 @@ const builder = module.exports = {
         }
         return result;
     },
-    renderAmp: function(data) {
+
+    renderAmp(data) {
         let result = ``;
         for (let block of data.blocks) {
           switch (block.type) {
@@ -461,19 +463,23 @@ const builder = module.exports = {
         }
         return result;
     },
-    createCNAME: function(){
+
+    createCNAME() {
         let siteSettings = settings.load().site;
         let domain = siteSettings.url.replace('https://', '').replace('http://', '');
         fs.outputFileSync(folder.sitePath() + 'CNAME', domain);
     },
-    addGitKeep: function(){
+
+    addGitKeep() {
         // adding the .gitkeep to the folder will allow the empty site folder to remain in the repo
         fs.outputFileSync(folder.sitePath() + '.gitkeep', '');
     },
-    addAdminBar: function(contents) {
+
+    addAdminBar(contents) {
         return contents.replace('</body>', builder.adminBarHTML() + '</body>');
     },
-    adminBarHTML: function() {
+
+    adminBarHTML() {
         return `<div style="background-color: #000; z-index: 50; width: 100%; left: 0; bottom:0; position: fixed; height: 2.5rem; -webkit-box-pack: justify; justify-content: space-between; -webkit-box-align: center; align-items: center; display: -webkit-box; display: flex; box-sizing: border-box; border-width:0px;">
                     <img src="/dashboard/assets/img/logo-inverse.svg" style="width: auto; padding-left: 0.5rem; height: 1rem;">
                     <div style="display: -webkit-box; display: flex; height: 2.5rem;">

@@ -33,7 +33,7 @@ class Post{
     }
 
     getPosts(){
-        this.posts.forEach(function(post, index){
+        this.posts.forEach(function (post, index) {
             if(typeof post !== 'undefined' && typeof post.meta !== 'undefined' && typeof post.meta.data !== 'undefined'){
                 post.meta.data = JSON.parse(post.meta.data);
             }

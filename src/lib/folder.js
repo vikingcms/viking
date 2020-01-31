@@ -29,52 +29,52 @@ const settingsFolder = 'settings/';
 
 
 const folder = module.exports = {
-    root: function(){
+    root() {
         return './';
     },
-    rootPath: function(){
+    rootPath() {
         return process.cwd() + '/';
     },
-    content: function(){
+    content() {
         return folder.root() + contentFolder;
     },
-    contentPath: function(){
+    contentPath() {
         return folder.rootPath() + contentFolder;
     },
-    image: function(){
+    image() {
         return folder.content() + imageFolder;
     },
-    imagePath: function(){
+    imagePath() {
         return folder.contentPath() + imageFolder;
     },
-    post: function(){
+    post() {
         return folder.content() + postFolder;
     },
-    postPath: function(){
+    postPath() {
         return folder.contentPath() + postFolder;
     },
-    theme: function(){
+    theme() {
         return folder.content() + themeFolder;
     },
-    themePath: function(){
+    themePath() {
         return folder.contentPath() + themeFolder;
     },
-    site: function(){
+    site() {
         return folder.root() + siteFolder;
     },
-    sitePath: function(){
+    sitePath() {
         return folder.rootPath() + siteFolder;
     },
-    settings: function(){
+    settings() {
         return folder.root() + settingsFolder;
     },
-    settingsPath: function(){
+    settingsPath() {
         return folder.rootPath() + settingsFolder;
     },
-    vikingPath: function(){
+    vikingPath() {
         return require("global-modules-path").getPath("viking") + '/';
     },
-    defaultSettings: function(){
+    defaultSettings() {
         return folder.vikingPath() + 'src/site/settings/';
     }
 }
