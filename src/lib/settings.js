@@ -3,7 +3,7 @@ const folder = require(require("global-modules-path").getPath("viking") + '/src/
 
 const self = module.exports = {
     
-    load: function(){
+    load() {
 
         return {
             build: self.loadSetting('build'),
@@ -12,7 +12,7 @@ const self = module.exports = {
         }
     },
 
-    loadSetting: function(name){
+    loadSetting(name) {
 
         try{
             return fs.readJsonSync( folder.settings() + name + '.json');
@@ -23,7 +23,7 @@ const self = module.exports = {
         }
     },
 
-    updateOption(name, key, value){
+    updateOption(name, key, value) {
         
         try{
             data = fs.readJsonSync( folder.settings() + name + '.json');
@@ -36,7 +36,7 @@ const self = module.exports = {
         self.update(name, data);
     },
 
-    update: function(name, data) {
+    update(name, data) {
         fs.outputJsonSync(folder.settings() + name + '.json', data);
     }
 }

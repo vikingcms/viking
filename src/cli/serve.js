@@ -39,7 +39,7 @@ async function getRandomPort (preferredPort = 8000) {
 }
 
 let serve = module.exports = {
-    launch: function(){
+    launch() {
 
         getRandomPort(8080).then( function(port){
 
@@ -78,7 +78,7 @@ let serve = module.exports = {
 
     },
 
-    generateRoutes: function(){
+    generateRoutes() {
         
         app.get('/', function(req, res){
             let posts = post.orderBy('created_at', 'DESC').getPosts();   
@@ -193,7 +193,6 @@ let serve = module.exports = {
                 res.json({ status: 'danger', message: err });
             }
 
-            
         });
 
         app.get('/dashboard/deploy', function(req, res){
@@ -249,12 +248,12 @@ let serve = module.exports = {
 
     }, 
 
-    getPost: function(slug, _callback){
+    getPost(slug, _callback) {
         let post = JSON.parse( fs.readFileSync( folder.post() + slug + '.json' ) );
         _callback(post);
     },
 
-    getFilenameFromSlug(slug){
+    getFilenameFromSlug(slug) {
         return folder.post() + slug + '.json';
     }
 }

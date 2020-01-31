@@ -1,16 +1,16 @@
 const fs = require('fs-extra');
 
 module.exports = {
-    welcome: function(){
+    welcome() {
         console.log('Welcome to Viking');
     },
-    createFolder: function(folderName){
+    createFolder(folderName) {
         console.log('creating new folder ' + folderName);
         fs.mkdir('./' + folderName , { recursive: true }, (err) => {
             if (err) throw err;
           });
     },
-    newProject: function(folderName){
+    newProject(folderName) {
         console.log('Welcome Viking!');
         console.log('Generating your new site inside: ' + folderName);
         fs.mkdir('./' + folderName , { recursive: true }, (err) => {
