@@ -180,7 +180,11 @@ const builder = module.exports = {
             urlStructure = urlStructure.replace('{{ priority }}', '0.9');
         }
 
-        siteMapContents += urlStructure;
+        if(urlStructure.indexOf('{{ loc }}') == -1){
+
+            siteMapContents += urlStructure;
+
+        }
         
     },
 
