@@ -100,18 +100,15 @@ if( document.getElementById('editor') ){
 }
 
 function renderBlocks(){
-    //if( document.getElementById('editor').dataset.blocks ){
-        let blocks = {};
-        if( document.getElementById('editor').dataset.blocks ){
-            blocks = JSON.parse(document.getElementById('editor').dataset.blocks);
-        }
-        console.log(blocks + ' -');
-        if(blocks && editor){
-            editor.blocks.render(
-                blocks
-            );
-        }
-    //}
+    let blocks = {};
+    if( document.getElementById('editor').dataset.blocks ){
+        blocks = JSON.parse(document.getElementById('editor').dataset.blocks);
+    }
+    if(blocks && editor){
+        editor.blocks.render(
+            blocks
+        );
+    }
 }
 
 if( document.getElementById('settings') ){
@@ -362,6 +359,7 @@ if( document.getElementById('build-btn') ){
     });
 }
 
+// Uncomment each notification below to see an example of each one
 //showNotification('success', 'Your new post has been successfull created.');
 //showNotification('danger', 'Something has went wrong trying to save your post.');
 //showNotification('info', 'Did you know that you can upload an image for your post.');
@@ -373,14 +371,12 @@ window.encodeImageFileAsURL = function(element) {
     reader.onload = function(event) {
         document.getElementById('image').src = event.target.result;
         document.getElementById('image').dataset.name = file.name;
-        console.log('hit abcdefg');
     }
     reader.readAsDataURL(file);
 }
 
 if(document.getElementById('image_upload')){
     document.getElementById('image_upload').addEventListener('change', function(event){
-        console.log('changed y');
         encodeImageFileAsURL(this);
         showImagePreview();
     });
