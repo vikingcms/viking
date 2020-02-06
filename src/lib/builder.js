@@ -81,11 +81,21 @@ const builder = module.exports = {
                 
             });
             builder.endSitemap();
-            builder.createCNAME();
+            if( builder.isNotGithubURL() ){
+                builder.createCNAME();
+            }
             builder.addGitKeep();
         });
 
         return {'status' : 'success'};
+    },
+
+    isNotGithubURL: function(){
+        let siteSettings = settings.load().site;
+        if( siteSettings.url.indexOf('github.io') == -1 && siteSettings.url.indexOf('github.com') == -1 && siteSettings.url.indexOf('github.page') == -1 ){
+            return true;
+        }
+        return false;
     },
 
     writeFile(file, directory, data) {
@@ -110,13 +120,15 @@ const builder = module.exports = {
                 if(file == 'home.axe'){
                     builder.replaceConditionals(contents, data, function (contents){
                         contents = contents.replace('{{ meta_description }}', siteSettings.description);
-                        builder.minifyAndWrite(directory, contents);
+                        builder.replacePostDataLoop(contents, function (contents){
+                            builder.minifyAndWrite(directory, contents);
+                        });
                     });
                 }
                 if(file == 'loop.axe'){
                     builder.replaceConditionals(contents, data, function (contents){
                         builder.replacePostDataLoop(contents, function (contents){
-                            contents = contents.replace('{{ meta_description }}', siteSettings.post.types[0].description);
+                            //contents = contents.replace('{{ meta_description }}', siteSettings.post.types[0].description);
                             builder.minifyAndWrite(directory, contents);
                         });
                     });
@@ -142,6 +154,9 @@ const builder = module.exports = {
             minifyJS: true
         });
 
+        contents = contents.replace('{{ title }}', siteSettings.title);
+        contents = contents.replace(/\{\{ subfolder \}\}/g, siteSettings.subfolder);
+        contents = contents.replace(/\{\{ url \}\}/g, siteSettings.url);
         contents = contents.replace('{{ currentURL }}', siteSettings.url + '/' + directory);
         
 
@@ -428,6 +443,9 @@ const builder = module.exports = {
               break;
             case 'image':
                 result += `<img src="${block.data.file.url}" alt="${block.data.file.caption}" class="w-full">`;
+                break;
+            case 'quote':
+                result += `<blockquote>${block.data.text}</blockquote>`;
                 break;
           }
         }
