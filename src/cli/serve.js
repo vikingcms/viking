@@ -212,12 +212,16 @@ let serve = module.exports = {
                 githubURL = checkForAtInURL[1];
             }
 
+            
+            if(githubURL.indexOf('.git') !== -1){
+                githubURL = githubURL.replace(':', '/').replace('.git', '');
+            }
+
             console.log('deploying to repo https://' + envSettings.gh_token + '@' + githubURL);
             
             ghpages.publish(folder.sitePath(), {
                 branch: 'gh-pages',
-                repo: 'https://' + envSettings.gh_token + '@' + githubURL,
-                silent: true
+                repo: 'https://' + envSettings.gh_token + '@' + githubURL
               }, function(){
                 req.session.notification = 'Your site has been successfully deployed. Give it a few minutes to update.';
                 req.session.notification_type = 'success';
