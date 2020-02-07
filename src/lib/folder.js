@@ -27,7 +27,6 @@ const siteFolder = 'site/';
 const themeFolder = 'themes/';
 const settingsFolder = 'settings/';
 
-
 const folder = module.exports = {
     root() {
         return './';

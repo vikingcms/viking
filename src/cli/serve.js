@@ -1,29 +1,22 @@
-const getPort = require('get-port');
 const open = require('open');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const app = express();
-const fs = require('fs');
 
 const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
 const routes = require(folder.vikingPath() + 'src/lib/routes.js');
+const helper = require(folder.vikingPath() + 'src/lib/helper.js');
 
 let notificationShown = 0;
-
-async function getRandomPort (preferredPort = 8000) {
-    const port = await getPort({ port: preferredPort });
-    return port;
-}
 
 module.exports = {
     launch() {
 
-        getRandomPort(8080).then( function(port){
+        helper.getRandomPort(8080).then(function(port) {
             
             app.set('view engine', 'ejs');
             app.use('/dashboard/assets', express.static(folder.vikingPath() + 'src/dashboard/assets'));
-            
             
             app.use('/images/', express.static(folder.imagePath()));
             app.use('/', express.static( folder.sitePath() ));
