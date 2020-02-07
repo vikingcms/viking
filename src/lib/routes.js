@@ -3,8 +3,9 @@ const dateFormat = require('dateformat');
 const fs = require('fs');
 const ghpages = require('gh-pages');
 const parse = require('parse-git-config');
+const globalModulesPath = require("global-modules-path");
 
-const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
+const folder = require(globalModulesPath.getPath("viking") + '/src/lib/folder.js');
 const builder = require(folder.vikingPath() + 'src/lib/builder.js');
 const settings = require(folder.vikingPath() + 'src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');

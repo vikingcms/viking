@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
-const vikingNewFolder = require("global-modules-path").getPath("viking") + '/src/site/';
+const globalModulesPath = require("global-modules-path");
+const vikingNewFolder = globalModulesPath.getPath("viking") + '/src/site/';
 const process = require('process');
 
 module.exports = {
