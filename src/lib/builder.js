@@ -6,8 +6,9 @@ const slugify = require('slugify');
 const dateFormat = require('dateformat');
 const sizeOf = require('image-size');
 const minify = require('html-minifier').minify;
+const globalModulesPath = require("global-modules-path");
 
-const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
+const folder = require(globalModulesPath.getPath("viking") + '/src/lib/folder.js');
 const settings = require(folder.vikingPath() + '/src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
 

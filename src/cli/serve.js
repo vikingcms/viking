@@ -1,10 +1,11 @@
-const open = require('open');
 const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
 const app = express();
+const session = require('express-session');
+const open = require('open');
+const bodyParser = require('body-parser');
+const globalModulesPath = require("global-modules-path");
 
-const folder = require(require("global-modules-path").getPath("viking") + '/src/lib/folder.js');
+const folder = require(globalModulesPath.getPath("viking") + '/src/lib/folder.js');
 const routes = require(folder.vikingPath() + 'src/lib/routes.js');
 const helper = require(folder.vikingPath() + 'src/lib/helper.js');
 

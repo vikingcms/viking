@@ -20,6 +20,8 @@
  * folder.defaultSettings() Viking default settings location
  */
 
+const globalModulesPath = require("global-modules-path");
+
 const contentFolder = 'content/';
 const imageFolder = 'images/';
 const postFolder = 'posts/json/';
@@ -71,7 +73,7 @@ const folder = module.exports = {
         return folder.rootPath() + settingsFolder;
     },
     vikingPath() {
-        return require("global-modules-path").getPath("viking") + '/';
+        return globalModulesPath.getPath("viking") + '/';
     },
     defaultSettings() {
         return folder.vikingPath() + 'src/site/settings/';
