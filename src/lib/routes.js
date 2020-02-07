@@ -8,23 +8,12 @@ const folder = require(require("global-modules-path").getPath("viking") + '/src/
 const builder = require(folder.vikingPath() + 'src/lib/builder.js');
 const settings = require(folder.vikingPath() + 'src/lib/settings.js');
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
+const helper = require(folder.vikingPath() + 'src/lib/helper.js');
 
 const post = new Post();
 
 const upload = multer({ dest : folder.imagePath() + 'tmp/' });
 let debug = false;
-
-function getDateString(d){
-	const year = d.getFullYear();
-	const month = String(d.getMonth()+1).padStart(2, 0);
-	const day = String(d.getDate()).padStart(2, 0);
-
-	const hour = String(d.getHours()).padStart(2, 0);
-	const minute = String(d.getMinutes()).padStart(2, 0);
-	const second = String(d.getSeconds()).padStart(2, 0);
-
-	return year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-}
 
 module.exports = {
 
@@ -66,7 +55,7 @@ module.exports = {
         });
 
         app.post('/dashboard/posts/delete', function(req, res){
-            let filename = serve.getFilenameFromSlug(req.body.slug);
+            let filename = folder.post() + req.body.slug + '.json';
 
             try {
                 fs.unlinkSync(filename);
@@ -115,11 +104,11 @@ module.exports = {
                         schema: req.body.meta_schema,
                         data: req.body.meta_data
                     },
-                    created_at: getDateString(new Date()),
-                    updated_at: getDateString(new Date()),
+                    created_at: helper.getDateString(new Date()),
+                    updated_at: helper.getDateString(new Date()),
                 }
 
-                let filename = serve.getFilenameFromSlug(postJson.slug);
+                let filename = folder.post() + postJson.slug + '.json';
 
                 fs.access(filename, fs.F_OK, (err) => {
                     // if we cannot access the file we can write it
@@ -181,9 +170,8 @@ module.exports = {
         });
 
         app.get('/dashboard/post/:post', function(req, res){
-            serve.getPost(req.params.post, function(post){
-                res.render(folder.vikingPath() + 'src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
-            });
+            let post = JSON.parse( fs.readFileSync( folder.post() + req.params.post + '.json' ) );
+            res.render(folder.vikingPath() + 'src/dashboard/single', { request: req, post: post, debug: debug, session: req.session });
         });
 
         app.get('/dashboard/fetchURL', function(req, res){

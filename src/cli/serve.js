@@ -19,8 +19,6 @@ async function getRandomPort (preferredPort = 8000) {
 module.exports = {
     launch() {
 
-        routes.sayHello();
-
         getRandomPort(8080).then( function(port){
             
             app.set('view engine', 'ejs');
@@ -56,14 +54,5 @@ module.exports = {
 
         });
 
-    },
-
-    getPost(slug, _callback) {
-        let post = JSON.parse( fs.readFileSync( folder.post() + slug + '.json' ) );
-        _callback(post);
-    },
-
-    getFilenameFromSlug(slug) {
-        return folder.post() + slug + '.json';
     }
 }

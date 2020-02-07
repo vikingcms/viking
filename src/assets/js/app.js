@@ -1,18 +1,19 @@
 import EditorJS from '@editorjs/editorjs';
-const Header = require('@editorjs/header');
-const LinkTool = require('@editorjs/link');
-const RawTool = require('@editorjs/raw');
+import Header from '@editorjs/header';
+import LinkTool from '@editorjs/link';
+import RawTool from '@editorjs/raw';
 import ImageTool from '@editorjs/image';
-const List = require('@editorjs/list');
-const Delimiter = require('@editorjs/delimiter');
-const Quote = require('@editorjs/quote');
-const Warning = require('@editorjs/warning');
-const InlineCode = require('@editorjs/inline-code');
-const axios = require('axios');
+import List from '@editorjs/list';
+import Delimiter from '@editorjs/delimiter';
+import Quote from '@editorjs/quote';
+import Warning from '@editorjs/warning';
+import InlineCode from '@editorjs/inline-code';
+import axios from 'axios';
 import ace from 'ace-builds';
 import modeJson from 'ace-builds/src-min-noconflict/mode-json.js';
 import themeChrome from 'ace-builds/src-min-noconflict/theme-chrome.js';
-var slugify = require('slugify');
+import slugify from 'slugify';
+
 let createPost = null;
 setCreatePostFalse();
 
@@ -191,7 +192,6 @@ function closeSettingsBar(){
 }
 
 function savePost(){
-   
     getPostData(function(data){
         axios.post('/dashboard/posts/create', data)
             .then(function (response) {
@@ -207,8 +207,6 @@ function savePost(){
                 console.log(error);
             });
     });
-
-        
 }
 
 function getSlugValue(){

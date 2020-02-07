@@ -25035,14 +25035,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @editorjs/editorjs */ "./node_modules/@editorjs/editorjs/dist/editor.js");
 /* harmony import */ var _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @editorjs/image */ "./node_modules/@editorjs/image/dist/bundle.js");
-/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_editorjs_image__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ace-builds */ "./node_modules/ace-builds/src-noconflict/ace.js");
-/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ace_builds__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ace-builds/src-min-noconflict/mode-json.js */ "./node_modules/ace-builds/src-min-noconflict/mode-json.js");
-/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ace-builds/src-min-noconflict/theme-chrome.js */ "./node_modules/ace-builds/src-min-noconflict/theme-chrome.js");
-/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _editorjs_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @editorjs/header */ "./node_modules/@editorjs/header/dist/bundle.js");
+/* harmony import */ var _editorjs_header__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_editorjs_header__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _editorjs_link__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @editorjs/link */ "./node_modules/@editorjs/link/dist/bundle.js");
+/* harmony import */ var _editorjs_link__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_editorjs_link__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _editorjs_raw__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @editorjs/raw */ "./node_modules/@editorjs/raw/dist/bundle.js");
+/* harmony import */ var _editorjs_raw__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_editorjs_raw__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @editorjs/image */ "./node_modules/@editorjs/image/dist/bundle.js");
+/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_editorjs_image__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _editorjs_list__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @editorjs/list */ "./node_modules/@editorjs/list/dist/bundle.js");
+/* harmony import */ var _editorjs_list__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_editorjs_list__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @editorjs/delimiter */ "./node_modules/@editorjs/delimiter/dist/bundle.js");
+/* harmony import */ var _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _editorjs_quote__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @editorjs/quote */ "./node_modules/@editorjs/quote/dist/bundle.js");
+/* harmony import */ var _editorjs_quote__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_editorjs_quote__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _editorjs_warning__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @editorjs/warning */ "./node_modules/@editorjs/warning/dist/bundle.js");
+/* harmony import */ var _editorjs_warning__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_editorjs_warning__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @editorjs/inline-code */ "./node_modules/@editorjs/inline-code/dist/bundle.js");
+/* harmony import */ var _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ace-builds */ "./node_modules/ace-builds/src-noconflict/ace.js");
+/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(ace_builds__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ace-builds/src-min-noconflict/mode-json.js */ "./node_modules/ace-builds/src-min-noconflict/mode-json.js");
+/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ace-builds/src-min-noconflict/theme-chrome.js */ "./node_modules/ace-builds/src-min-noconflict/theme-chrome.js");
+/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var slugify__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! slugify */ "./node_modules/slugify/slugify.js");
+/* harmony import */ var slugify__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(slugify__WEBPACK_IMPORTED_MODULE_15__);
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -25051,31 +25071,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var Header = __webpack_require__(/*! @editorjs/header */ "./node_modules/@editorjs/header/dist/bundle.js");
-
-var LinkTool = __webpack_require__(/*! @editorjs/link */ "./node_modules/@editorjs/link/dist/bundle.js");
-
-var RawTool = __webpack_require__(/*! @editorjs/raw */ "./node_modules/@editorjs/raw/dist/bundle.js");
-
-
-
-var List = __webpack_require__(/*! @editorjs/list */ "./node_modules/@editorjs/list/dist/bundle.js");
-
-var Delimiter = __webpack_require__(/*! @editorjs/delimiter */ "./node_modules/@editorjs/delimiter/dist/bundle.js");
-
-var Quote = __webpack_require__(/*! @editorjs/quote */ "./node_modules/@editorjs/quote/dist/bundle.js");
-
-var Warning = __webpack_require__(/*! @editorjs/warning */ "./node_modules/@editorjs/warning/dist/bundle.js");
-
-var InlineCode = __webpack_require__(/*! @editorjs/inline-code */ "./node_modules/@editorjs/inline-code/dist/bundle.js");
-
-var axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 
 
 
 
-var slugify = __webpack_require__(/*! slugify */ "./node_modules/slugify/slugify.js");
+
+
+
+
+
+
+
 
 var createPost = null;
 setCreatePostFalse();
@@ -25115,7 +25122,7 @@ function _getb() {
 var meta_schema = '';
 
 if (document.getElementById('meta_schema')) {
-  meta_schema = ace_builds__WEBPACK_IMPORTED_MODULE_3___default.a.edit('meta_schema', {
+  meta_schema = ace_builds__WEBPACK_IMPORTED_MODULE_12___default.a.edit('meta_schema', {
     mode: 'ace/mode/json',
     selectionStyle: 'text',
     showPrintMargin: false,
@@ -25127,7 +25134,7 @@ if (document.getElementById('meta_schema')) {
 var meta_data = '';
 
 if (document.getElementById('meta_data')) {
-  meta_data = ace_builds__WEBPACK_IMPORTED_MODULE_3___default.a.edit('meta_data', {
+  meta_data = ace_builds__WEBPACK_IMPORTED_MODULE_12___default.a.edit('meta_data', {
     mode: 'ace/mode/json',
     selectionStyle: 'text',
     showPrintMargin: false,
@@ -25145,17 +25152,17 @@ if (document.getElementById('editor')) {
      */
     holderId: 'editor',
     tools: {
-      header: Header,
+      header: _editorjs_header__WEBPACK_IMPORTED_MODULE_2___default.a,
       linkTool: {
-        "class": LinkTool,
+        "class": _editorjs_link__WEBPACK_IMPORTED_MODULE_3___default.a,
         config: {
           endpoint: 'http://localhost:8008/fetchUrl' // Your backend endpoint for url data fetching
 
         }
       },
-      raw: RawTool,
+      raw: _editorjs_raw__WEBPACK_IMPORTED_MODULE_4___default.a,
       image: {
-        "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_2___default.a,
+        "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_5___default.a,
         config: {
           endpoints: {
             byFile: '/dashboard/uploadFile',
@@ -25171,16 +25178,16 @@ if (document.getElementById('editor')) {
         }
       },
       list: {
-        "class": List,
+        "class": _editorjs_list__WEBPACK_IMPORTED_MODULE_6___default.a,
         inlineToolbar: true
       },
-      delimiter: Delimiter,
+      delimiter: _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7___default.a,
       inlineCode: {
-        "class": InlineCode,
+        "class": _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10___default.a,
         shortcut: 'CMD+SHIFT+M'
       },
-      warning: Warning,
-      quote: Quote
+      warning: _editorjs_warning__WEBPACK_IMPORTED_MODULE_9___default.a,
+      quote: _editorjs_quote__WEBPACK_IMPORTED_MODULE_8___default.a
     },
     autofocus: !createPost,
     onReady: function onReady() {
@@ -25252,7 +25259,7 @@ if (document.getElementById('save-post')) {
 if (document.getElementById('delete-post')) {
   document.getElementById('delete-post').addEventListener('click', function () {
     getPostData(function (data) {
-      axios.post('/dashboard/posts/delete', {
+      axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/posts/delete', {
         slug: data.slug
       }).then(function (response) {
         var data = response.data;
@@ -25281,7 +25288,7 @@ function closeSettingsBar() {
 
 function savePost() {
   getPostData(function (data) {
-    axios.post('/dashboard/posts/create', data).then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/posts/create', data).then(function (response) {
       var data = response.data;
 
       if (data.status == "success") {
@@ -25301,7 +25308,7 @@ function getSlugValue() {
 
   if (slug == "") {
     // return a slugified version of the title
-    slug = slugify(document.getElementById('title').value);
+    slug = slugify__WEBPACK_IMPORTED_MODULE_15___default()(document.getElementById('title').value);
   } // otherwise return the slug value since it is not empty
 
 
@@ -25368,7 +25375,7 @@ if (document.getElementById('toggleDebug')) {
 }
 
 function updateSettings(file, key, value) {
-  axios.post('/dashboard/update/settings/' + file, {
+  axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/update/settings/' + file, {
     key: key,
     value: value
   }).then(function (response) {
@@ -25424,7 +25431,7 @@ var createNotification = function createNotification(type, message) {
 
 if (document.getElementById('build-btn')) {
   document.getElementById('build-btn').addEventListener('click', function () {
-    axios.post('/dashboard/build').then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/build').then(function (response) {
       var data = response.data;
 
       if (data.status == "success") {
@@ -25548,8 +25555,8 @@ if (document.getElementById('date')) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/tony/Sites/viking/src/assets/js/app.js */"./src/assets/js/app.js");
-module.exports = __webpack_require__(/*! /Users/tony/Sites/viking/src/assets/sass/app.scss */"./src/assets/sass/app.scss");
+__webpack_require__(/*! /Users/jamescool/personal/viking/src/assets/js/app.js */"./src/assets/js/app.js");
+module.exports = __webpack_require__(/*! /Users/jamescool/personal/viking/src/assets/sass/app.scss */"./src/assets/sass/app.scss");
 
 
 /***/ })
