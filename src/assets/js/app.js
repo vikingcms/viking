@@ -46,7 +46,7 @@ if( document.getElementById('meta_data') ){
     
 }
 
-let editor = '';
+window.editor = '';
 if( document.getElementById('editor') ){
     editor = new EditorJS({
     /**

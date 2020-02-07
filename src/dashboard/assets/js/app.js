@@ -25109,7 +25109,7 @@ if (document.getElementById('meta_data')) {
   meta_data.getSession().setUseWorker(false);
 }
 
-var editor = '';
+window.editor = '';
 
 if (document.getElementById('editor')) {
   editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_0___default.a({
@@ -25567,8 +25567,8 @@ var self;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/jamescool/personal/viking/src/assets/js/app.js */"./src/assets/js/app.js");
-module.exports = __webpack_require__(/*! /Users/jamescool/personal/viking/src/assets/sass/app.scss */"./src/assets/sass/app.scss");
+__webpack_require__(/*! /Users/tony/Sites/viking/src/assets/js/app.js */"./src/assets/js/app.js");
+module.exports = __webpack_require__(/*! /Users/tony/Sites/viking/src/assets/sass/app.scss */"./src/assets/sass/app.scss");
 
 
 /***/ })
