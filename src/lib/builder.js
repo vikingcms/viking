@@ -380,20 +380,22 @@ const builder = module.exports = {
         let loopStart = contents.indexOf( loopStartString );
         let loopEnd = contents.indexOf( loopEndString );
 
-        let topHTML = contents.slice(0, loopStart);
-        let loopHTML = contents.slice( loopStart + loopStartString.length, loopEnd );
-        let bottomHTML = contents.slice(loopEnd + loopEndString.length, contents.length);
+        if(loopStart !== -1){
+            let topHTML = contents.slice(0, loopStart);
+            let loopHTML = contents.slice( loopStart + loopStartString.length, loopEnd );
+            let bottomHTML = contents.slice(loopEnd + loopEndString.length, contents.length);
 
-        let loopContent = '';
+            let loopContent = '';
 
-        posts.forEach(function (post, index){
-            builder.replaceConditionals(loopHTML, {post: post}, function (contents){
-                loopContent += builder.replacePostData( contents, post );
+            posts.forEach(function (post, index){
+                builder.replaceConditionals(loopHTML, {post: post}, function (contents){
+                    loopContent += builder.replacePostData( contents, post );
+                });
             });
-        });
 
-        // insert loop content between top and bottom half of file
-        contents = topHTML + loopContent.trim() + bottomHTML;
+            // insert loop content between top and bottom half of file
+            contents = topHTML + loopContent.trim() + bottomHTML;
+        }
 
         // return updated contents
         _callback(contents);
