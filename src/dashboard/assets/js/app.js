@@ -25031,43 +25031,37 @@ module.exports = function(module) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @editorjs/editorjs */ "./node_modules/@editorjs/editorjs/dist/editor.js");
-/* harmony import */ var _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _editorjs_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @editorjs/header */ "./node_modules/@editorjs/header/dist/bundle.js");
-/* harmony import */ var _editorjs_header__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_editorjs_header__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _editorjs_link__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @editorjs/link */ "./node_modules/@editorjs/link/dist/bundle.js");
-/* harmony import */ var _editorjs_link__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_editorjs_link__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editorjs_raw__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @editorjs/raw */ "./node_modules/@editorjs/raw/dist/bundle.js");
-/* harmony import */ var _editorjs_raw__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_editorjs_raw__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @editorjs/image */ "./node_modules/@editorjs/image/dist/bundle.js");
-/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_editorjs_image__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _editorjs_list__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @editorjs/list */ "./node_modules/@editorjs/list/dist/bundle.js");
-/* harmony import */ var _editorjs_list__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_editorjs_list__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @editorjs/delimiter */ "./node_modules/@editorjs/delimiter/dist/bundle.js");
-/* harmony import */ var _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _editorjs_quote__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @editorjs/quote */ "./node_modules/@editorjs/quote/dist/bundle.js");
-/* harmony import */ var _editorjs_quote__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_editorjs_quote__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _editorjs_warning__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @editorjs/warning */ "./node_modules/@editorjs/warning/dist/bundle.js");
-/* harmony import */ var _editorjs_warning__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_editorjs_warning__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @editorjs/inline-code */ "./node_modules/@editorjs/inline-code/dist/bundle.js");
-/* harmony import */ var _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ace-builds */ "./node_modules/ace-builds/src-noconflict/ace.js");
-/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(ace_builds__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ace-builds/src-min-noconflict/mode-json.js */ "./node_modules/ace-builds/src-min-noconflict/mode-json.js");
-/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ace-builds/src-min-noconflict/theme-chrome.js */ "./node_modules/ace-builds/src-min-noconflict/theme-chrome.js");
-/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var slugify__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! slugify */ "./node_modules/slugify/slugify.js");
-/* harmony import */ var slugify__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(slugify__WEBPACK_IMPORTED_MODULE_15__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+/* harmony import */ var _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @editorjs/editorjs */ "./node_modules/@editorjs/editorjs/dist/editor.js");
+/* harmony import */ var _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_editorjs_editorjs__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _editorjs_header__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @editorjs/header */ "./node_modules/@editorjs/header/dist/bundle.js");
+/* harmony import */ var _editorjs_header__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_editorjs_header__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _editorjs_link__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @editorjs/link */ "./node_modules/@editorjs/link/dist/bundle.js");
+/* harmony import */ var _editorjs_link__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_editorjs_link__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _editorjs_raw__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @editorjs/raw */ "./node_modules/@editorjs/raw/dist/bundle.js");
+/* harmony import */ var _editorjs_raw__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_editorjs_raw__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @editorjs/image */ "./node_modules/@editorjs/image/dist/bundle.js");
+/* harmony import */ var _editorjs_image__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_editorjs_image__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _editorjs_list__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @editorjs/list */ "./node_modules/@editorjs/list/dist/bundle.js");
+/* harmony import */ var _editorjs_list__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_editorjs_list__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @editorjs/delimiter */ "./node_modules/@editorjs/delimiter/dist/bundle.js");
+/* harmony import */ var _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_editorjs_delimiter__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _editorjs_quote__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @editorjs/quote */ "./node_modules/@editorjs/quote/dist/bundle.js");
+/* harmony import */ var _editorjs_quote__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_editorjs_quote__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _editorjs_warning__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @editorjs/warning */ "./node_modules/@editorjs/warning/dist/bundle.js");
+/* harmony import */ var _editorjs_warning__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_editorjs_warning__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @editorjs/inline-code */ "./node_modules/@editorjs/inline-code/dist/bundle.js");
+/* harmony import */ var _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_editorjs_inline_code__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ace-builds */ "./node_modules/ace-builds/src-noconflict/ace.js");
+/* harmony import */ var ace_builds__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(ace_builds__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ace-builds/src-min-noconflict/mode-json.js */ "./node_modules/ace-builds/src-min-noconflict/mode-json.js");
+/* harmony import */ var ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_mode_json_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ace-builds/src-min-noconflict/theme-chrome.js */ "./node_modules/ace-builds/src-min-noconflict/theme-chrome.js");
+/* harmony import */ var ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(ace_builds_src_min_noconflict_theme_chrome_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var slugify__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! slugify */ "./node_modules/slugify/slugify.js");
+/* harmony import */ var slugify__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(slugify__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _helper__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./helper */ "./src/assets/js/helper.js");
 
 
 
@@ -25091,38 +25085,10 @@ if (document.getElementById('createPost') && parseInt(document.getElementById('c
   setCreatePostTrue();
 }
 
-function getb6(_x) {
-  return _getb.apply(this, arguments);
-}
-
-function _getb() {
-  _getb = _asyncToGenerator(
-  /*#__PURE__*/
-  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(file) {
-    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return new Response(file).text();
-
-          case 2:
-            return _context.abrupt("return", _context.sent);
-
-          case 3:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _getb.apply(this, arguments);
-}
-
 var meta_schema = '';
 
 if (document.getElementById('meta_schema')) {
-  meta_schema = ace_builds__WEBPACK_IMPORTED_MODULE_12___default.a.edit('meta_schema', {
+  meta_schema = ace_builds__WEBPACK_IMPORTED_MODULE_11___default.a.edit('meta_schema', {
     mode: 'ace/mode/json',
     selectionStyle: 'text',
     showPrintMargin: false,
@@ -25134,7 +25100,7 @@ if (document.getElementById('meta_schema')) {
 var meta_data = '';
 
 if (document.getElementById('meta_data')) {
-  meta_data = ace_builds__WEBPACK_IMPORTED_MODULE_12___default.a.edit('meta_data', {
+  meta_data = ace_builds__WEBPACK_IMPORTED_MODULE_11___default.a.edit('meta_data', {
     mode: 'ace/mode/json',
     selectionStyle: 'text',
     showPrintMargin: false,
@@ -25143,26 +25109,26 @@ if (document.getElementById('meta_data')) {
   meta_data.getSession().setUseWorker(false);
 }
 
-var editor = '';
+window.editor = '';
 
 if (document.getElementById('editor')) {
-  editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_1___default.a({
+  editor = new _editorjs_editorjs__WEBPACK_IMPORTED_MODULE_0___default.a({
     /**
      * Id of Element that should contain Editor instance
      */
     holderId: 'editor',
     tools: {
-      header: _editorjs_header__WEBPACK_IMPORTED_MODULE_2___default.a,
+      header: _editorjs_header__WEBPACK_IMPORTED_MODULE_1___default.a,
       linkTool: {
-        "class": _editorjs_link__WEBPACK_IMPORTED_MODULE_3___default.a,
+        "class": _editorjs_link__WEBPACK_IMPORTED_MODULE_2___default.a,
         config: {
           endpoint: 'http://localhost:8008/fetchUrl' // Your backend endpoint for url data fetching
 
         }
       },
-      raw: _editorjs_raw__WEBPACK_IMPORTED_MODULE_4___default.a,
+      raw: _editorjs_raw__WEBPACK_IMPORTED_MODULE_3___default.a,
       image: {
-        "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_5___default.a,
+        "class": _editorjs_image__WEBPACK_IMPORTED_MODULE_4___default.a,
         config: {
           endpoints: {
             byFile: '/dashboard/uploadFile',
@@ -25178,36 +25144,24 @@ if (document.getElementById('editor')) {
         }
       },
       list: {
-        "class": _editorjs_list__WEBPACK_IMPORTED_MODULE_6___default.a,
+        "class": _editorjs_list__WEBPACK_IMPORTED_MODULE_5___default.a,
         inlineToolbar: true
       },
-      delimiter: _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_7___default.a,
+      delimiter: _editorjs_delimiter__WEBPACK_IMPORTED_MODULE_6___default.a,
       inlineCode: {
-        "class": _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_10___default.a,
+        "class": _editorjs_inline_code__WEBPACK_IMPORTED_MODULE_9___default.a,
         shortcut: 'CMD+SHIFT+M'
       },
-      warning: _editorjs_warning__WEBPACK_IMPORTED_MODULE_9___default.a,
-      quote: _editorjs_quote__WEBPACK_IMPORTED_MODULE_8___default.a
+      warning: _editorjs_warning__WEBPACK_IMPORTED_MODULE_8___default.a,
+      quote: _editorjs_quote__WEBPACK_IMPORTED_MODULE_7___default.a
     },
     autofocus: !createPost,
     onReady: function onReady() {
       if (document.getElementById('editor').dataset.blocks) {
-        renderBlocks();
+        _helper__WEBPACK_IMPORTED_MODULE_15__["default"].renderBlocks();
       }
     }
   });
-}
-
-function renderBlocks() {
-  var blocks = {};
-
-  if (document.getElementById('editor').dataset.blocks) {
-    blocks = JSON.parse(document.getElementById('editor').dataset.blocks);
-  }
-
-  if (blocks && editor) {
-    editor.blocks.render(blocks);
-  }
 }
 
 if (document.getElementById('settings')) {
@@ -25218,10 +25172,10 @@ if (document.getElementById('settings')) {
     }, 10);
   });
   document.getElementById('settings-backdrop').addEventListener('click', function () {
-    closeSettingsBar();
+    _helper__WEBPACK_IMPORTED_MODULE_15__["default"].closeSettingsBar();
   });
   document.getElementById('settings-close').addEventListener('click', function () {
-    closeSettingsBar();
+    _helper__WEBPACK_IMPORTED_MODULE_15__["default"].closeSettingsBar();
   });
 }
 
@@ -25240,26 +25194,16 @@ for (var i = 0; i < openToggles.length; i++) {
   });
 }
 
-window.removeOpenClasses = function () {
-  var openClasses = document.getElementsByClassName('open');
-
-  for (var i = 0; i < openClasses.length; i++) {
-    if (openClasses[i].id != 'settings') {
-      openClasses[i].classList.remove('open');
-    }
-  }
-};
-
 if (document.getElementById('save-post')) {
   document.getElementById('save-post').addEventListener('click', function () {
-    savePost();
+    _helper__WEBPACK_IMPORTED_MODULE_15__["default"].savePost();
   });
 }
 
 if (document.getElementById('delete-post')) {
   document.getElementById('delete-post').addEventListener('click', function () {
-    getPostData(function (data) {
-      axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/posts/delete', {
+    _helper__WEBPACK_IMPORTED_MODULE_15__["default"].getPostData(function (data) {
+      axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/dashboard/posts/delete', {
         slug: data.slug
       }).then(function (response) {
         var data = response.data;
@@ -25269,64 +25213,13 @@ if (document.getElementById('delete-post')) {
         }
 
         if (data.status == "fail") {
-          showNotification('danger', JSON.stringify(data.message));
+          _helper__WEBPACK_IMPORTED_MODULE_15__["default"].showNotification('danger', JSON.stringify(data.message));
         }
       })["catch"](function (error) {
         console.log(error);
       });
     });
   });
-}
-
-function closeSettingsBar() {
-  document.getElementById('settings-sidebar').classList.remove('open');
-  removeOpenClasses();
-  setTimeout(function () {
-    document.getElementById('settings').classList.remove('open');
-  }, 300);
-}
-
-function savePost() {
-  getPostData(function (data) {
-    axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/posts/create', data).then(function (response) {
-      var data = response.data;
-
-      if (data.status == "success") {
-        window.history.pushState({}, title, '/dashboard/post/' + data.slug);
-        document.getElementById('slug').value = data.slug;
-        setCreatePostFalse();
-        showNotification('success', 'Your new post has been successfull created.');
-      }
-    })["catch"](function (error) {
-      console.log(error);
-    });
-  });
-}
-
-function getSlugValue() {
-  var slug = document.getElementById('slug').value;
-
-  if (slug == "") {
-    // return a slugified version of the title
-    slug = slugify__WEBPACK_IMPORTED_MODULE_15___default()(document.getElementById('title').value);
-  } // otherwise return the slug value since it is not empty
-
-
-  return slug.toLowerCase();
-}
-
-function setCreatePostTrue() {
-  document.getElementById('title').focus();
-  createPost = true;
-  document.getElementById('delete-post').classList.add('hidden');
-}
-
-function setCreatePostFalse() {
-  createPost = false;
-
-  if (document.getElementById('delete-post')) {
-    document.getElementById('delete-post').classList.remove('hidden');
-  }
 }
 
 if (document.getElementById('title')) {
@@ -25336,136 +25229,41 @@ if (document.getElementById('title')) {
   });
 }
 
-function getPostData(_callback) {
-  editor.save().then(function (body) {
-    _callback({
-      title: document.getElementById('title').value,
-      body: body,
-      image: document.getElementById('image').src,
-      image_filename: document.getElementById('image').dataset.name,
-      slug: getSlugValue(),
-      excerpt: document.getElementById('excerpt').value,
-      meta_title: document.getElementById('meta_title').value,
-      meta_description: document.getElementById('meta_description').value,
-      meta_schema: meta_schema.getValue(),
-      meta_data: meta_data.getValue()
-    });
-  })["catch"](function (error) {
-    console.log('Saving failed: ', error);
-
-    _callback({});
-  });
-}
-
-window.showNotification = function (type, message) {
-  createNotification(type, message);
-  setTimeout(function () {
-    var notification = document.getElementById('notification');
-
-    if (notification) {
-      notification.classList.add('open');
-    }
-  }, 10);
-};
-
 if (document.getElementById('toggleDebug')) {
   document.getElementById('toggleDebug').addEventListener('change', function () {
-    updateSettings(this.dataset.settings, this.dataset.key, this.checked ? true : false);
+    _helper__WEBPACK_IMPORTED_MODULE_15__["default"].updateSettings(this.dataset.settings, this.dataset.key, this.checked ? true : false);
   });
-}
-
-function updateSettings(file, key, value) {
-  axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/update/settings/' + file, {
-    key: key,
-    value: value
-  }).then(function (response) {
-    console.log(response);
-  })["catch"](function (error) {
-    console.log(error);
-  });
-}
-
-var notificationTemplate = function notificationTemplate(type, message, title, color) {
-  return "<div class=\"fixed bottom-0 shadow-2xl group rounded-t-lg bg-white border border-gray-100 cursor-pointer transition " + type + "\" id=\"notification\">\n        <div class=\"float-left w-24\">\n            <div class=\"rounded-full absolute left-0 bg-black bg-gray-100 border-" + color + "-400 border-l-4 border-b-4 bubble\"></div>\n            <img src=\"/dashboard/assets/img/notifications/" + type + ".png\" class=\"h-48 -ml-8 -mt-8 relative\">\n        </div>\n        <div class=\"flex flex-col justify-center h-full pl-4 pr-5\">\n            <h4 class=\"text-" + color + "-400 font-bold -mt-1 mb-1\">" + title + "</h4>\n            <p class=\"text-xs text-gray-500 overflow-scroll\">" + message + "</p>\n        </div>\n        <div class=\"absolute right-0 top-0 bg-gray-100 group-hover:bg-gray-200 text-gray-400 rounded-full h-5 w-5 flex justify-center items-center text-xs leading-none font-bold mt-2 mr-2 cursor-pointer\">&times;</div>\n    </div>";
-};
-
-var createNotification = function createNotification(type, message) {
-  var title = 'Notice';
-  var color = 'gray';
-
-  if (type == 'success') {
-    title = 'Victory!';
-    color = 'green';
-  } else if (type == 'danger') {
-    title = 'Dagummit!';
-    color = 'red';
-  } else if (type == 'info') {
-    title = 'Goodaye!';
-    color = 'indigo';
-  } else if (type == 'warning') {
-    title = 'Be Warned!';
-    color = 'orange';
-  }
-
-  var dynamicElement = document.createElement('div');
-  dynamicElement.innerHTML = notificationTemplate(type, message, title, color);
-  document.body.appendChild(dynamicElement);
-  document.getElementById('notification').addEventListener('click', function () {
-    document.getElementById('notification').classList.remove('open');
-    setTimeout(function () {
-      document.getElementById('notification').remove();
-    }, 300);
-  });
-  setTimeout(function () {
-    if (document.getElementById('notification')) {
-      document.getElementById('notification').classList.remove('open');
-      setTimeout(function () {
-        if (document.getElementById('notification')) {
-          document.getElementById('notification').remove();
-        }
-      }, 300);
-    }
-  }, 3000);
-}; // Add event listener click for the build button
+} // Add event listener click for the build button
 
 
 if (document.getElementById('build-btn')) {
   document.getElementById('build-btn').addEventListener('click', function () {
-    axios__WEBPACK_IMPORTED_MODULE_11___default.a.post('/dashboard/build').then(function (response) {
+    axios__WEBPACK_IMPORTED_MODULE_10___default.a.post('/dashboard/build').then(function (response) {
       var data = response.data;
 
       if (data.status == "success") {
-        showNotification('success', 'Successfully built your site.');
+        _helper__WEBPACK_IMPORTED_MODULE_15__["default"].showNotification('success', 'Successfully built your site.');
       }
     })["catch"](function (error) {
       console.log(error);
     });
   });
 } // Uncomment each notification below to see an example of each one
-//showNotification('success', 'Your new post has been successfull created.');
-//showNotification('danger', 'Something has went wrong trying to save your post.');
-//showNotification('info', 'Did you know that you can upload an image for your post.');
-//showNotification('warning', 'Make sure to enter a good title in your post.');
+//helper.showNotification('success', 'Your new post has been successfull created.');
+//helper.showNotification('danger', 'Something has went wrong trying to save your post.');
+//helper.showNotification('info', 'Did you know that you can upload an image for your post.');
+//helper.showNotification('warning', 'Make sure to enter a good title in your post.');
 
-
-window.encodeImageFileAsURL = function (element) {
-  var file = element.files[0];
-  var reader = new FileReader();
-
-  reader.onload = function (event) {
-    document.getElementById('image').src = event.target.result;
-    document.getElementById('image').dataset.name = file.name;
-  };
-
-  reader.readAsDataURL(file);
-};
 
 if (document.getElementById('image_upload')) {
   document.getElementById('image_upload').addEventListener('change', function (event) {
-    encodeImageFileAsURL(this);
+    _helper__WEBPACK_IMPORTED_MODULE_15__["default"].encodeImageFileAsURL(this);
     showImagePreview();
   });
-}
+} // these two functions are invoked in template files
+// it might be necessary to attach them to the window object
+// do not move to helper.js
+
 
 window.hideImagePreview = function () {
   document.getElementById('image_preview_upload').classList.remove('hidden');
@@ -25482,25 +25280,8 @@ window.showImagePreview = function () {
   document.getElementById('image_preview').classList.remove('hidden');
 };
 
-var nth = function nth(d) {
-  if (d > 3 && d < 21) return 'th';
-
-  switch (d % 10) {
-    case 1:
-      return "st";
-
-    case 2:
-      return "nd";
-
-    case 3:
-      return "rd";
-
-    default:
-      return "th";
-  }
-};
-
-var secondTick = false;
+var secondTick = false; // this function relies on the "secondTick" flag, set above
+// do not move to helper.js
 
 function DisplayCurrentTime() {
   var date = new Date();
@@ -25523,8 +25304,24 @@ function DisplayCurrentDate() {
   var month = months[now.getMonth()];
   var day = now.getDate();
   var year = now.getFullYear();
-  document.getElementById('date').innerHTML = dayOfWeek + ", " + month + " " + day + nth(day) + " " + year;
+  document.getElementById('date').innerHTML = dayOfWeek + ", " + month + " " + day + _helper__WEBPACK_IMPORTED_MODULE_15__["default"].nth(day) + " " + year;
   var time = setTimeout(DisplayCurrentDate, 500);
+} // these two functions rely on the "createPost" flag, set above
+// do not move to helper.js
+
+
+function setCreatePostTrue() {
+  document.getElementById('title').focus();
+  createPost = true;
+  document.getElementById('delete-post').classList.add('hidden');
+}
+
+function setCreatePostFalse() {
+  createPost = false;
+
+  if (document.getElementById('delete-post')) {
+    document.getElementById('delete-post').classList.remove('hidden');
+  }
 }
 
 if (document.getElementById('time')) {
@@ -25534,6 +25331,221 @@ if (document.getElementById('time')) {
 if (document.getElementById('date')) {
   DisplayCurrentDate();
 }
+
+/***/ }),
+
+/***/ "./src/assets/js/helper.js":
+/*!*********************************!*\
+  !*** ./src/assets/js/helper.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var self;
+/* harmony default export */ __webpack_exports__["default"] = (self = {
+  createNotification: function createNotification(type, message) {
+    var title = 'Notice';
+    var color = 'gray';
+
+    if (type == 'success') {
+      title = 'Victory!';
+      color = 'green';
+    } else if (type == 'danger') {
+      title = 'Dagummit!';
+      color = 'red';
+    } else if (type == 'info') {
+      title = 'Goodaye!';
+      color = 'indigo';
+    } else if (type == 'warning') {
+      title = 'Be Warned!';
+      color = 'orange';
+    }
+
+    var dynamicElement = document.createElement('div');
+    dynamicElement.innerHTML = self.notificationTemplate(type, message, title, color);
+    document.body.appendChild(dynamicElement);
+    document.getElementById('notification').addEventListener('click', function () {
+      document.getElementById('notification').classList.remove('open');
+      setTimeout(function () {
+        document.getElementById('notification').remove();
+      }, 300);
+    });
+    setTimeout(function () {
+      if (document.getElementById('notification')) {
+        document.getElementById('notification').classList.remove('open');
+        setTimeout(function () {
+          if (document.getElementById('notification')) {
+            document.getElementById('notification').remove();
+          }
+        }, 300);
+      }
+    }, 3000);
+  },
+  showNotification: function showNotification(type, message) {
+    self.createNotification(type, message);
+    setTimeout(function () {
+      var notification = document.getElementById('notification');
+
+      if (notification) {
+        notification.classList.add('open');
+      }
+    }, 10);
+  },
+  notificationTemplate: function notificationTemplate(type, message, title, color) {
+    return "<div class=\"fixed bottom-0 shadow-2xl group rounded-t-lg bg-white border border-gray-100 cursor-pointer transition " + type + "\" id=\"notification\">\n            <div class=\"float-left w-24\">\n                <div class=\"rounded-full absolute left-0 bg-black bg-gray-100 border-" + color + "-400 border-l-4 border-b-4 bubble\"></div>\n                <img src=\"/dashboard/assets/img/notifications/" + type + ".png\" class=\"h-48 -ml-8 -mt-8 relative\">\n            </div>\n            <div class=\"flex flex-col justify-center h-full pl-4 pr-5\">\n                <h4 class=\"text-" + color + "-400 font-bold -mt-1 mb-1\">" + title + "</h4>\n                <p class=\"text-xs text-gray-500 overflow-scroll\">" + message + "</p>\n            </div>\n            <div class=\"absolute right-0 top-0 bg-gray-100 group-hover:bg-gray-200 text-gray-400 rounded-full h-5 w-5 flex justify-center items-center text-xs leading-none font-bold mt-2 mr-2 cursor-pointer\">&times;</div>\n        </div>";
+  },
+  // this is not being used
+  getb6: function () {
+    var _getb = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(file) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return new Response(file).text();
+
+            case 2:
+              return _context.abrupt("return", _context.sent);
+
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    function getb6(_x) {
+      return _getb.apply(this, arguments);
+    }
+
+    return getb6;
+  }(),
+  encodeImageFileAsURL: function encodeImageFileAsURL(element) {
+    var file = element.files[0];
+    var reader = new FileReader();
+
+    reader.onload = function (event) {
+      document.getElementById('image').src = event.target.result;
+      document.getElementById('image').dataset.name = file.name;
+    };
+
+    reader.readAsDataURL(file);
+  },
+  nth: function nth(d) {
+    if (d > 3 && d < 21) return 'th';
+
+    switch (d % 10) {
+      case 1:
+        return "st";
+
+      case 2:
+        return "nd";
+
+      case 3:
+        return "rd";
+
+      default:
+        return "th";
+    }
+  },
+  updateSettings: function updateSettings(file, key, value) {
+    axios.post('/dashboard/update/settings/' + file, {
+      key: key,
+      value: value
+    }).then(function (response) {
+      console.log(response);
+    })["catch"](function (error) {
+      console.log(error);
+    });
+  },
+  removeOpenClasses: function removeOpenClasses() {
+    var openClasses = document.getElementsByClassName('open');
+
+    for (var i = 0; i < openClasses.length; i++) {
+      if (openClasses[i].id != 'settings') {
+        openClasses[i].classList.remove('open');
+      }
+    }
+  },
+  closeSettingsBar: function closeSettingsBar() {
+    document.getElementById('settings-sidebar').classList.remove('open');
+    self.removeOpenClasses();
+    setTimeout(function () {
+      document.getElementById('settings').classList.remove('open');
+    }, 300);
+  },
+  savePost: function savePost() {
+    getPostData(function (data) {
+      axios.post('/dashboard/posts/create', data).then(function (response) {
+        var data = response.data;
+
+        if (data.status == "success") {
+          window.history.pushState({}, title, '/dashboard/post/' + data.slug);
+          document.getElementById('slug').value = data.slug;
+          setCreatePostFalse();
+          helper.showNotification('success', 'Your new post has been successfull created.');
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    });
+  },
+  getSlugValue: function getSlugValue() {
+    var slug = document.getElementById('slug').value;
+
+    if (slug == "") {
+      // return a slugified version of the title
+      slug = slugify(document.getElementById('title').value);
+    } // otherwise return the slug value since it is not empty
+
+
+    return slug.toLowerCase();
+  },
+  getPostData: function getPostData(_callback) {
+    editor.save().then(function (body) {
+      _callback({
+        title: document.getElementById('title').value,
+        body: body,
+        image: document.getElementById('image').src,
+        image_filename: document.getElementById('image').dataset.name,
+        slug: helper.getSlugValue(),
+        excerpt: document.getElementById('excerpt').value,
+        meta_title: document.getElementById('meta_title').value,
+        meta_description: document.getElementById('meta_description').value,
+        meta_schema: meta_schema.getValue(),
+        meta_data: meta_data.getValue()
+      });
+    })["catch"](function (error) {
+      console.log('Saving failed: ', error);
+
+      _callback({});
+    });
+  },
+  renderBlocks: function renderBlocks() {
+    var blocks = {};
+
+    if (document.getElementById('editor').dataset.blocks) {
+      blocks = JSON.parse(document.getElementById('editor').dataset.blocks);
+    }
+
+    if (blocks && editor) {
+      editor.blocks.render(blocks);
+    }
+  }
+});
 
 /***/ }),
 
@@ -25555,8 +25567,8 @@ if (document.getElementById('date')) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/jamescool/personal/viking/src/assets/js/app.js */"./src/assets/js/app.js");
-module.exports = __webpack_require__(/*! /Users/jamescool/personal/viking/src/assets/sass/app.scss */"./src/assets/sass/app.scss");
+__webpack_require__(/*! /Users/tony/Sites/viking/src/assets/js/app.js */"./src/assets/js/app.js");
+module.exports = __webpack_require__(/*! /Users/tony/Sites/viking/src/assets/sass/app.scss */"./src/assets/sass/app.scss");
 
 
 /***/ })
