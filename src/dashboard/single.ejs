@@ -39,6 +39,19 @@
                         <label class="viking-label mt-8" for="excerpt">Excerpt</label>
                         <textarea class="viking-input h-24" name="excerpt" id="excerpt"><% if(post.excerpt) { %><%= post.excerpt %><% } %></textarea>
 
+                        <div class="mt-6">
+                            <label class="viking-label">Type</label>
+                        </div>
+                        <div class="relative">
+                        <select name="type" class="viking-input">
+                            <option value="post">Post</option>
+                            <option value="page">Page</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                          </div>
+                        </div>
+
                         <div class="px-5 py-4 rounded-lg border mt-8 flex justify-center bg-white hover:bg-blue-100 items-center cursor-pointer open-toggle" data-toggle="meta-sidebar">
                             <div class="flex flex-col justify-center items-start flex-grow">
                                 <p class="font-bold text-gray-800">Meta</p>
@@ -48,6 +61,8 @@
                                 <path d="M11.611,10.049l-4.76-4.873c-0.303-0.31-0.297-0.804,0.012-1.105c0.309-0.304,0.803-0.293,1.105,0.012l5.306,5.433c0.304,0.31,0.296,0.805-0.012,1.105L7.83,15.928c-0.152,0.148-0.35,0.223-0.547,0.223c-0.203,0-0.406-0.08-0.559-0.236c-0.303-0.309-0.295-0.803,0.012-1.104L11.611,10.049z"></path>
                             </svg>
                         </div>
+
+                        
                     </div>              </div>
                 <div class="text-right p-5 flex justify-end" id="delete-post">
                     <div class="text-red-600 underline text-sm cursor-pointer inline-block flex justify-center items-center" data-slug="<%= post.slug %>">
