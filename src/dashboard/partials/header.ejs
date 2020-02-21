@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/dashboard/assets/css/app.css">
 </head>
 <body class="min-h-screen h-full">
+
     <div class="min-h-screen w-full flex justify-center">
 
         <!-- Sidebar -->
@@ -17,7 +18,7 @@
 
                 <nav class="text-gray-800 text-sm -mt-10">
                     <a href="/dashboard" class="block <% if(request.url == '/dashboard'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Dashboard</a>
-                    <a href="/dashboard/posts" class="block <% if(request.url == '/dashboard/posts'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Posts</a>
+                    <a href="/dashboard/posts" class="block <% if(request.url.indexOf('/dashboard/post') !== -1){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Posts</a>
                     <a href="/dashboard/settings" class="block <% if(request.url == '/dashboard/settings'){ %>font-bold<% } else { %> font-medium hover:text-black <% } %> py-1">Settings</a>
                 </nav>
 

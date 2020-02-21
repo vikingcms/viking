@@ -5,34 +5,34 @@
     </div>
     <div class="px-8 relative max-w-4xl">
             
-            <div class="flex flex-col justify-between min-h-screen py-5">
+            <div class="min-h-screen py-5">
                 <div>
                     <h1 class="font-bold text-gray-800">Settings</h1>
-                    <div class="flex">
-                        <div class="rounded-lg w-full mt-6 h-auto bg-gray-900 border-b border-gray-200 px-6 py-4">
-                            <div class="flex justify-between items-center">
-                                <div class="flex flex-col text-gray-100">
-                                    <h2 class="font-bold text-lg">Welcome To Viking</h2>
-                                    <p>An Awesome Static Site CMS</p>
-                                </div>
-                                <div>
-                                    <a href="#" class="bg-white text-gray-800 px-5 py-2 text-sm tracking-wider font-bold rounded cursor-pointer inline-block" id="update-btn">Update</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+
+                <div>
+                    <h2>Site Settings</h2>
+                </div>
+
+                <div>
+                    <h2>Environment Settings</h2>
+                </div>
+
+                <div>
+                    <h2>Theme Settings</h2>
+                </div>
+
+                <div>
+                    <h2>Build Settings</h2>
                 </div>
 
                 <div id="input-container"></div>
 
-                <div class="rounded w-full mt-5 h-auto bg-gray-200 px-6 py-4">
-                    <p class="text-gray-700 font-medium text-xs">You are currently using version 0.2.0 of VikingCMS</p>
-                </div>
             </div>
     </div>
 
     <script>
-        var settings = <%- settingsFile %>;
+        var settings = <%- JSON.stringify(site) %>;
         var updateButton = document.getElementById('update-btn');
         var inputContainer = document.getElementById('input-container');
 
@@ -51,5 +51,6 @@
             
         }
     </script>
+    
 
 <%- include('partials/footer'); -%>

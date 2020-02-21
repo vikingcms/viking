@@ -1,7 +1,15 @@
 const fs = require('fs-extra');
+const request = require('superagent');
 const globalModulesPath = require("global-modules-path");
 const vikingNewFolder = globalModulesPath.getPath("viking") + '/src/site/';
 const process = require('process');
+const admZip = require('adm-zip');
+
+const themeName = 'harold';
+const href = `https://github.com/vikingcms/${themeName}/archive`;
+const zipFile = 'master.zip';
+
+const themeSource = `${href}/${zipFile}`;
 
 module.exports = {
     welcome() {
@@ -20,13 +28,29 @@ module.exports = {
         fs.copySync(vikingNewFolder, './' + folderName);
 
         process.chdir(process.cwd() + '/' + folderName);
+        console.log('Downloading default theme for your site');
+        request
+            .get(themeSource)
+            .on('error', function(error) {
+                console.log(error);
+            })
+            .pipe(fs.createWriteStream(zipFile))
+            .on('finish', function() {
+                console.log('Finished Downloading Theme');
+                var zip = new admZip(zipFile);
+                console.log('Extracting Theme Zip File');
+                zip.extractEntryTo(`${themeName}-master/`, `./content/themes/${themeName}/`, false, true);
+                console.log('Finished Unzipping');
 
-        var serve = require(require("global-modules-path").getPath("viking") + '/src/cli/serve.js');
+                fs.unlinkSync(`./${zipFile}`);
 
-        console.log('Prepare your Hammer and Axe!')
-        console.log('Because it\'s time to start building...');
+                var serve = require(require("global-modules-path").getPath("viking") + '/src/cli/serve.js');
 
-        serve.launch();
-        
+                console.log('Prepare your Hammer and Axe!')
+                console.log('Because it\'s time to start building...');
+
+                serve.launch();
+
+            });
     }
 }

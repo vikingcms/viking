@@ -9,21 +9,29 @@ const minify = require('html-minifier').minify;
 const globalModulesPath = require("global-modules-path");
 
 const folder = require(globalModulesPath.getPath("viking") + '/src/lib/folder.js');
-const settings = require(folder.vikingPath() + '/src/lib/settings.js');
+const settings = require(folder.vikingPath() + '/src/lib/settings.js').load();
 const Post = require(folder.vikingPath() + 'src/lib/post.js');
 
+const helper = require(folder.vikingPath() + 'src/lib/helper.js');
+
 const post = new Post();
-const themePath = folder.themePath() + '2020/';
+const themePath = folder.themePath() + settings.theme.active + '/';
 
 let siteMapContents = '';
 let onlyOnce = false;
 
+let totalPages = 0;
+let builtPages = 0;
+
 const builder = module.exports = {
-    build() {
+    build(io) {
         
-        let env = settings.load().environment;
-        let siteSettings = settings.load().site;
+        helper.consoleLog(io, '<span class="text-yellow-500">### Starting The Build Process</span>');
+
         let posts = post.orderBy('created_at', 'DESC').getPosts();
+        //io = ioInstance;
+
+        totalPages = builder.getTotalPages(posts);
 
         // empty the site folder
         fs.emptyDirSync( folder.sitePath() );
@@ -44,18 +52,18 @@ const builder = module.exports = {
                 if(typeof(extension) != 'undefined' && extension == '.axe'){
 
                     // if debug mode is on we will write all posts to a json file
-                    if(env.debug){
+                    if(settings.environment.dev){
                         fs.writeJsonSync( folder.sitePath() + '/posts.json', posts, { spaces: '\t' });
                     }
 
                     if(file == 'home.axe'){
-                        builder.writeFile(file, '', {});
+                        builder.writeFile(file, '', {}, io);
                     }
                     
                     if(file == 'single.axe'){
 
                         posts.forEach(function (post, index) {
-                            builder.writeFile(file, post.slug + '/', { post: post });
+                            builder.writeFile(file, post.slug + '/', { post: post }, io);
                         });
 
                     }
@@ -63,19 +71,22 @@ const builder = module.exports = {
                     if(file == 'amp.axe'){
 
                         posts.forEach(function (post, index) {
-                            builder.writeFile(file, '/amp/' + post.slug + '/', { post: post });
+                            builder.writeFile(file, '/amp/' + post.slug + '/', { post: post }, io);
                         });
 
                     }
 
                     if(file == 'loop.axe'){
-                        builder.writeFile(file, siteSettings.loopRoute + '/', {});
+                        builder.writeFile(file, settings.site.loopRoute + '/', {}, io);
                     }
+                    
 
                     // copy over all the assets
                     fs.copySync(themePath + '/site/', folder.sitePath());
                     // copy over all the images
                     fs.copySync(folder.imagePath(), folder.sitePath() + 'images/');
+
+                    
                     
 
                 }
@@ -92,18 +103,25 @@ const builder = module.exports = {
     },
 
     isNotGithubURL: function(){
-        let siteSettings = settings.load().site;
-        if( siteSettings.url.indexOf('github.io') == -1 && siteSettings.url.indexOf('github.com') == -1 && siteSettings.url.indexOf('github.page') == -1 ){
+        if( settings.site.url.indexOf('github.io') == -1 && settings.site.url.indexOf('github.com') == -1 && settings.site.url.indexOf('github.page') == -1 ){
             return true;
         }
         return false;
     },
 
-    writeFile(file, directory, data) {
+    getTotalPages(posts){
+        // Multiply posts to include the amp pages
+        totalPages = posts.length * 2;
 
-        let env = settings.load().environment;
-        let siteSettings = settings.load().site;
-        builder.addToSitemap(file, directory, data, siteSettings);
+        // Increase by 1 to get homepage
+        totalPages += 1;
+
+        return totalPages;
+    },
+
+    writeFile(file, directory, data, io) {
+
+        builder.addToSitemap(file, directory, data);
 
         let contents = '';
         // turn into func used again below
@@ -115,37 +133,30 @@ const builder = module.exports = {
                         let amp = (file == 'amp.axe') ? true : false;
                         contents = builder.replacePostData( contents, data.post, amp);
                         contents = contents.replace('{{ meta_description }}', data.post.meta.description);
-                        builder.minifyAndWrite(directory, contents);
+                        builder.minifyAndWrite(directory, contents, io);
                     });
                 }
                 if(file == 'home.axe'){
                     builder.replaceConditionals(contents, data, function (contents){
-                        contents = contents.replace('{{ meta_description }}', siteSettings.description);
+                        contents = contents.replace('{{ meta_description }}', settings.site.description);
                         builder.replacePostDataLoop(contents, function (contents){
-                            builder.minifyAndWrite(directory, contents);
+                            builder.minifyAndWrite(directory, contents, io);
                         });
                     });
                 }
                 if(file == 'loop.axe'){
                     builder.replaceConditionals(contents, data, function (contents){
                         builder.replacePostDataLoop(contents, function (contents){
-                            //contents = contents.replace('{{ meta_description }}', siteSettings.post.types[0].description);
-                            builder.minifyAndWrite(directory, contents);
+                            builder.minifyAndWrite(directory, contents, io);
                         });
                     });
                 }
-                if(env.debug){
-                    contents = builder.addAdminBar(contents);
-                }
-
-                console.log('Built: ' + file);
                 
         });
         
     },
 
-    minifyAndWrite(directory, contents) {
-        let siteSettings = settings.load().site;
+    minifyAndWrite(directory, contents, io) {
 
         contents = minify(contents, {
             removeComments: true,
@@ -155,13 +166,37 @@ const builder = module.exports = {
             minifyJS: true
         });
 
-        contents = contents.replace('{{ title }}', siteSettings.title);
-        contents = contents.replace(/\{\{ subfolder \}\}/g, siteSettings.subfolder);
-        contents = contents.replace(/\{\{ url \}\}/g, siteSettings.url);
-        contents = contents.replace('{{ currentURL }}', siteSettings.url + '/' + directory);
+        contents = contents.replace('{{ title }}', settings.site.title);
+        contents = contents.replace(/\{\{ subfolder \}\}/g, settings.site.subfolder);
+        contents = contents.replace(/\{\{ url \}\}/g, settings.site.url);
+        contents = contents.replace('{{ currentURL }}', settings.site.url + '/' + directory);
+
+        if(settings.environment.dev){
+            contents = builder.addAdminBar(contents);
+            contents = builder.addLiveReload(contents);
+        }
         
 
         fs.outputFileSync(folder.sitePath() + directory + 'index.html', contents);
+
+        directory = (directory == '') ? '/' : directory;
+        helper.consoleLog(io, '<span class="text-blue-500">Built:</span> ' + directory);
+        console.log('Built: ' + directory);
+
+        if(builtPages >= totalPages){
+            helper.consoleLog(io, '<span class="text-yellow-500">### Finished The Build Process</span>');
+            helper.consoleLog(io, '[CLOSE_VIKING_CONSOLE]');
+            builtPages = 0;
+        } else {
+            builtPages += 1;
+        }
+        
+
+        // if(index >= 4){
+        //     helper.consoleLog(io, '<span class="text-yellow-500">### Finished The Build Process</span>');
+        //     console.log('Built: ' + file);
+        //     helper.consoleLog(io, '[CLOSE_VIKING_CONSOLE] - index ' + 4);
+        // }
     },
 
     beginSitemap() {
@@ -173,25 +208,25 @@ const builder = module.exports = {
         fs.writeFileSync(folder.sitePath() + 'sitemap.xml', siteMapContents);
     },
 
-    addToSitemap(file, directory, data, siteSettings) {
+    addToSitemap(file, directory, data) {
 
         let urlStructure = `\n\t<url>\n\t\t<loc>{{ loc }}</loc>\n\t\t<lastmod>{{ lastmod }}</lastmod>\n\t\t<priority>{{ priority }}</priority>\n\t</url>`;
 
         //Check which file this is for
         if(file == 'home.axe'){
-            urlStructure = urlStructure.replace('{{ loc }}', siteSettings.url);
+            urlStructure = urlStructure.replace('{{ loc }}', settings.site.url);
             urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(), "isoDateTime"));
             urlStructure = urlStructure.replace('{{ priority }}', '1.0');
         }
 
         if(file == 'loop.axe'){
-            urlStructure = urlStructure.replace('{{ loc }}', siteSettings.url + '/' + directory);
+            urlStructure = urlStructure.replace('{{ loc }}', settings.site.url + '/' + directory);
             urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(), "isoDateTime"));
             urlStructure = urlStructure.replace('{{ priority }}', '0.9');
         }
 
         if(file == 'single.axe'){
-            urlStructure = urlStructure.replace('{{ loc }}', siteSettings.url + '/' + directory);
+            urlStructure = urlStructure.replace('{{ loc }}', settings.site.url + '/' + directory);
             urlStructure = urlStructure.replace('{{ lastmod }}', dateFormat(new Date(data.post.updated_at), "isoDateTime"));
             urlStructure = urlStructure.replace('{{ priority }}', '0.9');
         }
@@ -388,9 +423,15 @@ const builder = module.exports = {
             let loopContent = '';
 
             posts.forEach(function (post, index){
-                builder.replaceConditionals(loopHTML, {post: post}, function (contents){
-                    loopContent += builder.replacePostData( contents, post );
-                });
+                console.log('post title is: ' + post.title);
+                if( typeof post.type !== 'undefined' && post.type == 'page'){
+                    // ignoring type of `pages` in the loop
+                    console.log('and post type is ' + post.type);
+                } else {
+                    builder.replaceConditionals(loopHTML, {post: post}, function (contents){
+                        loopContent += builder.replacePostData( contents, post );
+                    });
+                }
             });
 
             // insert loop content between top and bottom half of file
@@ -497,8 +538,7 @@ const builder = module.exports = {
     },
 
     createCNAME() {
-        let siteSettings = settings.load().site;
-        let domain = siteSettings.url.replace('https://', '').replace('http://', '');
+        let domain = settings.site.url.replace('https://', '').replace('http://', '');
         fs.outputFileSync(folder.sitePath() + 'CNAME', domain);
     },
 
@@ -518,5 +558,19 @@ const builder = module.exports = {
                         <a href="/dashboard" style="text-transform: uppercase; font-size: 0.75rem; color: #fff; padding-left: 0.75rem; padding-right: 0.75rem; height: 100%; font-weight: 500; -webkit-box-align: center; align-items: center; display: -webkit-box; display: flex; border-left-width: 1px; border-right-width: 1px; border-color: #2d3748;">Dashboard</a>
                     </div>
                 </div>`;
+    },
+
+    addLiveReload(contents){
+        return contents.replace('</body>', builder.liveReloadScript() + '</body>');
+    },
+
+    liveReloadScript() {
+        return `<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+                <script>
+                var socket = io.connect('${settings.site.url}');
+                socket.on('reload', function(data){
+                    location.reload();
+                });
+                </script>`;
     }
 };

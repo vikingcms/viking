@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
 const session = require('express-session');
+var http = require('http').createServer(app);
+var io = require('socket.io')(http, {
+    pingInterval: 10000,
+  pingTimeout: 5000,
+  cookie: false
+});
+
 const open = require('open');
 const bodyParser = require('body-parser');
 const globalModulesPath = require("global-modules-path");
@@ -20,6 +27,7 @@ module.exports = {
             app.use('/dashboard/assets', express.static(folder.vikingPath() + 'src/dashboard/assets'));
             
             app.use('/images/', express.static(folder.imagePath()));
+            app.use('/content/', express.static(folder.contentPath()));
             app.use('/', express.static( folder.sitePath() ));
             //app.use(express.json());
             app.use(express.json({limit: '10mb'}));
@@ -40,12 +48,12 @@ module.exports = {
                 next()
               });
 
-            routes.load(app);
+            routes.load(app, io);
 
-            app.listen(port, () => console.log(`Viking is running on port ${port}!`))
+            http.listen(port, () => console.log(`Viking is running on port ${port}!`))
             
-            open('http://localhost:' + port);
-
+            open('http://localhost:' + port + '/dashboard');
+              helper.devMode(io);
         });
 
     }

@@ -6,10 +6,14 @@ const self = module.exports = {
     
     load() {
 
-        return {
-            site: self.loadSetting('site'),
-            environment: self.loadSetting('environment')
+        let settings = fs.readdirSync( folder.settingsPath() );
+        let settingsArr = [];
+        for(var i=0; i<settings.length; ++i){
+            let settingKey = settings[i].replace('.json', '');
+            settingsArr[settingKey] = self.loadSetting(settingKey);
         }
+
+        return Object.assign({}, settingsArr);
     },
 
     loadSetting(name) {

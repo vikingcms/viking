@@ -18,11 +18,10 @@ let debug = false;
 
 module.exports = {
 
-    load(app) {
+    load(app, io) {
             
         app.get('/', function(req, res){
-            let posts = post.orderBy('created_at', 'DESC').getPosts();   
-            res.render(folder.vikingPath() + 'src/dashboard/index', { request: req, debug: debug, session: req.session, settings: settings.load(), posts: posts }) 
+            res.redirect('/dashboard');
         });
 
         app.get('/dashboard', function(req, res) {
@@ -31,7 +30,7 @@ module.exports = {
         });
         
         app.post('/dashboard/build', function(req, res){
-            res.json( builder.build() );
+            res.json( builder.build(io) );
         });
 
         app.get('/dashboard/posts', function(req, res){
@@ -40,8 +39,8 @@ module.exports = {
         });
 
         app.get('/dashboard/settings', function (req, res) {
-            let settingsFile = JSON.parse(fs.readFileSync(folder.rootPath() + '/content/settings.json'));
-            res.render(folder.vikingPath() + 'src/dashboard/settings', { request: req, debug: debug, session: req.session, settingsFile: settingsFile }) 
+            let site = JSON.parse(fs.readFileSync(folder.rootPath() + 'settings/site.json'));
+            res.render(folder.vikingPath() + 'src/dashboard/settings', { request: req, debug: debug, session: req.session, site: site }) 
         });
 
         app.get('/dashboard/posts/create', function(req, res){
@@ -92,6 +91,8 @@ module.exports = {
                     fs.writeFileSync(folder.imagePath() + req.body.image_filename, base64Image, {encoding: 'base64'});
                 }
 
+                console.log('saved type as: ' + req.body.type);
+
                 let postJson = {
                     title: req.body.title,
                     excerpt: req.body.excerpt,
@@ -99,6 +100,7 @@ module.exports = {
                     image: imageFile,
                     status: "published",
                     body: req.body.body,
+                    type: req.body.type,
                     meta: {
                         title: req.body.meta_title,
                         description: req.body.meta_description,
