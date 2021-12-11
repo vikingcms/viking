@@ -120,7 +120,7 @@
         margin-right: 0px;
     }
 
-    
+
 
     .ce-block{
         @apply p-4 border border-transparent rounded-lg;
@@ -196,24 +196,24 @@
 .toggle__dot {
     transition: all 0.3s ease-in-out;
   }
-  
+
   input:checked ~ .toggle__dot {
     transform: translateX(24px);
     background-color: #55e6a5;
   }
-  
+
   input:checked ~ .toggle__line{
     background:#46d695;
   }
-  
+
   input:checked ~ .toggle__line .no{
     display:none;
   }
-  
+
   input:checked ~ .toggle__line .yes{
     display:block;
   }
-  
+
   .yes{
     font-size: 9px;
     top: 3px;
